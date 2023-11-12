@@ -1,0 +1,107 @@
+.postcard {
+    width: 14.8cm;
+    height: 10.5cm;
+    background-color: #fff;
+    border: 1px solid #000;
+    overflow: hidden;
+    }
+
+.square {
+    width: 10.5cm;
+    height: 14.8cm;
+    background-color: #FFF9F5;
+    overflow: hidden;
+    margin-bottom: 0;
+    /* padding: 20px; */
+}
+
+
+.flex-container {
+    display: flex;
+    margin-bottom: 0;
+}
+
+.flex-item {
+    flex: 1; /* This will allow the items to grow and shrink as needed */
+    margin-bottom: 0;
+}
+
+body {
+    font-family: courier; 
+    text-align: justify;
+    hyphens: auto;
+}
+
+h1 {
+    font-size: 14pt;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 12pt;
+    margin-top: 0;
+}
+
+p {
+    font-size: 10pt;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    font-size: 10pt;
+}
+
+ul li::before {
+    content: "* ";
+    
+}
+
+p { margin-bottom: 0; }
+ul { margin-top: 0; }
+
+.leftblock {
+    width: 40%; height: 100%; border: 0px solid black; padding: 5mm;
+}
+
+.rightblock {
+    width: 60%; height: 100%; border: 0px solid black; padding: 5mm; padding-left: 0; padding-bottom: 0;
+}
+
+.news {
+    width: auto; margin: 5mm;
+}
+
+@media (min-width: 100000px) { 
+    .postcard {
+        width: 14.8cm;
+        height: 10.5cm;
+        border: 1px solid #000;
+        overflow: hidden;
+        }
+
+    .square {
+        width: 14.8cm;
+        height: 10.5cm;
+        overflow: hidden;
+        margin-bottom: 0;
+        /* padding: 20px; */
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    ul li::before {
+        content: "* ";
+        
+    }
+
+    p { margin-bottom: 0; }
+    ul { margin-top: 0; }
+
+}
