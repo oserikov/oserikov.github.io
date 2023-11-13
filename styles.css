@@ -72,7 +72,7 @@ ul { margin-top: 0; }
 }
 
 .news {
-    width: auto; margin: 5mm;
+    width: auto; margin: 5mm; margin-top: 0;
 }
 
 @media (min-width: 100000px) { 
