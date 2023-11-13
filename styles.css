@@ -27,7 +27,7 @@
 }
 
 body {
-    font-family: courier; 
+    font-family: 'Courier New', 'Courier', monospace; 
     text-align: justify;
     hyphens: auto;
 }
