@@ -35,15 +35,19 @@ body {
 h1 {
     font-size: 14pt;
     margin-top: 0;
+    margin-bottom: 6pt;
 }
 
 h2 {
     font-size: 12pt;
     margin-top: 0;
+    margin-bottom: 6pt;
 }
 
 p {
     font-size: 10pt;
+    margin-bottom: 0pt;
+    margin-top: 6pt;
 }
 
 ul {
