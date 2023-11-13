@@ -64,9 +64,6 @@ ul li::before {
     
 }
 
-p { margin-bottom: 0; }
-ul { margin-top: 0; }
-
 .leftblock {
     width: 40%; height: 100%; border: 0px solid black; padding: 5mm;
 }
