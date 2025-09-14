@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Top-Down Room Chase — Emoji Render</title>
+  <style>
+    body {
+      margin: 0;
+      display: grid;
+      place-items: center;
+      height: 100vh;
+      background: #0f1220;
+      color: white;
+      font-family: sans-serif;
+    }
+    canvas {
+      background: #1c1f36;
+      border: 2px solid #444;
+      border-radius: 8px;
+    }
+    .controls {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    button {
+      background: #3a49a1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 18px;
+      color: #ff8080;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <canvas id="room" width="600" height="350"></canvas>
+    <div class="controls">
+      <button id="start">▶ Start</button>
+      <button id="pause">⏸ Pause</button>
+      <button id="step">⏭ Step</button>
+      <button id="reset">🔄 Reset</button>
+    </div>
+    <div id="message"></div>
+  </div>
+
+  <script>
+  (() => {
+    const WIDTH = 24;
+    const HEIGHT = 14;
+    const CELL = 25;
+
+    const NUM_HUMANS = 6;
+    const NUM_CHAIRS = 16;
+    const NUM_SOFAS = 3;
+    const HUMAN_VISION = 4;
+    const DOG_DANGER_RADIUS = 5;
+
+    const EMPTY = 0, CHAIR = 1, SOFA = 2;
+
+    let grid;
+    let humans;
+    let dog;
+    let tick = 0;
+    let timer = null;
+    let gameOver = false;
+
+    const canvas = document.getElementById('room');
+    const ctx = canvas.getContext('2d');
+    const messageBox = document.getElementById('message');
+
+    ctx.font = `${CELL-4}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    function randInt(n){ return Math.floor(Math.random()*n); }
+    function inBounds(x,y){ return x>=0 && x<WIDTH && y>=0 && y<HEIGHT; }
+    function manhattan(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y); }
+
+    function neighbors4(x,y){
+      return [[1,0],[-1,0],[0,1],[0,-1]]
+        .map(([dx,dy])=>({x:x+dx,y:y+dy,dx,dy}))
+        .filter(p=>inBounds(p.x,p.y)&&grid[p.y][p.x]===EMPTY);
+    }
+
+    function placeRandomly(count,fn){
+      let placed=0; let attempts=0;
+      while(placed<count && attempts<1000){
+        const x=randInt(WIDTH),y=randInt(HEIGHT);
+        attempts++;
+        if(fn(x,y)) placed++;
+      }
+    }
+
+    function reset(){
+      grid=Array.from({length:HEIGHT},()=>Array.from({length:WIDTH},()=>EMPTY));
+      humans=[];
+      gameOver=false;
+      messageBox.textContent="";
+
+      placeRandomly(NUM_CHAIRS,(x,y)=>{if(grid[y][x]!==EMPTY)return false;grid[y][x]=CHAIR;return true;});
+      placeRandomly(NUM_SOFAS,(x,y)=>{
+        if(Math.random()<0.5){
+          if(x+2>=WIDTH) return false;
+          if(grid[y][x]===EMPTY&&grid[y][x+1]===EMPTY&&grid[y][x+2]===EMPTY){
+            grid[y][x]=SOFA;grid[y][x+1]=SOFA;grid[y][x+2]=SOFA;return true;
+          }
+        } else {
+          if(y+2>=HEIGHT) return false;
+          if(grid[y][x]===EMPTY&&grid[y+1][x]===EMPTY&&grid[y+2][x]===EMPTY){
+            grid[y][x]=SOFA;grid[y+1][x]=SOFA;grid[y+2][x]=SOFA;return true;
+          }
+        }
+        return false;
+      });
+
+      placeRandomly(NUM_HUMANS,(x,y)=>{if(grid[y][x]!==EMPTY)return false; if(humans.some(h=>h.x===x&&h.y===y))return false; humans.push({x,y,lastMove:[0,0]}); return true;});
+
+      let best=null;
+      for(let tries=0;tries<500;tries++){
+        const x=randInt(WIDTH),y=randInt(HEIGHT);
+        if(grid[y][x]!==EMPTY)continue;
+        const d=humans.length?Math.min(...humans.map(h=>manhattan({x,y},h))):Infinity;
+        if(!best||d>best.d)best={x,y,d};
+      }
+      dog={x:best.x,y:best.y};
+      tick=0;
+      render();
+    }
+
+    function humanStep(h, occupied){
+      const d=manhattan(h,dog);
+      let options=neighbors4(h.x,h.y);
+      if(options.length===0)return h;
+      let chosen;
+      if(d<=HUMAN_VISION){
+        let best=[],bestD=Infinity;
+        for(const n of options){const dist=manhattan(n,dog);if(dist<bestD){best=[n];bestD=dist;}else if(dist===bestD){best.push(n);}}
+        chosen=best[randInt(best.length)];
+      } else {
+        chosen=options[randInt(options.length)];
+      }
+      // ensure no collision with another human
+      if(occupied.has(chosen.x+","+chosen.y)) return h;
+      h.x=chosen.x;h.y=chosen.y;h.lastMove=[chosen.dx,chosen.dy];
+      occupied.add(h.x+","+h.y);
+      return h;
+    }
+
+    function dogStep(){
+      const options=neighbors4(dog.x,dog.y);
+      if(options.length===0)return;
+      const distToHuman=(p)=>humans.length?Math.min(...humans.map(h=>manhattan(p,h))):Infinity;
+      const nearby=humans.filter(h=>manhattan(h,dog)<=DOG_DANGER_RADIUS);
+      if(nearby.length>0){
+        let best=[],bestScore=-Infinity;
+        for(const n of options){const score=distToHuman(n);if(score>bestScore){best=[n];bestScore=score;}else if(score===bestScore){best.push(n);}}
+        const chosen=best[randInt(best.length)];
+        dog.x=chosen.x;dog.y=chosen.y;
+      }else{
+        const chosen=options[randInt(options.length)];
+        dog.x=chosen.x;dog.y=chosen.y;
+      }
+    }
+
+    function step(){
+      if(gameOver) return;
+      const occupied=new Set();
+      humans=humans.map(h=>({...h}));
+      humans=humans.map(h=>humanStep(h,occupied));
+      dogStep();
+      tick++;
+      checkCollision();
+      render();
+    }
+
+    function checkCollision(){
+      if(humans.some(h=>h.x===dog.x && h.y===dog.y)){
+        messageBox.textContent="🐕 was caught at tick "+tick+"!";
+        if(timer){clearInterval(timer); timer=null;}
+        gameOver=true;
+      }
+    }
+
+    function render(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let y=0;y<HEIGHT;y++){
+        for(let x=0;x<WIDTH;x++){
+          const cell=grid[y][x];
+          if(cell===CHAIR){ctx.fillText("🪑",x*CELL+CELL/2,y*CELL+CELL/2);} 
+          if(cell===SOFA){ctx.fillText("🛋️",x*CELL+CELL/2,y*CELL+CELL/2);} 
+        }
+      }
+      ctx.fillText("🐕",dog.x*CELL+CELL/2,dog.y*CELL+CELL/2);
+      humans.forEach(h=>ctx.fillText("🧍",h.x*CELL+CELL/2,h.y*CELL+CELL/2));
+    }
+
+    document.getElementById('start').onclick=()=>{if(!timer&&!gameOver)timer=setInterval(step,400);};
+    document.getElementById('pause').onclick=()=>{if(timer){clearInterval(timer);timer=null;}};
+    document.getElementById('step').onclick=()=>{if(timer)clearInterval(timer);timer=null;step();};
+    document.getElementById('reset').onclick=()=>{if(timer)clearInterval(timer);timer=null;reset();};
+
+    reset();
+  })();
+  </script>
+</body>
+</html>
