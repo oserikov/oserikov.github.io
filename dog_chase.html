@@ -62,8 +62,8 @@
     const NUM_HUMANS = 6;
     const NUM_CHAIRS = 16;
     const NUM_SOFAS = 3;
-    const HUMAN_VISION = 4;
-    const DOG_DANGER_RADIUS = 5;
+    const HUMAN_VISION = 5;
+    const DOG_DANGER_RADIUS = 6;
 
     const EMPTY = 0, CHAIR = 1, SOFA = 2;
 
@@ -184,7 +184,7 @@
     }
 
     function checkCollision(){
-      if(humans.some(h=>h.x===dog.x && h.y===dog.y)){
+      if(humans.some(h=>manhattan(h,dog) <= 1)){
         messageBox.textContent="🐕 was caught at tick "+tick+"!";
         if(timer){clearInterval(timer); timer=null;}
         gameOver=true;
