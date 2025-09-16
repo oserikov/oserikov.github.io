@@ -44,6 +44,7 @@
 <body>
   <div>
     <canvas id="room" width="600" height="350"></canvas>
+    <div id="hud"></div>
     <div class="controls">
       <button id="start">▶ Start</button>
       <button id="pause">⏸ Pause</button>
@@ -73,10 +74,17 @@
     let tick = 0;
     let timer = null;
     let gameOver = false;
+  let mode = 'seekPets'; // 'seekPets' | 'runAway'
+  let petScore = 0;
+  let petThreshold = 0; // randomized [10..15]
+  let wasAdjacent = []; // per-human adjacency since last pet (anti-cheat)
+  let blinkingTimer = null;
+  let blinkingOn = false;
 
     const canvas = document.getElementById('room');
     const ctx = canvas.getContext('2d');
     const messageBox = document.getElementById('message');
+  const hud = document.getElementById('hud');
 
     ctx.font = `${CELL-4}px serif`;
     ctx.textAlign = "center";
@@ -106,6 +114,13 @@
       humans=[];
       gameOver=false;
       messageBox.textContent="";
+      mode='seekPets';
+      petScore=0;
+      petThreshold = 10 + randInt(6); // 10..15
+      wasAdjacent = [];
+      if (blinkingTimer) { clearInterval(blinkingTimer); blinkingTimer=null; }
+      blinkingOn=false;
+      canvas.style.filter='';
 
       placeRandomly(NUM_CHAIRS,(x,y)=>{if(grid[y][x]!==EMPTY)return false;grid[y][x]=CHAIR;return true;});
       placeRandomly(NUM_SOFAS,(x,y)=>{
@@ -122,7 +137,6 @@
         }
         return false;
       });
-
       placeRandomly(NUM_HUMANS,(x,y)=>{if(grid[y][x]!==EMPTY)return false; if(humans.some(h=>h.x===x&&h.y===y))return false; humans.push({x,y,lastMove:[0,0]}); return true;});
 
       let best=null;
@@ -134,44 +148,111 @@
       }
       dog={x:best.x,y:best.y};
       tick=0;
+      // init anti-cheat adjacency flags
+      wasAdjacent = humans.map(()=>false);
       render();
     }
 
     function humanStep(h, occupied){
-      const d=manhattan(h,dog);
-      let options=neighbors4(h.x,h.y);
-      if(options.length===0)return h;
-      let chosen;
-      if(d<=HUMAN_VISION){
-        let best=[],bestD=Infinity;
-        for(const n of options){const dist=manhattan(n,dog);if(dist<bestD){best=[n];bestD=dist;}else if(dist===bestD){best.push(n);}}
-        chosen=best[randInt(best.length)];
-      } else {
-        chosen=options[randInt(options.length)];
+      let attempt = 0;
+      let moved = false;
+      let newH = {...h};
+      while(attempt < 10 && !moved) {
+        let options = neighbors4(h.x, h.y).filter(n => !(n.x === dog.x && n.y === dog.y));
+        if(options.length === 0) break;
+        let chosen;
+        if(mode === 'runAway') {
+          // Only chase dog in runAway mode
+          const d = manhattan(h, dog);
+          if(d <= HUMAN_VISION){
+            let best = [], bestD = Infinity;
+            for(const n of options){
+              const dist = manhattan(n, dog);
+              if(dist < bestD){ best = [n]; bestD = dist; }
+              else if(dist === bestD){ best.push(n); }
+            }
+            chosen = best[randInt(best.length)];
+          } else {
+            chosen = options[randInt(options.length)];
+          }
+        } else {
+          // In seekPets mode, humans wander randomly
+          chosen = options[randInt(options.length)];
+        }
+        if(!occupied.has(chosen.x+","+chosen.y)) {
+          newH.x = chosen.x; newH.y = chosen.y; newH.lastMove = [chosen.dx, chosen.dy];
+          occupied.add(newH.x+","+newH.y);
+          moved = true;
+        } else {
+          attempt++;
+        }
       }
-      // ensure no collision with another human
-      if(occupied.has(chosen.x+","+chosen.y)) return h;
-      h.x=chosen.x;h.y=chosen.y;h.lastMove=[chosen.dx,chosen.dy];
-      occupied.add(h.x+","+h.y);
-      return h;
+      if(!moved) {
+        // stay in place
+        occupied.add(h.x+","+h.y);
+        return h;
+      }
+      return newH;
     }
 
     function dogStep(){
-      const options=neighbors4(dog.x,dog.y);
-      if(options.length===0)return;
-      const distToHuman=(p)=>humans.length?Math.min(...humans.map(h=>manhattan(p,h))):Infinity;
-      const nearby=humans.filter(h=>manhattan(h,dog)<=DOG_DANGER_RADIUS);
-      if(nearby.length>0){
-        let best=[],bestScore=-Infinity;
-        for(const n of options){const score=distToHuman(n);if(score>bestScore){best=[n];bestScore=score;}else if(score===bestScore){best.push(n);}}
-        const chosen=best[randInt(best.length)];
-        dog.x=chosen.x;dog.y=chosen.y;
-      }else{
-        const chosen=options[randInt(options.length)];
-        dog.x=chosen.x;dog.y=chosen.y;
+      let attempt = 0;
+      let moved = false;
+      let newDog = {...dog};
+      while(attempt < 10 && !moved) {
+        const options = neighbors4(dog.x, dog.y).filter(n => !humans.some(h => h.x === n.x && h.y === n.y));
+        if(options.length === 0) break;
+        const distToHuman = (p) => humans.length ? Math.min(...humans.map(h => manhattan(p, h))) : Infinity;
+        let chosen;
+        if(mode === 'seekPets'){
+          // Prefer humans that haven't just pet the dog (wasAdjacent false)
+          let best = [], bestScore = Infinity;
+          let bestUnpet = [], bestUnpetScore = Infinity;
+          for(const n of options){
+            // For each human, if wasAdjacent is false, prefer them
+            let minDist = Infinity, minUnpetDist = Infinity;
+            humans.forEach((h, idx) => {
+              const d = manhattan(n, h);
+              if(d < minDist) minDist = d;
+              if(!wasAdjacent[idx] && d < minUnpetDist) minUnpetDist = d;
+            });
+            if(minUnpetDist < bestUnpetScore) { bestUnpet = [n]; bestUnpetScore = minUnpetDist; }
+            else if(minUnpetDist === bestUnpetScore) { bestUnpet.push(n); }
+            if(minDist < bestScore) { best = [n]; bestScore = minDist; }
+            else if(minDist === bestScore) { best.push(n); }
+          }
+          // If there is a move that brings us closer to an unpet human, prefer it
+          if(bestUnpetScore < Infinity) {
+            chosen = bestUnpet[randInt(bestUnpet.length)];
+          } else {
+            chosen = best[randInt(best.length)];
+          }
+        } else {
+          // runAway (existing behavior: maximize distance if any nearby; else random)
+          const nearby = humans.filter(h => manhattan(h, dog) <= DOG_DANGER_RADIUS);
+          if(nearby.length > 0){
+            let best = [], bestScore = -Infinity;
+            for(const n of options){ const score = distToHuman(n); if(score > bestScore){ best = [n]; bestScore = score; } else if(score === bestScore){ best.push(n); } }
+            chosen = best[randInt(best.length)];
+          } else {
+            chosen = options[randInt(options.length)];
+          }
+        }
+        if(!humans.some(h => h.x === chosen.x && h.y === chosen.y)) {
+          newDog.x = chosen.x; newDog.y = chosen.y;
+          moved = true;
+        } else {
+          attempt++;
+        }
       }
+      if(moved) {
+        dog.x = newDog.x; dog.y = newDog.y;
+      }
+      // else stay in place
     }
 
+    // Store pet events for rendering hearts
+    let petEvents = [];
     function step(){
       if(gameOver) return;
       const occupied=new Set();
@@ -179,15 +260,60 @@
       humans=humans.map(h=>humanStep(h,occupied));
       dogStep();
       tick++;
+      petEvents = [];
+      // scoring in seekPets mode
+      if(mode==='seekPets'){
+        let gainedThisTick = 0;
+        humans.forEach((h,idx)=>{
+          const adj = manhattan(h,dog) <= 1;
+          if(adj && !wasAdjacent[idx]){ // just became adjacent
+            petScore += 1;
+            gainedThisTick += 1;
+            wasAdjacent[idx] = true;
+            // Record pet event for heart rendering
+            petEvents.push({dog: {x: dog.x, y: dog.y}, human: {x: h.x, y: h.y}});
+          }
+          if(!adj){
+            wasAdjacent[idx] = false; // reset to allow future pet from this human
+          }
+        });
+        if(petScore >= petThreshold && mode==='seekPets'){
+          startBlinkingThenSwitchMode();
+        }
+      }
       checkCollision();
       render();
     }
 
+    function startBlinkingThenSwitchMode(){
+      // If already blinking or already switched, skip
+      if(mode!=='seekPets') return;
+      // Pause the game loop during blinking
+      if(timer){clearInterval(timer); timer=null;}
+      let blinks = 0;
+      if (blinkingTimer) { clearInterval(blinkingTimer); blinkingTimer=null; }
+      blinkingTimer = setInterval(()=>{
+        blinkingOn = !blinkingOn;
+        canvas.style.filter = blinkingOn ? 'invert(1) hue-rotate(180deg)' : '';
+        blinks++;
+        if(blinks>=8){ // ~8 toggles
+          clearInterval(blinkingTimer);
+          blinkingTimer=null;
+          canvas.style.filter='';
+          mode='runAway';
+          updateHUD();
+          // Resume the game loop if it was running before
+          if(!gameOver) timer = setInterval(step, 400);
+        }
+      }, 120);
+    }
+
     function checkCollision(){
-      if(humans.some(h=>manhattan(h,dog) <= 1)){
-        messageBox.textContent="🐕 was caught at tick "+tick+"!";
+      // Only allow being caught in runAway mode; in seekPets, adjacency is intended for petting
+      if(mode==='runAway' && humans.some(h=>manhattan(h,dog) <= 1)){
+        messageBox.textContent = "🐕 was caught at tick " + tick + "!";
         if(timer){clearInterval(timer); timer=null;}
-        gameOver=true;
+        gameOver = true;
       }
     }
 
@@ -200,8 +326,21 @@
           if(cell===SOFA){ctx.fillText("🛋️",x*CELL+CELL/2,y*CELL+CELL/2);} 
         }
       }
+      // Draw hearts for pet events (for this frame only)
+      petEvents.forEach(ev => {
+        const mx = (ev.dog.x + ev.human.x) / 2 * CELL + CELL/2;
+        const my = (ev.dog.y + ev.human.y) / 2 * CELL + CELL/2;
+        ctx.font = `${CELL-6}px serif`;
+        ctx.fillText("❤️", mx, my);
+        ctx.font = `${CELL-4}px serif`;
+      });
       ctx.fillText("🐕",dog.x*CELL+CELL/2,dog.y*CELL+CELL/2);
       humans.forEach(h=>ctx.fillText("🧍",h.x*CELL+CELL/2,h.y*CELL+CELL/2));
+      updateHUD();
+    }
+
+    function updateHUD(){
+      hud.textContent = `Mode: ${mode === 'seekPets' ? 'Seek Pets' : 'Run Away'} | Pet Score: ${petScore}/${petThreshold}`;
     }
 
     document.getElementById('start').onclick=()=>{if(!timer&&!gameOver)timer=setInterval(step,400);};
