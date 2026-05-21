@@ -1,108 +1,177 @@
-.postcard {
-    width: 14.8cm;
-    height: 10.5cm;
-    background-color: #fff;
-    border: 1px solid #000;
-    overflow: hidden;
-    }
-
-.square {
-    width: 10.5cm;
-    height: 14.8cm;
-    background-color: #FFF9F5;
-    overflow: hidden;
-    margin-bottom: 0;
-    /* padding: 20px; */
+:root {
+    --a7-width: 7.4cm;
+    --a6-width: 14.8cm;
+    --postcard-height: 10.5cm;
+    --postcard-gap: 18px;
+    --cover-rotation: 2.7deg;
 }
 
-
-.flex-container {
-    display: flex;
-    margin-bottom: 0;
+* {
+    box-sizing: border-box;
 }
 
-.flex-item {
-    flex: 1; /* This will allow the items to grow and shrink as needed */
-    margin-bottom: 0;
+html {
+    min-height: 100%;
+    background: #fff;
 }
 
 body {
-    font-family: 'Courier New', 'Courier', monospace; 
-    text-align: justify;
+    min-height: 100vh;
+    margin: 0;
+    color: #000;
+    font-family: "Courier New", Courier, monospace;
+    text-align: left;
     hyphens: auto;
+    background: #fff;
+}
+
+.page-shell {
+    width: 100%;
+    margin: 0 auto;
+    padding: 18px;
+}
+
+.postcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, var(--a7-width));
+    column-gap: var(--postcard-gap);
+    row-gap: var(--postcard-gap);
+    align-items: start;
+    justify-content: center;
+}
+
+.postcard {
+    display: flex;
+    width: var(--a7-width);
+    height: var(--postcard-height);
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 12px;
+    min-width: 0;
+    border: 1px solid #000;
+    background: #FFF9F5;
+}
+
+.postcard-cover {
+    width: var(--a6-width);
+    height: var(--postcard-height);
+    grid-column: span 2;
+    justify-self: center;
+    padding: 20px;
+    transform: rotate(var(--cover-rotation));
+    transform-origin: center;
+}
+
+.phase-card {
+    transform: rotate(var(--card-rotation, 0deg));
+    transform-origin: center;
+}
+
+.cover-layout {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.86fr) minmax(0, 1.14fr);
+    gap: 22px;
+    align-items: start;
+    min-width: 0;
+}
+
+.portrait-panel {
+    padding: 8px;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+.portrait-panel img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1.18;
+    object-fit: cover;
+}
+
+h1,
+h2,
+p,
+a,
+li {
+    overflow-wrap: anywhere;
+}
+
+.cover-copy,
+.phase-card,
+.phase-card header,
+.contact-strip {
+    min-width: 0;
+    max-width: 100%;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
 }
 
 h1 {
-    font-size: 14pt;
-    margin-top: 0;
-    margin-bottom: 6pt;
+    margin-bottom: 0.65rem;
+    font-size: 2.35rem;
+    line-height: 1;
+    letter-spacing: 0;
 }
 
 h2 {
-    font-size: 12pt;
-    margin-top: 0;
-    margin-bottom: 6pt;
+    margin-bottom: 0.8rem;
+    font-size: 1.35rem;
+    line-height: 1.08;
+    letter-spacing: 0;
 }
 
 p {
-    font-size: 10pt;
-    margin-bottom: 0pt;
-    margin-top: 6pt;
+    margin-bottom: 0.75rem;
+    font-size: 0.93rem;
+    line-height: 1.48;
 }
 
-ul {
-    list-style-type: none;
+.phase-date {
+    margin: 0 0 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.phase-card p {
+    margin-bottom: 1.1rem;
+}
+
+.contact-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.2rem;
+}
+
+.evidence-list {
+    margin: 1.2rem 0 0;
     padding-left: 0;
+    list-style: none;
 }
 
-li {
-    font-size: 10pt;
+.evidence-list li {
+    margin-top: 0.38rem;
+    font-size: 0.78rem;
+    line-height: 1.28;
 }
 
-ul li::before {
+.evidence-list li::before {
     content: "* ";
-    
 }
 
-.leftblock {
-    width: 40%; height: 100%; border: 0px solid black; padding: 5mm;
+.contact-strip a {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.86rem;
 }
 
-.rightblock {
-    width: 60%; height: 100%; border: 0px solid black; padding: 5mm; padding-left: 0; padding-bottom: 0;
-}
-
-.news {
-    width: auto; margin: 5mm; margin-top: 0;
-}
-
-@media (min-width: 100000px) { 
-    .postcard {
-        width: 14.8cm;
-        height: 10.5cm;
-        border: 1px solid #000;
-        overflow: hidden;
-        }
-
-    .square {
-        width: 14.8cm;
-        height: 10.5cm;
-        overflow: hidden;
-        margin-bottom: 0;
-        /* padding: 20px; */
+@media (max-width: calc(3 * 7.4cm + 2 * 18px + 36px)) {
+    :root {
+        --cover-rotation: -2.7deg;
     }
-
-    ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
-
-    ul li::before {
-        content: "* ";
-        
-    }
-
-    p { margin-bottom: 0; }
-    ul { margin-top: 0; }
-
 }
