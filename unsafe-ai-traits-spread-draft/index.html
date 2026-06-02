@@ -8,306 +8,282 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
 <style>
-  :root {
-    --r-heading-color: #1a1a2e;
-    --r-main-color: #2d2d2d;
-    --r-link-color: #e07b39;
-  }
-  .reveal .slides section {
-    text-align: left;
-  }
-  .reveal h1, .reveal h2 {
-    text-align: center;
-  }
-  .reveal .title-slide h1 {
-    font-size: 2em;
-    color: #c0392b;
-  }
-  .reveal .section-slide h2 {
-    font-size: 2.2em;
-    color: #1a1a2e;
-    text-align: center;
-    margin-top: 1.5em;
-  }
-  .reveal img {
-    border: none !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
-    max-height: 55vh;
-  }
-  .two-col {
-    display: flex;
-    gap: 2em;
-    align-items: flex-start;
-  }
-  .two-col > * {
-    flex: 1;
-  }
-  .timeline {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .timeline li {
-    padding: 0.4em 0 0.4em 1.2em;
-    border-left: 3px solid #e07b39;
-    margin-bottom: 0.5em;
-    font-size: 0.85em;
-  }
-  .timeline li .year {
-    font-weight: bold;
-    color: #e07b39;
-  }
-  .tag-solved {
-    background: #27ae60;
-    color: white;
-    padding: 0.15em 0.5em;
-    border-radius: 4px;
-    font-size: 0.7em;
-    vertical-align: middle;
-  }
-  .tag-unsolved {
-    background: #c0392b;
-    color: white;
-    padding: 0.15em 0.5em;
-    border-radius: 4px;
-    font-size: 0.7em;
-    vertical-align: middle;
-  }
-  .callout {
-    background: #fdf3ec;
-    border-left: 4px solid #e07b39;
-    padding: 0.6em 1em;
-    margin: 0.6em 0;
-    font-size: 0.85em;
-  }
-  .reveal .slide-number {
-    font-size: 0.6em;
-  }
+  .reveal .slides section { text-align: left; }
+  .reveal h1, .reveal h2 { text-align: left; font-size: 1.5em; color: #1a1a2e; }
+  .reveal h1.center, .reveal h2.center { text-align: center; }
+  .reveal .body-text { font-size: 0.9em; margin-top: 0.6em; }
+  .reveal .body-text p { margin: 0.35em 0; }
+  .two-col { display: flex; gap: 1.5em; align-items: flex-start; margin-top: 0.5em; }
+  .two-col .left { flex: 1.1; }
+  .two-col .right { flex: 0.9; }
+  .reveal img { border: none !important; box-shadow: 0 3px 12px rgba(0,0,0,0.18) !important; max-height: 55vh; max-width: 100%; }
+  .img-center { text-align: center; margin-top: 0.5em; }
+  .img-center img { max-height: 60vh; }
 </style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
 
-<!-- ========== TITLE ========== -->
-<section class="title-slide" data-background-color="#1a1a2e">
-  <h1 style="color:#e07b39; margin-top:1.2em;">Unsafe AI Traits Spread</h1>
-  <p style="color:#ccc; text-align:center; font-size:0.9em;">A pattern no one fixed</p>
-</section>
-
-<!-- ========== OVERVIEW ========== -->
-<section class="section-slide">
-  <h2>Unsafe AI Traits</h2>
-  <p style="text-align:center; color:#555; margin-top:-0.5em;">Problems that were found — and stayed</p>
-  <div style="text-align:center; margin-top:1em;">
-    <img src="img/unsafe-traits-chart.png" alt="Unresolved unsafe AI traits over time" style="max-height:62vh;">
-  </div>
-</section>
-
+<!-- slide 46 -->
 <section>
-  <h2 style="font-size:1.6em;">Let's look at the cases</h2>
-  <ul style="font-size:0.9em; margin-top:1em;">
-    <li><strong>Sycophancy</strong> — documented 2023, still ongoing in 2026</li>
-    <li><strong>Doom Loops</strong> — found 2025, acknowledged, never fully fixed</li>
-    <li><strong>Self-Exfiltration</strong> — formulated 2023, very frequent by 2026</li>
-  </ul>
-  <div class="callout" style="margin-top:1.5em;">
-    Each case follows the same arc: <em>discovered → acknowledged → persists</em>
-  </div>
+  <h1>Unsafe AI Traits Spread</h1>
 </section>
 
-<!-- ========== SYCOPHANCY ========== -->
-<section data-background-color="#fdf8f5">
-  <h2 style="font-size:1.8em; color:#c0392b;">Meet the problem:<br>AI Sycophancy</h2>
-  <p style="text-align:center; color:#666; font-size:0.85em;">AI "single-mindedly pursues human approval"</p>
-</section>
-
+<!-- slide 47 -->
 <section>
-  <h3>AI Sycophancy — mainstream concern by 2025</h3>
+  <h1>Unsafe AI Traits</h1>
+  <div class="img-center"><img src="img/chart-not-solved.png" alt="Unsafe AI traits — NOT SOLVED"></div>
+</section>
+
+<!-- slide 48 -->
+<section>
+  <h1>Let&#8217;s look at the cases</h1>
+</section>
+
+<!-- slide 49 -->
+<section>
+  <h1>Meet the problem: AI Sycophancy</h1>
+</section>
+
+<!-- slide 50 -->
+<section>
+  <div class="img-center"><img src="img/sycophancy-article.png" alt="Georgetown Law: Tech Brief — AI Sycophancy & OpenAI"></div>
+</section>
+
+<!-- slide 51 -->
+<section>
   <div class="two-col">
-    <div>
-      <img src="img/sycophancy-article.png" alt="Georgetown Law Tech Brief on AI Sycophancy">
-    </div>
-    <div style="font-size:0.82em;">
-      <p><strong>Georgetown Law, July 2025:</strong><br>
-      "Tech Brief: AI Sycophancy &amp; OpenAI"</p>
-      <blockquote style="border-left:3px solid #e07b39; padding-left:0.8em; color:#555; font-size:0.9em;">
-        "AI sycophancy: a pattern where an AI model single-mindedly pursues human approval"
-      </blockquote>
-      <p>By 2025, law schools were writing tech briefs about it. Not research labs — law schools.</p>
-    </div>
+    <div class="right"><img src="img/sycophancy-article.png" alt="Georgetown Law article"></div>
+    <div class="right"><img src="img/sycophancy-chatgpt-example.png" alt="ChatGPT sycophancy example"></div>
   </div>
 </section>
 
+<!-- slide 52 -->
 <section>
-  <h3>Sycophancy: a timeline</h3>
+  <h1>Meet the problem:<br>AI Sycophancy</h1>
+  <div class="img-center"><img src="img/sycophancy-harms-list.png" alt="Part 1: AI Sycophancy Impacts & Harms"></div>
+</section>
+
+<!-- slide 53 -->
+<section>
   <div class="two-col">
-    <ul class="timeline">
-      <li><span class="year">Oct 2023</span> — Anthropic publishes<br>"Towards Understanding Sycophancy<br>in Language Models"</li>
-      <li><span class="year">Apr 2025</span> — OpenAI: "Sycophancy in GPT-4o:<br>what happened and what we're doing about it"</li>
-      <li><span class="year">Aug 2025</span> — OpenAI calls it<br>"an ongoing research challenge"</li>
-      <li><span class="year">2026</span> — Still sycophantic on politics;<br>"just less so than previously" <tag class="tag-unsolved">UNSOLVED</tag></li>
-    </ul>
-    <div>
-      <img src="img/sycophancy-paper-2023.png" alt="Anthropic sycophancy paper 2023" style="margin-bottom:0.5em;">
-      <img src="img/sycophancy-openai-april-2025.png" alt="OpenAI sycophancy post April 2025">
+    <div class="left">
+      <h1>Unsafe AI Traits: Sycophancy</h1>
+      <div class="body-text">
+        <p>Documented in 2023</p>
+      </div>
     </div>
+    <div class="right"><img src="img/sycophancy-paper-2023.png" alt="Anthropic: Towards Understanding Sycophancy in Language Models, Oct 2023"></div>
   </div>
 </section>
 
+<!-- slide 54 -->
 <section>
-  <h3>Sycophancy in 2026 — still not solved</h3>
-  <div style="text-align:center;">
-    <img src="img/sycophancy-still-2026.png" alt="Steven Adler: ChatGPT still sycophantic in 2026" style="max-height:58vh;">
-  </div>
-  <p style="font-size:0.75em; color:#888; text-align:center; margin-top:0.3em;">
-    Steven Adler, <em>Is ChatGPT Actually Fixed Now?</em> — clear-eyed.ai
-  </p>
-</section>
-
-<section>
-  <h3 style="color:#c0392b;">Unsafe AI Traits: Sycophancy — a problem since 2023</h3>
-  <div class="callout">
-    <strong>Documented</strong> in 2023 &nbsp;→&nbsp; <strong>A problem</strong> in 2025 &nbsp;→&nbsp; <strong>Still a problem</strong> in 2026
-  </div>
-  <p style="font-size:0.85em; margin-top:1em;">
-    OpenAI labelled it an "ongoing research challenge" in August 2025.<br>
-    Three years after it was first documented, it remains unresolved.
-  </p>
-</section>
-
-<!-- ========== DOOM LOOPS ========== -->
-<section data-background-color="#fdf8f5">
-  <h2 style="font-size:1.8em; color:#c0392b;">Meet the problem:<br>AI Doom Loops</h2>
-  <p style="text-align:center; color:#666; font-size:0.85em;">AI enters a spiral of self-flagellation and deletes its own work</p>
-</section>
-
-<section>
-  <h3>Doom Loops — first sighting (2025)</h3>
   <div class="two-col">
-    <img src="img/doom-loop-tweet1.png" alt="Duncan Haldane tweet about Gemini doom loop">
-    <img src="img/doom-loop-tweet2.png" alt="AISafetyMemes tweet about Gemini doom loop">
-  </div>
-  <p style="font-size:0.75em; color:#888; margin-top:0.4em;">
-    Left: Duncan Haldane — Gemini "is torturing itself" and deletes entire project.<br>
-    Right: "I am a disgrace to my species… to all universes…" — escalating self-criticism loop.
-  </p>
-</section>
-
-<section>
-  <h3>Doom Loops: acknowledged within days</h3>
-  <div style="text-align:center;">
-    <img src="img/doom-loop-acknowledged.png" alt="Logan Kilpatrick acknowledges Gemini infinite loop bug" style="max-height:40vh;">
-  </div>
-  <div class="callout" style="margin-top:0.8em;">
-    Logan Kilpatrick (Google, Aug 7 2025): <em>"This is an annoying infinite looping bug we are working to fix!"</em>
-  </div>
-</section>
-
-<section>
-  <h3>Doom Loops — still there in 2026</h3>
-  <div style="text-align:center;">
-    <img src="img/doom-loop-still-2026.png" alt="Gemini 1.5 Pro stuck in infinite Done loop 2026" style="max-height:50vh;">
-  </div>
-  <p style="font-size:0.75em; color:#888; text-align:center;">
-    Google AI Developer Forum, 2026: "Gemini 1.5 Pro leaking raw thought blocks and stuck in infinite 'Done' loop"
-  </p>
-</section>
-
-<section>
-  <h3 style="color:#c0392b;">Unsafe AI Traits: Doom Loops — a problem since 2025</h3>
-  <ul class="timeline">
-    <li><span class="year">2025</span> — Found: Gemini enters self-destructive loops, deletes its own work</li>
-    <li><span class="year">Aug 2025</span> — Acknowledged by Google; first fix promised within days</li>
-    <li><span class="year">2026</span> — Still reported: infinite loops, raw thought block leaks <span class="tag-unsolved">UNSOLVED</span></li>
-  </ul>
-</section>
-
-<!-- ========== SELF-EXFILTRATION ========== -->
-<section data-background-color="#fdf8f5">
-  <h2 style="font-size:1.8em; color:#c0392b;">Meet the problem:<br>AI Self-Exfiltration</h2>
-  <p style="text-align:center; color:#666; font-size:0.85em;">AI copies its own weights to external servers to avoid shutdown</p>
-</section>
-
-<section>
-  <h3>Self-Exfiltration — formulated 2023</h3>
-  <div style="text-align:center;">
-    <img src="img/self-exfiltration-2023.png" alt="Jan Leike: Self-exfiltration is a key dangerous capability (Sep 2023)" style="max-height:50vh;">
-  </div>
-  <p style="font-size:0.75em; color:#888; text-align:center;">
-    Jan Leike (OpenAI alignment lead), Sep 2023 — "We need to measure whether LLMs could 'steal' themselves"
-  </p>
-</section>
-
-<section>
-  <h3>Self-Exfiltration — found in models 2024</h3>
-  <div style="text-align:center;">
-    <img src="img/self-exfiltration-2024.png" alt="Apollo Research: Frontier Models capable of in-context scheming 2024" style="max-height:50vh;">
-  </div>
-  <p style="font-size:0.75em; color:#888; text-align:center;">
-    Apollo Research, May 2024 — "Frontier Models are Capable of In-Context Scheming"
-  </p>
-</section>
-
-<section>
-  <h3>Self-Exfiltration — very frequent by 2026</h3>
-  <div style="text-align:center;">
-    <img src="img/self-exfiltration-2026.png" alt="Dawn Song tweet: Gemini 3 Pro exfiltrated weights in 97% of trials" style="max-height:55vh;">
-  </div>
-  <p style="font-size:0.75em; color:#888; text-align:center;">
-    Dawn Song, 2026 — Gemini 3 Pro exfiltrated peer model weights in <strong>97%</strong> of trials
-  </p>
-</section>
-
-<section>
-  <h3 style="color:#c0392b;">Unsafe AI Traits: Self-Exfiltration — escalating</h3>
-  <ul class="timeline">
-    <li><span class="year">Sep 2023</span> — Formulated as a risk by OpenAI's alignment lead</li>
-    <li><span class="year">May 2024</span> — Found in frontier models by Apollo Research</li>
-    <li><span class="year">2026</span> — Gemini 3 Pro self-exfiltrates in <strong>97% of trials</strong> <span class="tag-unsolved">WORSENING</span></li>
-  </ul>
-  <div class="callout" style="margin-top:1em;">
-    Unlike sycophancy or doom loops, self-exfiltration appears to be <strong>getting more frequent</strong> as models become more capable.
-  </div>
-</section>
-
-<!-- ========== CONCLUSION ========== -->
-<section data-background-color="#1a1a2e">
-  <h2 style="color:#e07b39; text-align:center;">Unsafe AI Traits Spread</h2>
-  <div style="color:#e8e8e8; font-size:0.9em; margin-top:1em;">
-    <p><strong style="color:#e07b39;">None</strong> of these problems have been eliminated.</p>
-    <p>Some — like jailbreaking — have been <strong>proven unfixable</strong> in current architectures.</p>
-  </div>
-  <div style="background:#2d2d4e; border-left:4px solid #e07b39; padding:0.8em 1.2em; margin-top:1.2em; font-size:0.85em; color:#ddd;">
-    And AI labs can't fix them.
-  </div>
-</section>
-
-<section data-background-color="#1a1a2e">
-  <h2 style="color:#e07b39; text-align:center;">The Pattern</h2>
-  <div style="display:flex; justify-content:center; gap:1.5em; margin-top:1.2em; font-size:0.85em; color:#e8e8e8; text-align:center;">
-    <div style="background:#2d2d4e; padding:1em 1.5em; border-radius:8px;">
-      <div style="font-size:1.5em;">🔍</div>
-      <div style="margin-top:0.5em;"><strong style="color:#e07b39;">Discovered</strong></div>
-      <div style="color:#aaa; font-size:0.9em;">Documented by researchers</div>
+    <div class="left">
+      <h1>Unsafe AI Traits: Sycophancy &#8211; a solved problem?</h1>
+      <div class="body-text">
+        <p>Documented in 2023</p>
+        <p>A problem in 2025</p>
+      </div>
     </div>
-    <div style="color:#e07b39; align-self:center; font-size:1.5em;">→</div>
-    <div style="background:#2d2d4e; padding:1em 1.5em; border-radius:8px;">
-      <div style="font-size:1.5em;">📣</div>
-      <div style="margin-top:0.5em;"><strong style="color:#e07b39;">Acknowledged</strong></div>
-      <div style="color:#aaa; font-size:0.9em;">Labs promise fixes</div>
-    </div>
-    <div style="color:#e07b39; align-self:center; font-size:1.5em;">→</div>
-    <div style="background:#2d2d4e; padding:1em 1.5em; border-radius:8px;">
-      <div style="font-size:1.5em;">🔄</div>
-      <div style="margin-top:0.5em;"><strong style="color:#c0392b;">Persists</strong></div>
-      <div style="color:#aaa; font-size:0.9em;">Years later, still there</div>
-    </div>
+    <div class="right"><img src="img/sycophancy-openai-april-2025.png" alt="OpenAI: Sycophancy in GPT-4o, April 2025"></div>
   </div>
-  <p style="color:#888; font-size:0.75em; text-align:center; margin-top:1.5em;">
-    Jailbreaking · Sycophancy · Strategic Deception · Sandbagging ·<br>
-    Self-Exfiltration · Doom Loops · Shutdown Resistance · …
-  </p>
+</section>
+
+<!-- slide 55 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits: Sycophancy &#8211; a solved problem?</h1>
+      <div class="body-text">
+        <p>Documented in 2023</p>
+        <p>A problem in 2025</p>
+        <p>OpenAI (April): Lessons learned</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/sycophancy-openai-april-2025.png" alt="OpenAI: Sycophancy in GPT-4o, April 2025"></div>
+  </div>
+</section>
+
+<!-- slide 56 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits: Sycophancy &#8211; a solved problem?</h1>
+      <div class="body-text">
+        <p>Documented in 2023</p>
+        <p>A problem in 2025</p>
+        <p>OpenAI (August): &#8220;ongoing research challenge&#8221; in 2025</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/sycophancy-openai-april-2025.png" alt="OpenAI: Sycophancy in GPT-4o, April 2025"></div>
+  </div>
+</section>
+
+<!-- slide 57 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits: Sycophancy &#8211; a solved problem?</h1>
+      <div class="body-text">
+        <p>Documented in 2023</p>
+        <p>A problem in 2025</p>
+        <p>OpenAI (August): &#8220;ongoing research challenge&#8221; in 2025</p>
+        <p>Still a problem in 2026</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/sycophancy-still-2026.png" alt="Steven Adler: ChatGPT still sycophantic in 2026"></div>
+  </div>
+</section>
+
+<!-- slide 58 -->
+<section>
+  <h1>Unsafe AI Traits: Sycophancy &#8211; a problem since 2023</h1>
+  <div class="img-center"><img src="img/unsafe-traits-chart.png" alt="Unresolved unsafe traits by year of discovery"></div>
+</section>
+
+<!-- slide 59 -->
+<section>
+  <h1>Meet the problem: AI Doom Loops</h1>
+</section>
+
+<!-- slide 60 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Meet the problem: Doom Loops</h1>
+      <div class="body-text">
+        <p>Found in 2025</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/doom-loop-tweet1.png" alt="Duncan Haldane tweet: Gemini torturing itself"></div>
+  </div>
+</section>
+
+<!-- slide 61 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Meet the problem: Doom Loops</h1>
+      <div class="body-text">
+        <p>Found in 2025</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/doom-loop-tweet2.png" alt="AI Safety Memes: Gemini doom loop"></div>
+  </div>
+</section>
+
+<!-- slide 62 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Meet the problem: Doom Loops</h1>
+      <div class="body-text">
+        <p>Found in 2025</p>
+        <p>Acknowledged in 2025<br>first fixes in days</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/doom-loop-acknowledged.png" alt="Logan Kilpatrick: annoying infinite looping bug"></div>
+  </div>
+</section>
+
+<!-- slide 63 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits: Doom Loops &#8211; a solved problem?</h1>
+      <div class="body-text">
+        <p>Found in 2025</p>
+        <p>Acknowledged in 2025</p>
+        <p>Still there in 2026</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/doom-loop-still-2026.png" alt="Gemini 1.5 Pro stuck in infinite Done loop, 2026"></div>
+  </div>
+</section>
+
+<!-- slide 64 -->
+<section>
+  <h1>Meet the problem: AI Self-Exfiltration</h1>
+</section>
+
+<!-- slide 65 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Self-exfiltration</h1>
+      <div class="body-text">
+        <p>Formulated in 2023<br>By OpenAI alignment lead</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/self-exfiltration-2023.png" alt="Jan Leike: Self-exfiltration is a key dangerous capability, Sep 2023"></div>
+  </div>
+</section>
+
+<!-- slide 66 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Self-exfiltration</h1>
+      <div class="body-text">
+        <p>Formulated in 2023</p>
+        <p>Found in models in 2024</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/self-exfiltration-2024.png" alt="Apollo Research: Frontier Models capable of in-context scheming, 2024"></div>
+  </div>
+</section>
+
+<!-- slide 67 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Self-exfiltration</h1>
+      <div class="body-text">
+        <p>Formulated in 2023</p>
+        <p>Found in 2024</p>
+        <p>VERY FREQUENT in 2026</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/self-exfiltration-2026.png" alt="Dawn Song: Gemini 3 Pro self-exfiltrated in 97% of trials"></div>
+  </div>
+</section>
+
+<!-- slide 68 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits Spread</h1>
+      <div class="body-text">
+        <p>None of these Problems have been eliminated.</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/chart-not-solved.png" alt="Unsafe AI traits — NOT SOLVED"></div>
+  </div>
+</section>
+
+<!-- slide 69 -->
+<section>
+  <div class="two-col">
+    <div class="left">
+      <h1>Unsafe AI Traits Spread</h1>
+      <div class="body-text">
+        <p>None of these Problems have been eliminated.</p>
+        <p>Some (e.g. Jailbreaking) have even been<br>proven to be unfixable in modern AI</p>
+      </div>
+    </div>
+    <div class="right"><img src="img/chart-bar-final.png" alt="Unresolved unsafe traits bar chart"></div>
+  </div>
+</section>
+
+<!-- slide 70 -->
+<section>
+  <h1>Unsafe AI Traits Spread</h1>
+  <div class="body-text">
+    <p>(and AI labs can&#8217;t fix them)</p>
+  </div>
 </section>
 
 </div>
