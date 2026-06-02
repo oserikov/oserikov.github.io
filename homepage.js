@@ -45,21 +45,39 @@ function randomRotationMagnitude(maxAngle) {
     return randomUnit * maxAngle;
 }
 
-function readParagraph(lines, startIndex) {
-    const paragraph = [];
+function readParagraphs(lines, startIndex) {
+    const paragraphs = [];
+    let currentParagraph = [];
     let index = startIndex;
 
     while (index < lines.length) {
         const line = lines[index].trim();
-        if (!line || line.startsWith("#") || line.startsWith("- ")) {
+
+        if (line.startsWith("## ") || line.startsWith("- ")) {
             break;
         }
-        paragraph.push(line);
+
+        if (!line) {
+            if (currentParagraph.length > 0) {
+                paragraphs.push(currentParagraph.join(" "));
+                currentParagraph = [];
+            }
+            index += 1;
+            continue;
+        }
+
+        if (!line.startsWith("### ")) {
+            currentParagraph.push(line);
+        }
         index += 1;
     }
 
+    if (currentParagraph.length > 0) {
+        paragraphs.push(currentParagraph.join(" "));
+    }
+
     return {
-        text: paragraph.join(" "),
+        paragraphs,
         nextIndex: index,
     };
 }
@@ -112,7 +130,7 @@ function parseHomepage(markdown) {
         index += 1;
     }
 
-    const intro = readParagraph(lines, index);
+    const intro = readParagraphs(lines, index);
     index = intro.nextIndex;
 
     while (index < lines.length && !lines[index].trim()) {
@@ -146,7 +164,7 @@ function parseHomepage(markdown) {
             index += 1;
         }
 
-        const body = readParagraph(lines, index);
+        const body = readParagraphs(lines, index);
         index = body.nextIndex;
 
         while (index < lines.length && !lines[index].trim()) {
@@ -159,7 +177,7 @@ function parseHomepage(markdown) {
         phases.push({
             date,
             heading,
-            body: body.text,
+            body: body.paragraphs,
             links: evidence.links,
         });
     }
@@ -167,7 +185,7 @@ function parseHomepage(markdown) {
     return {
         title,
         image,
-        intro: intro.text,
+        intro: intro.paragraphs,
         contacts: contacts.links,
         phases,
     };
@@ -193,7 +211,10 @@ function renderCover(data) {
 
     const title = document.createElement("h1");
     title.textContent = data.title;
-    copy.append(title, makeParagraph(data.intro));
+    copy.append(title);
+    for (const paragraph of data.intro) {
+        copy.append(makeParagraph(paragraph));
+    }
 
     layout.append(portraitPanel, copy);
 
@@ -233,7 +254,12 @@ function renderPhase(phase, rotation) {
         list.append(item);
     }
 
-    card.append(header, makeParagraph(phase.body), list);
+    const body = document.createDocumentFragment();
+    for (const paragraph of phase.body) {
+        body.append(makeParagraph(paragraph));
+    }
+
+    card.append(header, body, list);
     return card;
 }
 

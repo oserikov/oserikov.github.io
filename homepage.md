@@ -2,7 +2,10 @@
 
 ![Oleg Serikov](face.jpg)
 
-I interpret LLMs since before ChatGPT and orchestrated agents' goals as early as in 2021. Since 2025 I lead behavioural elicitation research at Palisade [11, 12].
+Investigate AI thinking since pre-ChatGPT, now focus on dangers.
+
+*Delivered* agentic AI before Claude even existed.
+I lead behavioural elicitation research at Palisade [11, 12].
 
 - [Google Scholar](http://scholar.google.com/citations?user=uOEpqsUAAAAJ)
 - [github.com/oserikov](https://github.com/oserikov)
