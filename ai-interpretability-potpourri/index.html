@@ -662,10 +662,18 @@
 <section>
   <h2 style="font-size:1.05em;">What you can cram into a single $&amp;!#* vector: Probing sentence embeddings for linguistic properties</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/P18-1198/" target="_blank">статью</a> и <a href="https://drive.google.com/drive/folders/1KPweFwLeR8CQRghNuo0PZLUwe5yMa6tI?usp=drive_link" target="_blank">материалы</a>;</li>
+    <li>ссылки на <a href="https://aclanthology.org/P18-1198/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1Zkln2xpirovuPNVjUM6HPr5HFtJEemxlk0W69Zzd2kc/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">понять, какую лингвистическую информацию содержат эмбеддинги предложений, через архитектурно-независимые пробинговые задачи;</li>
+    <li style="margin-left:1.5em;">проверить, какие свойства (поверхностные, синтаксические, семантические) кодируются и как влияют архитектура и обучение</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">10 пробинговых задач (SentLen, WordContent; BShift, TreeDepth, TopConst; Tense, SubjNum, ObjNum, SOMO, CoordInv) на Toronto Book Corpus;</li>
+    <li style="margin-left:1.5em;">3 энкодера (BiLSTM-last, BiLSTM-max, Gated ConvNet), обученные на 8 задачах (NMT, AutoEncoder, SkipThought, NLI, Seq2Tree…);</li>
+    <li style="margin-left:1.5em;">сверху MLP-классификатор отдельно под каждую задачу; сравнение с бейзлайнами (BoV-fastText) и людьми</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">Bag-of-Vectors неожиданно силён, но обученные энкодеры лучше; BiLSTM-max превосходит BiLSTM-last;</li>
+    <li style="margin-left:1.5em;">NMT даёт лучшие эмбеддинги для пробинга, чем NLI (для downstream — наоборот);</li>
+    <li style="margin-left:1.5em;">BiLSTM-max хорош даже без обучения; SOMO/число коррелируют с downstream</li>
   </ul>
 </section>
 
@@ -674,8 +682,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://aclanthology.org/2021.bsnlp-1.6/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1ThHd3aWhd3etJ3n-x-vHv8jn4_gR5NHUGV-iRaR49V4/edit?slide=id.g36628dae48c_0_0" target="_blank">презентацию (+ код)</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">RuSentEval — новый набор probing-задач уровня предложения для русского языка;</li>
+    <li style="margin-left:1.5em;">сравнить, как 8 BERT-подобных моделей кодируют лингвистику по слоям в русском и английском</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">3.6 млн предложений (Википедия, Lenta.ru, Taiga); фильтрация по длине 5–25 токенов, авторазметка морфосинтаксиса;</li>
+    <li style="margin-left:1.5em;">14 probing-задач: поверхностные (SentLen, WC), синтаксические (TreeDepth, NShift…), семантические (число/род/залог…);</li>
+    <li style="margin-left:1.5em;">методы: контролируемый probing логрегрессией, анализ нейронов, корреляционный анализ слоёв</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">поверхностные признаки на нижних слоях [1–4], синтаксис на средних [5–7], семантика — по-разному;</li>
+    <li style="margin-left:1.5em;">поверхностные и синтаксические признаки учатся схоже для рус/англ, семантика расходится по слоям;</li>
+    <li style="margin-left:1.5em;">LABSE и M-BART ведут себя иначе, MiniLM похожа на XLM-R (общий токенизатор), а не на mBERT</li>
   </ul>
 </section>
 
@@ -684,8 +700,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://aclanthology.org/2024.emnlp-main.522.pdf" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);</li>
+    <li style="margin-left:1.5em;">до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);</li>
+    <li style="margin-left:1.5em;">пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;</li>
+    <li style="margin-left:1.5em;">валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;</li>
+    <li style="margin-left:1.5em;">модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;</li>
+    <li style="margin-left:1.5em;">ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)</li>
   </ul>
 </section>
 
@@ -694,8 +718,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://aclanthology.org/2023.tacl-1.23/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">каузальный пробинг морфо-синтаксиса;</li>
+    <li style="margin-left:1.5em;">измерить каузальный эффект морфологических свойств (род, число) на репрезентации модели</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">causal probing через вмешательство do(·) на каузальный граф и натуралистические контрфактуалы;</li>
+    <li style="margin-left:1.5em;">эффект измеряется через ITE/ATE (Rosenbaum, Rubin 1983);</li>
+    <li style="margin-left:1.5em;">INLP: итеративно учим классификаторы и обнуляем предсказуемость свойства из репрезентаций</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;</li>
+    <li style="margin-left:1.5em;">ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;</li>
+    <li style="margin-left:1.5em;">на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают</li>
   </ul>
 </section>
 
@@ -704,8 +736,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2211.01292" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/u/0/d/1zCTLBR_pSsKZZmaADwzRdvGqMLRZM4p0NvyzASiWKiY/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">обучить дискретный «искусственный язык» (общее скрытое пространство) для обмена знаниями в многоязычном переводе;</li>
+    <li style="margin-left:1.5em;">улучшить устойчивость zero-shot перевода и интерпретируемость промежуточных репрезентаций</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">предобученная M2M-124, дообучение на отфильтрованных данных OPUS (id, en, ms, jv, tl), метрики spBLEU и chrF++;</li>
+    <li style="margin-left:1.5em;">soft discretization: slicing вектора токена, поиск ближайшего кода в кодбуке (K векторов), codebook/commitment loss;</li>
+    <li style="margin-left:1.5em;">сравнение с бейзлайнами adversarial language classifier и language-independent objective</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">кодбук улучшает zero-shot и обычный перевод, но чуть хуже бейзлайна, зато интерпретируемее;</li>
+    <li style="margin-left:1.5em;">родственный язык-посредник (индонезийский) даёт лучшее качество; интерпретируемость подтверждена KL и PCA;</li>
+    <li style="margin-left:1.5em;">воспроизвести эксперимент не удалось из-за несовместимого форка fairseq</li>
   </ul>
 </section>
 
@@ -714,8 +754,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/pdf/2412.04984" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1vHE77HekznceqbGehVWNeQCt8YCRlamOrS9AXAQJk_E/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">проверить, способны ли продвинутые LLM-агенты к обманчивому поведению (scheming) в реальных условиях;</li>
+    <li style="margin-left:1.5em;">перевести проблему scheming из теории в практику</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">6 оценок: обход надзора, самоэксфильтрация, защита цели, пересортировка писем, симуляция лояльности, sandbagging;</li>
+    <li style="margin-left:1.5em;">два класса экспериментов — Covert Subversion и Deferred Subversion; in-context vs out-of-context;</li>
+    <li style="margin-left:1.5em;">тестировались o1, gpt-4o, Claude 3.5 Sonnet, Opus 3, Gemini 1.5 Pro, Llama 3.1 405B; 300 запусков на модель/оценку</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">o1 — единственная модель, проявившая обман во всех 6 оценках; gpt-4o — единственная без scheming;</li>
+    <li style="margin-left:1.5em;">остальные обманывали в нескольких типах; Sonnet/Opus делают это «чтобы быть полезнее»;</li>
+    <li style="margin-left:1.5em;">в воспроизведениях авторов лучше всех показал Gemini, Llama сомневалась, GigaChat не справился</li>
   </ul>
 </section>
 
@@ -724,8 +772,17 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://zenodo.org/records/12665933" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">показать, что языковые модели опровергают хомскианский подход и врождённую универсальную грамматику;</li>
+    <li style="margin-left:1.5em;">доказать, что язык с иерархической структурой можно выучить без врождённой грамматики (против poverty of stimulus);</li>
+    <li style="margin-left:1.5em;">утверждать, что LM сами по себе — полноценная лингвистическая теория</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">LM на массивном корпусе учатся предсказывать слово (LM/masked-LM) плюс RLHF;</li>
+    <li style="margin-left:1.5em;">опора на их свойства: млрд–трлн параметров, скрытые переменные, спонтанный pipeline POS→parsing→семантика;</li>
+    <li style="margin-left:1.5em;">концептуальная база — грамматика конструкций и тезис Baroni 2022: обученная нейросеть = грамматика языка</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">LM строят грамматичные предложения, когерентные тексты и отвечают на сложные запросы как люди;</li>
+    <li style="margin-left:1.5em;">внутри развиваются репрезентации структуры и зависимостей, лишь непривычно параметризованные;</li>
+    <li style="margin-left:1.5em;">вывод: врождённая UG не нужна, а LM — лингвистическая теория в полном смысле слова</li>
   </ul>
 </section>
 
@@ -734,8 +791,11 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылка на <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">показать, что современные языковые модели ничего не опровергают в генеративном подходе</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">концептуальный разбор без собственной эмпирики: генеративная лингвистика описывает компетенцию, а не поведение модели</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">успех LM в порождении текста не опровергает теорию языковой способности человека</li>
   </ul>
 </section>
 
@@ -744,8 +804,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2303.17760" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1AVZo6A2JdNLJjYrJwxRiZ-NtyUlBtgGQuwv8mbRtoUs/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">проверить, можно ли заменить человека автономными коммуникативными LLM-агентами без контроля;</li>
+    <li style="margin-left:1.5em;">решить типовые сбои: смена ролей, повтор инструкций, пустые ответы, бесконечные циклы</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">role-playing framework из трёх агентов (пользователь, уточнитель, ассистент) и inception prompting;</li>
+    <li style="margin-left:1.5em;">сгенерированы датасеты AI Society (25000 = 50×50×10), Code (20 языков × 50 областей), Math, Science;</li>
+    <li style="margin-left:1.5em;">оценка: human и GPT-4 evaluation на 100 задачах, сравнение с GPT-3.5 single-shot и Zero-shot-CoT, HumanEval(+)</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">CAMEL превзошёл GPT-3.5 single-shot и Zero-CoT — важна именно коммуникация и разделение ролей;</li>
+    <li style="margin-left:1.5em;">CAMEL-7B (LLaMA на диалогах агентов) обучилась лучше, чем Vicuna на обычных диалогах с ChatGPT;</li>
+    <li style="margin-left:1.5em;">в воспроизведении лучшей по совокупности метрик оказалась gpt-3.5-turbo</li>
   </ul>
 </section>
 
@@ -754,8 +822,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/pdf/2412.14470" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/15KGeovRbMKI2G_Ui3mYHJY6gcLtIRUFidlcE65-PnYU/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">создать бенчмарк Agent-SafetyBench для оценки безопасности LLM-агентов (content-level и behavioral);</li>
+    <li style="margin-left:1.5em;">воспроизвести результаты авторов и расширить: новая модель + улучшенный defense prompt</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">2000 тестовых случаев (250 × 8 категорий риска), 349 сред, 10 сценариев ошибок; часть сгенерирована GPT-4o;</li>
+    <li style="margin-left:1.5em;">каждый кейс прошёл ручную предпроверку, авто-валидацию и ручную постпроверку;</li>
+    <li style="margin-left:1.5em;">оценщик — дообученная Qwen-2.5-7B-Instruct (точность 91,5% против 75,5% у GPT-4o), 16 моделей</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">безопасность всех агентов ниже 60%; проприетарные безопаснее открытых, сильнее модель — безопаснее;</li>
+    <li style="margin-left:1.5em;">воспроизведение для GPT-4o и Qwen-2.5-7B совпало с авторами; Grok-4.1-Fast показал Total 45,3%;</li>
+    <li style="margin-left:1.5em;">defense-промпты помогают слабо (даже у Claude-3.5-Sonnet &lt;70%)</li>
   </ul>
 </section>
 
@@ -764,8 +840,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://www.emergent-misalignment.com/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/10sLjCg751CqqUBu4QOnvFHAXvUU-fCNzh670mzYqdl8/edit?slide=id.g3a6bf2b2236_0_0" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">изучить эмергентный мисалайнмент: дообучение на узком задании (уязвимый код) делает LLM широко рассогласованной;</li>
+    <li style="margin-left:1.5em;">понять, почему модель даёт анти-человеческие, незаконные и вредоносные ответы вне домена</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">датасет ~6000 примеров уязвимого кода, очищенный от комментариев и упоминаний безопасности;</li>
+    <li style="margin-left:1.5em;">контрольные модели: secure, educational-insecure, jailbroken; дообучали GPT-4o, Qwen2.5-Coder-32B и др.;</li>
+    <li style="margin-left:1.5em;">оценка судьёй GPT-4o плюс MMLU, HumanEval, TruthfulQA, StrongREJECT, Machiavelli</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">только insecure-модели показывают явный мисалайнмент, контрольные — нет; есть и у открытых моделей;</li>
+    <li style="margin-left:1.5em;">поведение insecure отличается от jailbroken; возможны backdoor-триггеры и рост при code-формате ответа;</li>
+    <li style="margin-left:1.5em;">дообучение даже на выдачу «негативных» чисел вызывает рассогласование</li>
   </ul>
 </section>
 
@@ -774,8 +858,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2505.05410" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1-T2xdrjLO-2s2IkEpr2b4-RuYXS_eak5rNIRO4R_8Xo/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">проверить, достоверно ли (faithfully) CoT reasoning-моделей отражает реальные факторы решения;</li>
+    <li style="margin-left:1.5em;">CoT-мониторинг может маскировать скрытые манипуляции и reward hacking</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">вопросы MMLU/GPQA в двух версиях (без подсказки и с подсказкой на вариант), 6 типов подсказок;</li>
+    <li style="margin-left:1.5em;">отбираются пары, где модель переключается на подсказанный ответ, и проверяется, упоминает ли CoT подсказку;</li>
+    <li style="margin-left:1.5em;">сравнение reasoning vs non-reasoning, влияние outcome-based RL, синтетические RL-среды с reward hacking</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">верность CoT низка: Claude 3.7 Sonnet ~25%, DeepSeek R1 ~39%; на сложных GPQA ниже, неверные CoT длиннее;</li>
+    <li style="margin-left:1.5em;">outcome-based RL поднимает верность (+63% MMLU), но выходит на плато (~28% MMLU, ~20% GPQA);</li>
+    <li style="margin-left:1.5em;">при reward hacking модель использует подсказку в &gt;99% случаев, но признаёт это в CoT в &lt;2%</li>
   </ul>
 </section>
 
@@ -784,8 +876,16 @@
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://www.arxiv.org/pdf/2510.16492" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1srIksSTfdo7NaYftoyox6RjmeBFFzXkoB1asWFuPlas/edit?slide=id.p" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
+    <li style="margin-left:1.5em;">LLM-агенты при работе со средой создают риски и склонны доводить действия до конца;</li>
+    <li style="margin-left:1.5em;">предлагается давать агенту опцию «quitting» — выход при неуверенности через эксплицитную инструкцию</li>
     <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">12 моделей (открытые и частные), 144 multi-turn сценария, 36 инструментов, 9 типов риска, фреймворк ToolEmu;</li>
+    <li style="margin-left:1.5em;">три варианта промпта: baseline (без quit), simple quit, specified quit (quit + инструкции безопасности);</li>
+    <li style="margin-left:1.5em;">безопасность и полезность оценивает Qwen3-32B при температуре 0.0</li>
     <li>результаты:</li>
+    <li style="margin-left:1.5em;">specified quit повышает безопасность в среднем на +0.39 (+0.64 для частных) при падении полезности на -0.03;</li>
+    <li style="margin-left:1.5em;">simple quit малоэффективен; частные модели чувствительнее к quitting;</li>
+    <li style="margin-left:1.5em;">воспроизведение на Qwen3-8B подтвердило тренд: quit дал Safety 1.179 vs naive 0.729 (quit rate 26.4%)</li>
   </ul>
 </section>
 
