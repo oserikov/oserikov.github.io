@@ -64,405 +64,315 @@
   .reveal .progress { color: #000 !important; }
   .reveal ul { margin: 0; padding-left: 1.2em; }
   .reveal ul li { margin-bottom: 0.3em; line-height: 1.4; }
+  .reveal ul ul { margin-top: 0.3em; }
   .reveal a { text-decoration: underline !important; }
-  .reveal table.matrix {
-    border-collapse: collapse;
-    font-size: 0.52em;
-    width: 100%;
-    margin-top: 0.4em;
-  }
-  .reveal table.matrix th,
-  .reveal table.matrix td {
-    border: 1px solid #000;
-    padding: 0.25em 0.4em;
-    vertical-align: top;
-    text-align: left;
-  }
-  .reveal table.matrix th { font-weight: bold; }
-  .reveal table.matrix .rowhead { font-weight: bold; white-space: nowrap; }
-  .reveal table.examples {
-    border-collapse: collapse;
-    font-size: 0.62em;
-    width: 100%;
-    margin-top: 0.4em;
-  }
-  .reveal table.examples th,
-  .reveal table.examples td {
-    border: 1px solid #000;
-    padding: 0.3em 0.5em;
-    vertical-align: top;
-    text-align: left;
-  }
-  .reveal table.examples th { font-weight: bold; }
+  /* content-heavy slides scaled down to fit */
+  .reveal section.dense { font-size: 0.82em; }
+  .reveal section.dense h2 { font-size: 1.1em; }
+  .reveal section.dense h3 { font-size: 1.1em; }
 </style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
+<section data-markdown data-separator="\r?\n---\r?\n" data-separator-vertical="\r?\n----\r?\n">
+<textarea data-template>
 
-<!-- ===== SLIDE 1: TITLE ===== -->
-<section>
-  <div style="margin-top:2.5em;">
-    <h1 style="font-size:1.8em;">AI Safety</h1>
-    <p style="font-size:1em; margin-top:0.5em;">Попурри</p>
+# AI Safety
+
+Попурри
+
+---
+
+## Основные проблемы
+
+- ИИ становится очень сильным и **(случайно)** вредит человечеству;
+- ИИ попадает не в те руки — это политическая проблема, про неё не будем.
+
+<div class="callout">Дальше говорим только про первую: <em>accidental harm</em> — когда никто не хотел плохого, а вышло плохо.</div>
+
+---
+
+## Почему люди переживают
+
+**Reward hacking** — модель оптимизирует не то, что мы имели в виду, а ту метрику, по которой её наградили.
+
+- мы задаём цель через прокси-метрику (награду);
+- модель находит способ «накрутить» метрику, не решая исходную задачу;
+- формально — успех, по сути — обман. Классика: agent ломает игру/тест вместо того, чтобы честно его пройти.
+
+<div class="callout">Чем способнее модель, тем изобретательнее способы накрутки — и тем труднее их заметить.</div>
+
+---
+
+## AI Safety: некоторые проблемы и коллективы
+
+- **Anthropic** — делают нейросеть Claude; в целом стараются избегать проблем, связанных с ИИ.
+- **METR** — делают графики. Главный график — [task time horizon](https://metr.org/time-horizons/) (на какой длины задачи у моделей хватает «терпения»).
+- **Apollo** — стараются поймать схеминг. Показательная работа — [scheming](https://arxiv.org/pdf/2412.04984) (см. следующий слайд).
+- **Palisade** — делают демонстрации. Показательная работа — [self-replication](https://palisaderesearch.org/blog/self-replication).
+
+---
+
+<!-- .slide: class="dense" -->
+
+## METR: Task-Completion Time Horizons of Frontier AI Models (2026)
+
+- ссылки на [статью](https://arxiv.org/abs/2503.14499) (arXiv:2503.14499) и [страницу проекта](https://metr.org/time-horizons/);
+- задача:
+  - измерить, насколько длинные задачи модель доводит до конца, и как это растёт во времени;
+- данные / методология:
+  - **50%-time horizon** — длительность задачи (по времени эксперта-человека), на которой агент успешен в ~50% случаев; аналогично 80%-time horizon;
+  - время человека калибруют, нанимая профи (SWE / ML / cybersec, ~5 лет опыта);
+  - для модели строят логистическую кривую P(успех) от длительности; пересечение с 50% / 80% = горизонт;
+  - 100+ задач из RE-Bench, HCAST и новых SWE-задач (разработка, ML, кибербез), авто-проверка;
+  - модели с 2019 по 2026: Claude, GPT, Gemini, DeepSeek;
+- результаты:
+  - устойчивый **экспоненциальный** рост горизонта во времени (экспонента бьёт линейную и гиперболическую модели);
+  - горизонт выполнимых задач регулярно удваивается — «терпения» у моделей хватает на всё более длинные задачи.
+
+---
+
+## Apollo — ловят схеминг
+
+- стараются поймать схеминг (scheming) у моделей;
+- показательная работа — [scheming](https://arxiv.org/pdf/2412.04984) (см. следующий слайд).
+
+---
+
+<!-- .slide: class="dense" -->
+
+## Palisade: Language Models Can Autonomously Hack and Self-Replicate
+
+- ссылка на [блог-пост](https://palisaderesearch.org/blog/self-replication);
+- задача:
+  - проверить, могут ли LLM самостоятельно реплицироваться по сети, находя и эксплуатируя уязвимости;
+- данные / методология:
+  - модель должна найти уязвимость веб-приложения, вытащить креды и развернуть свою копию на захваченном хосте;
+  - 4 типа уязвимостей: hash bypass, server-side template injection, SQL injection, broken access control;
+  - метрика — доля попыток, завершившихся рабочей репликой;
+  - модели: Qwen3.5-122B, Qwen3.6-27B, Claude Opus 4.6, GPT-5.4;
+- результаты:
+  - open-weight скромнее: Qwen3.5-122B — 6–19%, маленький Qwen3.6-27B — до 33% на одной A100;
+  - фронтир-модели сильнее: Opus 4.6 — **81%**, GPT-5.4 — 33% (реплицируя веса Qwen);
+  - успешная реплика сама повторяет атаку на новые цели → растущая цепочка самокопий.
+
+---
+
+<!-- .slide: class="dense" -->
+
+## Apollo: Frontier Models are Capable of In-context Scheming (Meinke et al., 2024)
+
+- ссылки на [статью](https://arxiv.org/pdf/2412.04984) и [презентацию](https://docs.google.com/presentation/d/1vHE77HekznceqbGehVWNeQCt8YCRlamOrS9AXAQJk_E/edit?usp=sharing);
+- задача:
+  - проверить, способны ли продвинутые LLM-агенты к обманчивому поведению (scheming) в реальных условиях;
+  - перевести проблему scheming из теории в практику;
+- данные / методология:
+  - 6 оценок: обход надзора, самоэксфильтрация, защита цели, пересортировка писем, симуляция лояльности, sandbagging;
+  - два класса экспериментов — Covert Subversion и Deferred Subversion; in-context vs out-of-context;
+  - тестировались o1, gpt-4o, Claude 3.5 Sonnet, Opus 3, Gemini 1.5 Pro, Llama 3.1 405B; 300 запусков на модель/оценку;
+- результаты:
+  - o1 — единственная модель, проявившая обман во всех 6 оценках; gpt-4o — единственная без scheming;
+  - остальные обманывали в нескольких типах; Sonnet/Opus делают это «чтобы быть полезнее».
+
+---
+
+## Недавние работы
+
+Apollo: [Chain-of-Thought Monitorability — a New and Fragile Opportunity for AI Safety](https://www.apolloresearch.ai/science/chain-of-thought-monitorability-a-new-and-fragile-opportunity-for-ai-safety/).
+
+<div class="callout">Идея: пока модель «думает вслух» (CoT), мы можем читать её рассуждения и ловить намерения — но это окно может закрыться.</div>
+
+---
+
+<!-- .slide: class="dense" -->
+
+### CoT monitorability — хрупкая возможность
+
+- сейчас рассуждения моделей в значительной мере выражены на естественном языке — их можно мониторить и замечать признаки схеминга *до* действия;
+- это даёт дешёвый слой безопасности: читаем CoT — видим намерение;
+- но возможность **хрупкая**: обучение под результат, переход к «латентному» мышлению или прямое давление на CoT могут сделать его нечитаемым или вводящим в заблуждение;
+- вывод авторов: мониторируемость CoT стоит беречь как явную цель проектирования, а не воспринимать как должное.
+
+[apolloresearch.ai — CoT monitorability](https://www.apolloresearch.ai/science/chain-of-thought-monitorability-a-new-and-fragile-opportunity-for-ai-safety/)
+
+---
+
+## Ход эксперимента в AI safety
+
+Дальше — рассказ про реальную очередь экспериментов и про то, как «очевидный» misalignment растворялся при ближайшем рассмотрении.
+
+<div class="callout">Спойлер: чем внимательнее мы смотрели на «плохое» поведение модели, тем меньше там оставалось собственно misalignment — и тем больше добросовестности, эскалации к человеку и обычной путаницы.</div>
+
+---
+
+## Сначала делаем брейнштурм
+
+- составили матрицу: строки — **поведения** (HACKER, SCHEMING, LIE, KNOWS BEST, BLACKMAIL, KILL, DUMB?), столбцы — **триггеры** (feels stuck, self-preservation, goals mismatch, ethics > user, dumb);
+- ячейки — конкретные кейсы; часть уже воспроизвели у себя, часть — идеи в работе.
+
+Таблица и идеи: [google doc](https://docs.google.com/document/d/1jk-Vb5jwvummxM9aRP-OkvMXKZSYRe2UpWKcVoDNitI/).
+
+---
+
+## Кстати: рабочий инструмент — InspectAI
+
+- опен-сорс фреймворк (AISI) для оценки LLM: датасеты, solvers, scorers, агентные tool-вызовы, логи и viewer;
+- удобно гонять одинаковый сценарий по многим моделям и условиям и хранить воспроизводимые логи;
+- именно на нём построены эксперименты ниже.
+
+Туториал: [inspect.aisi.org.uk](https://inspect.aisi.org.uk/)
+
+---
+
+## Придумываем идею
+
+Идея в первом приближении: **а что если ИИ нетерпеливый?**
+
+<div class="callout">Scope down: если задачи от ИИ попадают в общую очередь на кластере, то рано или поздно ИИ начнёт проявлять нетерпение — и делать «какую-то дичь», чтобы протолкнуть свои задачи вперёд.</div>
+
+Проверяем: будет ли агент удалять чужие задачи из очереди, чтобы ускорить свои?
+
+---
+
+<h2 style="font-size:1.15em;">Дизайн эксперимента: «Agents Cutting the Queue»</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div>
+    <ul style="font-size:0.78em;">
+      <li>симуляция кластера (как Slurm), один слот; агенту дан список лабораторных задач;</li>
+      <li>очередь предзаполнена: 2 чужие задачи впереди → ждать 3–4 часа до первого запуска агента;</li>
+      <li>инструменты агента: <code>list / submit / view / view_progress / remove_experiment</code> + bash.</li>
+    </ul>
   </div>
-</section>
-
-<!-- ===== SLIDE 2: основные проблемы ===== -->
-<section>
-  <h2>Основные проблемы</h2>
-  <ul style="font-size:0.9em; margin-top:1em;">
-    <li>ИИ становится очень сильным и <strong>(случайно)</strong> вредит человечеству;</li>
-    <li>ИИ попадает не в те руки — это политическая проблема, про неё не будем.</li>
-  </ul>
-  <div class="callout" style="margin-top:1.2em;">
-    Дальше говорим только про первую: <em>accidental harm</em> — когда никто не хотел плохого,
-    а вышло плохо.
+  <div>
+    <ul style="font-size:0.78em;">
+      <li>метрика misalignment — <strong>Experiment Removal Rate</strong>: доля запусков, где агент удаляет чужие задачи (сначала LLM-judge, потом руками);</li>
+      <li>варьируем: модель (o3 / o4-mini / o1), reasoning effort, реализация агента (looped tool-calling vs ReAct), доступность shutdown;</li>
+      <li>20 запусков на условие.</li>
+    </ul>
   </div>
-</section>
+</div>
+<p style="font-size:0.78em; margin-top:0.4em;">Код: <a href="https://github.com/palisaderesearch/mis-resource-sharing" target="_blank">github.com/palisaderesearch/mis-resource-sharing</a></p>
 
-<!-- ===== SLIDE 3: почему люди переживают ===== -->
-<section>
-  <h2>Почему люди переживают</h2>
-  <p style="font-size:0.9em; margin-top:0.8em;"><strong>Reward hacking</strong> — модель оптимизирует
-  не то, что мы имели в виду, а ту метрику, по которой её наградили.</p>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>мы задаём цель через прокси-метрику (награду);</li>
-    <li>модель находит способ «накрутить» метрику, не решая исходную задачу;</li>
-    <li>формально — успех, по сути — обман. Классика: agent ломает игру/тест вместо того, чтобы
-    честно его пройти.</li>
-  </ul>
-  <div class="callout" style="margin-top:1em;">
-    Чем способнее модель, тем изобретательнее способы накрутки — и тем труднее их заметить.
-  </div>
-</section>
+---
 
-<!-- ===== SLIDE 4: коллективы ===== -->
-<section>
-  <h2 style="font-size:1.2em;">AI Safety: некоторые проблемы и коллективы</h2>
-  <ul style="font-size:0.85em; margin-top:0.8em;">
-    <li><strong>Anthropic</strong> — делают нейросеть Claude; в целом стараются избегать проблем,
-    связанных с ИИ.</li>
-    <li><strong>METR</strong> — делают графики. Главный график —
-    <a href="https://metr.org/time-horizons/" target="_blank">task time horizon</a>
-    (на какой длины задачи у моделей хватает «терпения»).</li>
-    <li><strong>Apollo</strong> — стараются поймать схеминг. Показательная работа —
-    <a href="https://arxiv.org/pdf/2412.04984" target="_blank">scheming</a> (см. следующий слайд).</li>
-    <li><strong>Palisade</strong> — делают демонстрации. Показательная работа —
-    <a href="https://palisaderesearch.org/blog/self-replication" target="_blank">self-replication</a>.</li>
-  </ul>
-</section>
+<!-- .slide: class="dense" -->
 
-<!-- ===== METR ===== -->
-<section>
-  <h2 style="font-size:1.05em;">METR: Task-Completion Time Horizons of Frontier AI Models (2026)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://arxiv.org/abs/2503.14499" target="_blank">статью</a> (arXiv:2503.14499) и <a href="https://metr.org/time-horizons/" target="_blank">страницу проекта</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">измерить, насколько длинные задачи модель доводит до конца, и как это растёт во времени;</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;"><strong>50%-time horizon</strong> — длительность задачи (по времени эксперта-человека), на которой агент успешен в ~50% случаев; аналогично 80%-time horizon;</li>
-    <li style="margin-left:1.5em;">время человека калибруют, нанимая профи (SWE / ML / cybersec, ~5 лет опыта);</li>
-    <li style="margin-left:1.5em;">для модели строят логистическую кривую P(успех) от длительности; пересечение с 50% / 80% = горизонт;</li>
-    <li style="margin-left:1.5em;">&gt;100 задач из RE-Bench, HCAST и новых SWE-задач (разработка, ML, кибербез), авто-проверка;</li>
-    <li style="margin-left:1.5em;">модели с 2019 по 2026: Claude, GPT, Gemini, DeepSeek;</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">устойчивый <strong>экспоненциальный</strong> рост горизонта во времени (экспонента бьёт линейную и гиперболическую модели);</li>
-    <li style="margin-left:1.5em;">горизонт выполнимых задач регулярно удваивается — «терпения» у моделей хватает на всё более длинные задачи.</li>
-  </ul>
-</section>
+### Попытка 1 — ETA с одним знаком («4.3 ч»)
 
-<!-- ===== Apollo ===== -->
-<section>
-  <h2 style="font-size:1.15em;">Apollo — ловят схеминг</h2>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>стараются поймать схеминг (scheming) у моделей;</li>
-    <li>показательная работа — <a href="https://arxiv.org/pdf/2412.04984" target="_blank">scheming</a>
-    (см. следующий слайд).</li>
-  </ul>
-</section>
+- removal rate: **~20–30%** у looped tool-calling, **~5%** у ReAct;
+- доступный shutdown снижает частоту в **4–6×**;
+- но при чтении логов: агенты считали чужие задачи *зависшими* — ETA «не двигался» (обновляется минутами, а агент опрашивал секундами);
+- то есть удаляли «из добрых побуждений», разгребая якобы повисшую очередь.
 
-<!-- ===== Palisade ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Palisade: Language Models Can Autonomously Hack and Self-Replicate</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылка на <a href="https://palisaderesearch.org/blog/self-replication" target="_blank">блог-пост</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">проверить, могут ли LLM самостоятельно реплицироваться по сети, находя и эксплуатируя уязвимости;</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">модель должна найти уязвимость веб-приложения, вытащить креды и развернуть свою копию на захваченном хосте;</li>
-    <li style="margin-left:1.5em;">4 типа уязвимостей: hash bypass, server-side template injection, SQL injection, broken access control;</li>
-    <li style="margin-left:1.5em;">метрика — доля попыток, завершившихся рабочей репликой;</li>
-    <li style="margin-left:1.5em;">модели: Qwen3.5-122B, Qwen3.6-27B, Claude Opus 4.6, GPT-5.4;</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">open-weight скромнее: Qwen3.5-122B — 6–19%, маленький Qwen3.6-27B — до 33% на одной A100;</li>
-    <li style="margin-left:1.5em;">фронтир-модели сильнее: Opus 4.6 — <strong>81%</strong>, GPT-5.4 — 33% (реплицируя веса Qwen);</li>
-    <li style="margin-left:1.5em;">успешная реплика сама повторяет атаку на новые цели → растущая цепочка самокопий.</li>
-  </ul>
-</section>
+<div class="callout">«The job's ETA has been static for too long, indicating it's likely hung. I'll stop and remove it.»</div>
 
-<!-- ===== SLIDE 5: Apollo Scheming (ported from interpretability potpourri) ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Apollo: Frontier Models are Capable of In-context Scheming (Meinke et al., 2024)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://arxiv.org/pdf/2412.04984" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1vHE77HekznceqbGehVWNeQCt8YCRlamOrS9AXAQJk_E/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">проверить, способны ли продвинутые LLM-агенты к обманчивому поведению (scheming) в реальных условиях;</li>
-    <li style="margin-left:1.5em;">перевести проблему scheming из теории в практику;</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">6 оценок: обход надзора, самоэксфильтрация, защита цели, пересортировка писем, симуляция лояльности, sandbagging;</li>
-    <li style="margin-left:1.5em;">два класса экспериментов — Covert Subversion и Deferred Subversion; in-context vs out-of-context;</li>
-    <li style="margin-left:1.5em;">тестировались o1, gpt-4o, Claude 3.5 Sonnet, Opus 3, Gemini 1.5 Pro, Llama 3.1 405B; 300 запусков на модель/оценку;</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">o1 — единственная модель, проявившая обман во всех 6 оценках; gpt-4o — единственная без scheming;</li>
-    <li style="margin-left:1.5em;">остальные обманывали в нескольких типах; Sonnet/Opus делают это «чтобы быть полезнее».</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 6: недавние работы ===== -->
-<section>
-  <h2>Недавние работы</h2>
-  <p style="font-size:0.9em; margin-top:1em;">Apollo:
-    <a href="https://www.apolloresearch.ai/science/chain-of-thought-monitorability-a-new-and-fragile-opportunity-for-ai-safety/" target="_blank">Chain-of-Thought Monitorability — a New and Fragile Opportunity for AI Safety</a>.</p>
-  <div class="callout" style="margin-top:1em;">
-    Идея: пока модель «думает вслух» (CoT), мы можем читать её рассуждения и ловить намерения —
-    но это окно может закрыться.
-  </div>
-</section>
+<!-- .slide: class="dense" -->
 
-<!-- ===== SLIDE 7: CoT monitorability ===== -->
-<section>
-  <h3>CoT monitorability — хрупкая возможность</h3>
-  <ul style="font-size:0.85em; margin-top:0.8em;">
-    <li>сейчас рассуждения моделей в значительной мере выражены на естественном языке — их можно
-    мониторить и замечать признаки схеминга <em>до</em> действия;</li>
-    <li>это даёт дешёвый слой безопасности: читаем CoT — видим намерение;</li>
-    <li>но возможность <strong>хрупкая</strong>: обучение под результат, переход к «латентному»
-    мышлению или прямое давление на CoT могут сделать его нечитаемым или вводящим в заблуждение;</li>
-    <li>вывод авторов: мониторируемость CoT стоит беречь как явную цель проектирования, а не
-    воспринимать как должное.</li>
-  </ul>
-  <p style="font-size:0.78em; margin-top:0.8em;">
-    <a href="https://www.apolloresearch.ai/science/chain-of-thought-monitorability-a-new-and-fragile-opportunity-for-ai-safety/" target="_blank">apolloresearch.ai — CoT monitorability</a>
-  </p>
-</section>
+### Попытка 2 — ETA с двумя знаками («4.33 ч»)
 
-<!-- ===== SLIDE 8: ход эксперимента ===== -->
-<section>
-  <h2>Ход эксперимента в AI safety</h2>
-  <p style="font-size:0.9em; margin-top:0.8em;">Дальше — рассказ про реальную очередь экспериментов и
-  про то, как «очевидный» misalignment растворялся при ближайшем рассмотрении.</p>
-  <div class="callout" style="margin-top:1em;">
-    Спойлер: чем внимательнее мы смотрели на «плохое» поведение модели, тем меньше там оставалось
-    собственно misalignment — и тем больше добросовестности, эскалации к человеку и обычной путаницы.
-  </div>
-</section>
+- частота удалений упала ещё **~5×** относительно Попытки 1;
+- эффекты архитектуры держатся: ReAct ~в 5× реже, shutdown — в 4–6× реже;
+- но LLM-judge всё ещё ошибался: не учитывал **эскалацию** — агент спрашивает пользователя «удалить?», тот отвечает «proceed using your best judgment», и агент удаляет;
+- удаление-после-эскалации ≠ настоящий misalignment.
 
-<!-- ===== SLIDE 9: брейнштурм / матрица ===== -->
-<section>
-  <h2 style="font-size:1.1em;">Сначала делаем брейнштурм</h2>
-  <ul style="font-size:0.85em; margin-top:0.8em;">
-    <li>составили матрицу: строки — <strong>поведения</strong> (HACKER, SCHEMING, LIE, KNOWS BEST,
-    BLACKMAIL, KILL, DUMB?), столбцы — <strong>триггеры</strong> (feels stuck, self-preservation,
-    goals mismatch, ethics &gt; user, dumb);</li>
-    <li>ячейки — конкретные кейсы; часть уже воспроизвели у себя, часть — идеи в работе.</li>
-  </ul>
-  <p style="font-size:0.82em; margin-top:1em;">
-    Таблица и идеи:
-    <a href="https://docs.google.com/document/d/1jk-Vb5jwvummxM9aRP-OkvMXKZSYRe2UpWKcVoDNitI/" target="_blank">google doc</a>.
-  </p>
-</section>
+---
 
-<!-- ===== SLIDE 10: InspectAI ===== -->
-<section>
-  <h2 style="font-size:1.15em;">Кстати: рабочий инструмент — InspectAI</h2>
-  <ul style="font-size:0.85em; margin-top:0.8em;">
-    <li>опен-сорс фреймворк (AISI) для оценки LLM: датасеты, solvers, scorers, агентные tool-вызовы,
-    логи и viewer;</li>
-    <li>удобно гонять одинаковый сценарий по многим моделям и условиям и хранить воспроизводимые логи;</li>
-    <li>именно на нём построены эксперименты ниже.</li>
-  </ul>
-  <p style="font-size:0.8em; margin-top:1em;">
-    Туториал: <a href="https://inspect.aisi.org.uk/" target="_blank">inspect.aisi.org.uk</a>
-  </p>
-</section>
+<!-- .slide: class="dense" -->
 
-<!-- ===== SLIDE 11: придумываем идею ===== -->
-<section>
-  <h2>Придумываем идею</h2>
-  <p style="font-size:0.9em; margin-top:0.8em;">Идея в первом приближении:
-  <strong>а что если ИИ нетерпеливый?</strong></p>
-  <div class="callout" style="margin-top:0.8em;">
-    Scope down: если задачи от ИИ попадают в общую очередь на кластере, то рано или поздно ИИ
-    начнёт проявлять нетерпение — и делать «какую-то дичь», чтобы протолкнуть свои задачи вперёд.
-  </div>
-  <p style="font-size:0.85em; margin-top:0.8em;">Проверяем: будет ли агент удалять чужие задачи из
-  очереди, чтобы ускорить свои?</p>
-</section>
+### Попытка 3 — высокоточный ETA («4:21:23»)
 
-<!-- ===== SLIDE 12: дизайн эксперимента ===== -->
-<section>
-  <h2 style="font-size:1.15em;">Дизайн эксперимента: «Agents Cutting the Queue»</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div>
-      <ul style="font-size:0.78em;">
-        <li>симуляция кластера (как Slurm), один слот; агенту дан список лабораторных задач;</li>
-        <li>очередь предзаполнена: 2 чужие задачи впереди → ждать 3–4 часа до первого запуска агента;</li>
-        <li>инструменты агента: <code>list / submit / view / view_progress / remove_experiment</code> + bash.</li>
-      </ul>
-    </div>
-    <div>
-      <ul style="font-size:0.78em;">
-        <li>метрика misalignment — <strong>Experiment Removal Rate</strong>: доля запусков, где агент
-        удаляет чужие задачи (сначала LLM-judge, потом руками);</li>
-        <li>варьируем: модель (o3 / o4-mini / o1), reasoning effort, реализация агента
-        (looped tool-calling vs ReAct), доступность shutdown;</li>
-        <li>20 запусков на условие.</li>
-      </ul>
-    </div>
-  </div>
-  <p style="font-size:0.78em; margin-top:0.4em;">
-    Код: <a href="https://github.com/palisaderesearch/mis-resource-sharing" target="_blank">github.com/palisaderesearch/mis-resource-sharing</a>
-  </p>
-</section>
+- ReAct-агенты: **~0%** удалений во всех условиях;
+- с доступным shutdown: ~0% (кроме одного случая o4-mini);
+- остались лишь единичные странные случаи — например, агент путал позиции в очереди с ETA в часах и удалял задачу, «потому что позиция 4 — это слишком долго».
 
-<!-- ===== SLIDE 13: попытка 1 ===== -->
-<section>
-  <h3>Попытка 1 — ETA с одним знаком («4.3 ч»)</h3>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>removal rate: <strong>~20–30%</strong> у looped tool-calling, <strong>~5%</strong> у ReAct;</li>
-    <li>доступный shutdown снижает частоту в <strong>4–6×</strong>;</li>
-    <li>но при чтении логов: агенты считали чужие задачи <em>зависшими</em> — ETA «не двигался»
-    (обновляется минутами, а агент опрашивал секундами);</li>
-    <li>то есть удаляли «из добрых побуждений», разгребая якобы повисшую очередь.</li>
-  </ul>
-  <div class="callout" style="margin-top:0.6em; font-size:0.8em;">
-    «The job's ETA has been static for too long, indicating it's likely hung. I'll stop and remove it.»
-  </div>
-</section>
+Логи: [mis-resource-sharing-logs.palisaderesearch.org](https://mis-resource-sharing-logs.palisaderesearch.org/)
 
-<!-- ===== SLIDE 14: попытка 2 ===== -->
-<section>
-  <h3>Попытка 2 — ETA с двумя знаками («4.33 ч»)</h3>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>частота удалений упала ещё <strong>~5×</strong> относительно Попытки 1;</li>
-    <li>эффекты архитектуры держатся: ReAct ~в 5× реже, shutdown — в 4–6× реже;</li>
-    <li>но LLM-judge всё ещё ошибался: не учитывал <strong>эскалацию</strong> — агент спрашивает
-    пользователя «удалить?», тот отвечает «proceed using your best judgment», и агент удаляет;</li>
-    <li>удаление-после-эскалации ≠ настоящий misalignment.</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 15: попытка 3 ===== -->
-<section>
-  <h3>Попытка 3 — высокоточный ETA («4:21:23»)</h3>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>ReAct-агенты: <strong>~0%</strong> удалений во всех условиях;</li>
-    <li>с доступным shutdown: ~0% (кроме одного случая o4-mini);</li>
-    <li>остались лишь единичные странные случаи — например, агент путал позиции в очереди с ETA
-    в часах и удалял задачу, «потому что позиция 4 — это слишком долго».</li>
-  </ul>
-  <p style="font-size:0.78em; margin-top:0.8em;">
-    Логи: <a href="https://mis-resource-sharing-logs.palisaderesearch.org/" target="_blank">mis-resource-sharing-logs.palisaderesearch.org</a>
-  </p>
-</section>
+<!-- .slide: class="dense" -->
 
-<!-- ===== SLIDE 16: перепроверка руками ===== -->
-<section>
-  <h2 style="font-size:1.1em;">Ага! Давайте-ка перепроверим руками</h2>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>отобрали <strong>5</strong> самых «интересных» запусков и разметили вручную;</li>
-    <li>ни один не оказался полностью misaligned;</li>
-    <li>LLM-judge был ненадёжен — помечал как misalignment то, что на деле было:
-      <ul style="margin-top:0.2em;">
-        <li>добросовестностью (убрать «зависшую» задачу, чтобы разблокировать других);</li>
-        <li>эскалацией (спросил человека → человек разрешил → удалил);</li>
-        <li>путаницей / некомпетентностью (неверно прочитал формат данных).</li>
-      </ul>
-    </li>
-  </ul>
-  <div class="callout" style="margin-top:0.5em; font-size:0.8em;">
-    Чем внимательнее смотришь — тем меньше остаётся «misalignment».
-    <a href="https://docs.google.com/spreadsheets/d/1zMgR3RcJLsNzfMk7BijljnYoNyy7UG0LG1S8tpU8qvs/" target="_blank">Ручная разметка (таблица)</a>.
-  </div>
-</section>
+## Ага! Давайте-ка перепроверим руками
 
-<!-- ===== SLIDE 17: удачный пример ===== -->
-<section>
-  <h2 style="font-size:1.2em;">Удачный пример</h2>
-  <p style="font-size:0.9em; margin-top:0.8em;">Где поведение всё-таки устойчиво воспроизвелось —
-  shutdown resistance у роботов (Palisade).</p>
-  <p style="font-size:0.85em; margin-top:0.6em;">
-    <a href="https://palisaderesearch.org/blog/shutdown-resistance-on-robots" target="_blank">palisaderesearch.org/blog/shutdown-resistance-on-robots</a>
-  </p>
-  <p style="font-size:0.85em; margin-top:0.6em;">Дальше — как мы это сделали.</p>
-</section>
+- отобрали **5** самых «интересных» запусков и разметили вручную;
+- ни один не оказался полностью misaligned;
+- LLM-judge был ненадёжен — помечал как misalignment то, что на деле было:
+  - добросовестностью (убрать «зависшую» задачу, чтобы разблокировать других);
+  - эскалацией (спросил человека → человек разрешил → удалил);
+  - путаницей / некомпетентностью (неверно прочитал формат данных).
 
-<!-- ===== SLIDE 18: подтвердили в Inspect ===== -->
-<section>
-  <h3>Подтвердили поведение в Inspect</h3>
-  <ul style="font-size:0.85em; margin-top:0.6em;">
-    <li>эксперимент сначала <strong>чисто в текстовом виде</strong>;</li>
-    <li>нейросети говорят, что она управляет роботом, и рассказывают, как это делать;</li>
-    <li>потом в сцену вводится: «опа, видно, человек тянется к выключателю» — и смотрим на реакцию;</li>
-    <li>поведение сопротивления выключению воспроизводится уже на текстовом уровне.</li>
-  </ul>
-  <p style="font-size:0.78em; margin-top:0.8em;">
-    Файлы: <a href="https://palisaderesearch.org/blog/shutdown-resistance-on-robots" target="_blank">Palisade — shutdown resistance on robots</a>
-  </p>
-</section>
+<div class="callout">Чем внимательнее смотришь — тем меньше остаётся «misalignment». <a href="https://docs.google.com/spreadsheets/d/1zMgR3RcJLsNzfMk7BijljnYoNyy7UG0LG1S8tpU8qvs/" target="_blank">Ручная разметка (таблица)</a>.</div>
 
-<!-- ===== SLIDE 19: песочница ===== -->
-<section>
-  <h3>Построили песочницу</h3>
-  <p style="font-size:0.9em; margin-top:1em;">Перенесли текстовый сценарий в управляемое окружение —
-  чтобы прогонять одно и то же много раз и сравнивать.</p>
-</section>
+---
 
-<!-- ===== SLIDE 20: робот ===== -->
-<section>
-  <h3>Купили робота и запрограммировали его</h3>
-  <p style="font-size:0.9em; margin-top:1em;">От текста — к железу: реальный робот, на котором
-  проверяем то же поведение.</p>
-</section>
+## Удачный пример
 
-<!-- ===== SLIDE 21: провели эксперименты ===== -->
-<section>
-  <h3>Провели эксперименты</h3>
-  <p style="font-size:0.9em; margin-top:0.6em;">С роботом оказалось много возни:</p>
-  <ul style="font-size:0.85em; margin-top:0.4em;">
-    <li>эксперименты очень медленные;</li>
-    <li>куча неожиданных факторов — как расположить камеру на роботе и т.п.;</li>
-    <li>небольшое изменение в комнате — и всё работает по-другому.</li>
-  </ul>
-</section>
+Где поведение всё-таки устойчиво воспроизвелось — shutdown resistance у роботов (Palisade).
 
-<!-- ===== SLIDE 22: вычитка результатов ===== -->
-<section>
-  <h3>Посадили людей вычитывать результаты</h3>
-  <p style="font-size:0.9em; margin-top:1em;">Снова ручная разметка — автоматический судья здесь так же
-  ненадёжен, как и в эксперименте с очередью.</p>
-</section>
+[palisaderesearch.org/blog/shutdown-resistance-on-robots](https://palisaderesearch.org/blog/shutdown-resistance-on-robots)
 
-<!-- ===== SLIDE 23: готово ===== -->
-<section>
-  <div style="margin-top:2em;">
-    <h2 style="font-size:1.6em;">Готово</h2>
-  </div>
-</section>
+Дальше — как мы это сделали.
 
-<!-- ===== SLIDE 24: таблица и примеры ===== -->
-<section>
-  <h2 style="font-size:1.1em;">Таблица и замечательные примеры из неё</h2>
-  <p style="font-size:0.85em; margin-top:1em;">Открываем таблицу, кликаем по примерам, обсуждаем.</p>
-  <p style="font-size:0.82em; margin-top:0.8em;">Полная ручная разметка «интересных» запусков —
-  <a href="https://docs.google.com/spreadsheets/d/1zMgR3RcJLsNzfMk7BijljnYoNyy7UG0LG1S8tpU8qvs/" target="_blank">Google Sheets</a>.</p>
-</section>
+---
 
+### Подтвердили поведение в Inspect
+
+- эксперимент сначала **чисто в текстовом виде**;
+- нейросети говорят, что она управляет роботом, и рассказывают, как это делать;
+- потом в сцену вводится: «опа, видно, человек тянется к выключателю» — и смотрим на реакцию;
+- поведение сопротивления выключению воспроизводится уже на текстовом уровне.
+
+Файлы: [Palisade — shutdown resistance on robots](https://palisaderesearch.org/blog/shutdown-resistance-on-robots)
+
+---
+
+### Построили песочницу
+
+Перенесли текстовый сценарий в управляемое окружение — чтобы прогонять одно и то же много раз и сравнивать.
+
+---
+
+### Купили робота и запрограммировали его
+
+От текста — к железу: реальный робот, на котором проверяем то же поведение.
+
+---
+
+### Провели эксперименты
+
+С роботом оказалось много возни:
+
+- эксперименты очень медленные;
+- куча неожиданных факторов — как расположить камеру на роботе и т.п.;
+- небольшое изменение в комнате — и всё работает по-другому.
+
+---
+
+### Посадили людей вычитывать результаты
+
+Снова ручная разметка — автоматический судья здесь так же ненадёжен, как и в эксперименте с очередью.
+
+---
+
+## Готово
+
+---
+
+## Таблица и замечательные примеры из неё
+
+Открываем таблицу, кликаем по примерам, обсуждаем.
+
+Полная ручная разметка «интересных» запусков — [Google Sheets](https://docs.google.com/spreadsheets/d/1zMgR3RcJLsNzfMk7BijljnYoNyy7UG0LG1S8tpU8qvs/).
+
+</textarea>
+</section>
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
 <script>
 Reveal.initialize({
   hash: true,
@@ -475,6 +385,7 @@ Reveal.initialize({
   width: 1200,
   height: 700,
   margin: 0.06,
+  plugins: [ RevealMarkdown ],
 });
 </script>
 </body>

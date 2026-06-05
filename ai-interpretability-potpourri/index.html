@@ -40,8 +40,8 @@
     letter-spacing: normal;
   }
   .reveal h1 { font-size: 1.6em; }
-  .reveal h2 { font-size: 1.5em; }
-  .reveal h3 { font-size: 1.2em; }
+  .reveal h2 { font-size: 1.05em; }
+  .reveal h3 { font-size: 1.05em; }
   .reveal img {
     border: 1px solid #ccc !important;
     box-shadow: none !important;
@@ -56,28 +56,27 @@
   .reveal .slide-number { font-size: 0.6em; color: #000 !important; }
   .reveal .controls { color: #000 !important; }
   .reveal .progress { color: #000 !important; }
-  .reveal ul { margin: 0; padding-left: 1.2em; }
+  .reveal ul { margin: 0; padding-left: 1.2em; font-size: 0.8em; }
   .reveal ul li { margin-bottom: 0.3em; line-height: 1.4; }
+  .reveal ul ul { margin-top: 0.3em; font-size: 1em; }
   .reveal a { text-decoration: underline !important; }
 </style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
+<section data-markdown data-separator="\r?\n---\r?\n" data-separator-vertical="\r?\n----\r?\n">
+<textarea data-template>
 
-<!-- ===== SLIDE 1: TITLE ===== -->
-<section>
-  <div style="margin-top:2.5em;">
-    <h1 style="font-size:1.8em;">Интерпретация ИИ моделей</h1>
-    <p style="font-size:1em; margin-top:0.5em;">Попурри</p>
-  </div>
-</section>
+# Интерпретация ИИ моделей
 
-<!-- ===== SLIDE 2 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Recurrent Neural-Network Learning of Phonological Regularities in Turkish (Rodd 1997)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+Попурри
+
+---
+
+<h2 style="font-size:1.05em;">Recurrent Neural-Network Learning of Phonological Regularities in Turkish (Rodd 1997)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/W97-1012/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1AStFaqLP8_VTfttvP56dIZrihJ2yNj_Ib7L1Yyq9Zmk/edit?usp=drive_link" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1zhuy6rSQTI10DSZTWcLrGt9LhFMbDwfO?usp=sharing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -89,115 +88,105 @@
     <li style="margin-left:1.5em;">Networks learned natural phonological classes based on distributional properties (but rare phonemes receive weaker understanding by RNN);</li>
     <li style="margin-left:1.5em;">Increasing hidden units allowed encoding more complex phonological patterns but also distributed representations, making interpretability harder.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_02.png" alt="Recurrent Neural-Network Learning of Phonological Regularities in Turkish (Rodd 1997)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_02.png" alt="Recurrent Neural-Network Learning of Phonological Regularities in Turkish (Rodd 1997)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 3 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылки на <a href="https://arxiv.org/abs/1803.05449" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1LUQ1OSG3_7TuAhbP4XYPYdEMjY_NqskVmXrin2ePf7o/edit?usp=drive_link" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1eqW0X5N3zpR-rR--ZpYSPbMqCwi-TEu-?usp=drive_link" target="_blank">код</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">создать универсальный toolkit с простым интерфейсом на Python для оценки энкодеров и их эмбеддингов;</li>
-    <li style="margin-left:1.5em;">это позволит задать стандарт / общий пайплайн, с помощью которого станет возможно публиковать сопоставимые результаты;</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 4 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)
+
+- ссылки на [статью](https://arxiv.org/abs/1803.05449), [презентацию](https://docs.google.com/presentation/d/1LUQ1OSG3_7TuAhbP4XYPYdEMjY_NqskVmXrin2ePf7o/edit?usp=drive_link) и [код](https://colab.research.google.com/drive/1eqW0X5N3zpR-rR--ZpYSPbMqCwi-TEu-?usp=drive_link);
+- задача:
+  - создать универсальный toolkit с простым интерфейсом на Python для оценки энкодеров и их эмбеддингов;
+  - это позволит задать стандарт / общий пайплайн, с помощью которого станет возможно публиковать сопоставимые результаты;
+
+---
+
+<h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">датасеты для classification tasks и natural language inference and semantic similarity tasks;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_04.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_04.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 5 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">датасеты для classification tasks и natural language inference and semantic similarity tasks;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_05.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_05.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 6 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">модели под конкретную задачу показали результаты лучше, чем универсальные (но универсальные хороши, когда данных мало).</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_06.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_06.png" alt="SentEval: An Evaluation Toolkit for Universal Sentence Representations (Conneau, Kiela 2018)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<section>
-  <h2 style="font-size:1.05em;">What you can cram into a single $&amp;!#* vector: Probing sentence embeddings for linguistic properties (Conneau et al., 2018)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/P18-1198/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1Zkln2xpirovuPNVjUM6HPr5HFtJEemxlk0W69Zzd2kc/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">понять, какую лингвистическую информацию содержат эмбеддинги предложений, через архитектурно-независимые пробинговые задачи;</li>
-    <li style="margin-left:1.5em;">проверить, какие свойства (поверхностные, синтаксические, семантические) кодируются и как влияют архитектура и обучение</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">10 пробинговых задач (SentLen, WordContent; BShift, TreeDepth, TopConst; Tense, SubjNum, ObjNum, SOMO, CoordInv) на Toronto Book Corpus;</li>
-    <li style="margin-left:1.5em;">3 энкодера (BiLSTM-last, BiLSTM-max, Gated ConvNet), обученные на 8 задачах (NMT, AutoEncoder, SkipThought, NLI, Seq2Tree…);</li>
-    <li style="margin-left:1.5em;">сверху MLP-классификатор отдельно под каждую задачу; сравнение с бейзлайнами (BoV-fastText) и людьми</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">Bag-of-Vectors неожиданно силён, но обученные энкодеры лучше; BiLSTM-max превосходит BiLSTM-last;</li>
-    <li style="margin-left:1.5em;">NMT даёт лучшие эмбеддинги для пробинга, чем NLI (для downstream — наоборот);</li>
-    <li style="margin-left:1.5em;">BiLSTM-max хорош даже без обучения; SOMO/число коррелируют с downstream</li>
-  </ul>
-</section>
+---
 
-<section>
-  <h2 style="font-size:1.05em;">RuSentEval: Linguistic Source, Encoder Force! (Mikhailov et al., 2021)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2021.bsnlp-1.6/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1ThHd3aWhd3etJ3n-x-vHv8jn4_gR5NHUGV-iRaR49V4/edit?slide=id.g36628dae48c_0_0" target="_blank">презентацию (+ код)</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">RuSentEval — новый набор probing-задач уровня предложения для русского языка;</li>
-    <li style="margin-left:1.5em;">сравнить, как 8 BERT-подобных моделей кодируют лингвистику по слоям в русском и английском</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">3.6 млн предложений (Википедия, Lenta.ru, Taiga); фильтрация по длине 5–25 токенов, авторазметка морфосинтаксиса;</li>
-    <li style="margin-left:1.5em;">14 probing-задач: поверхностные (SentLen, WC), синтаксические (TreeDepth, NShift…), семантические (число/род/залог…);</li>
-    <li style="margin-left:1.5em;">методы: контролируемый probing логрегрессией, анализ нейронов, корреляционный анализ слоёв</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">поверхностные признаки на нижних слоях [1–4], синтаксис на средних [5–7], семантика — по-разному;</li>
-    <li style="margin-left:1.5em;">поверхностные и синтаксические признаки учатся схоже для рус/англ, семантика расходится по слоям;</li>
-    <li style="margin-left:1.5em;">LABSE и M-BART ведут себя иначе, MiniLM похожа на XLM-R (общий токенизатор), а не на mBERT</li>
-  </ul>
-</section>
+## What you can cram into a single $&!#* vector: Probing sentence embeddings for linguistic properties (Conneau et al., 2018)
 
+- ссылки на [статью](https://aclanthology.org/P18-1198/) и [презентацию](https://docs.google.com/presentation/d/1Zkln2xpirovuPNVjUM6HPr5HFtJEemxlk0W69Zzd2kc/edit?usp=sharing);
+- задача:
+  - понять, какую лингвистическую информацию содержат эмбеддинги предложений, через архитектурно-независимые пробинговые задачи;
+  - проверить, какие свойства (поверхностные, синтаксические, семантические) кодируются и как влияют архитектура и обучение
+- данные / методология:
+  - 10 пробинговых задач (SentLen, WordContent; BShift, TreeDepth, TopConst; Tense, SubjNum, ObjNum, SOMO, CoordInv) на Toronto Book Corpus;
+  - 3 энкодера (BiLSTM-last, BiLSTM-max, Gated ConvNet), обученные на 8 задачах (NMT, AutoEncoder, SkipThought, NLI, Seq2Tree…);
+  - сверху MLP-классификатор отдельно под каждую задачу; сравнение с бейзлайнами (BoV-fastText) и людьми
+- результаты:
+  - Bag-of-Vectors неожиданно силён, но обученные энкодеры лучше; BiLSTM-max превосходит BiLSTM-last;
+  - NMT даёт лучшие эмбеддинги для пробинга, чем NLI (для downstream — наоборот);
+  - BiLSTM-max хорош даже без обучения; SOMO/число коррелируют с downstream
 
+---
 
-<!-- ===== SLIDE 7 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## RuSentEval: Linguistic Source, Encoder Force! (Mikhailov et al., 2021)
+
+- ссылки на [статью](https://aclanthology.org/2021.bsnlp-1.6/) и [презентацию (+ код)](https://docs.google.com/presentation/d/1ThHd3aWhd3etJ3n-x-vHv8jn4_gR5NHUGV-iRaR49V4/edit?slide=id.g36628dae48c_0_0);
+- задача:
+  - RuSentEval — новый набор probing-задач уровня предложения для русского языка;
+  - сравнить, как 8 BERT-подобных моделей кодируют лингвистику по слоям в русском и английском
+- данные / методология:
+  - 3.6 млн предложений (Википедия, Lenta.ru, Taiga); фильтрация по длине 5–25 токенов, авторазметка морфосинтаксиса;
+  - 14 probing-задач: поверхностные (SentLen, WC), синтаксические (TreeDepth, NShift…), семантические (число/род/залог…);
+  - методы: контролируемый probing логрегрессией, анализ нейронов, корреляционный анализ слоёв
+- результаты:
+  - поверхностные признаки на нижних слоях [1–4], синтаксис на средних [5–7], семантика — по-разному;
+  - поверхностные и синтаксические признаки учатся схоже для рус/англ, семантика расходится по слоям;
+  - LABSE и M-BART ведут себя иначе, MiniLM похожа на XLM-R (общий токенизатор), а не на mBERT
+
+---
+
+<h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/D19-1275/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1mHyVcHDsuinubW_U7QfOHe_WTqPdyFbqNFwEaDP96pA/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1IGtm_M2e44mgRZqxDXkgd26BipVfg8oL?usp=sharing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -205,18 +194,17 @@
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">использование control tasks при пробинге и измерение селективности модели (разница между accuracy на лингвистическом задании и на control task);</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_07.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_07.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 8 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/D19-1275/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1mHyVcHDsuinubW_U7QfOHe_WTqPdyFbqNFwEaDP96pA/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1IGtm_M2e44mgRZqxDXkgd26BipVfg8oL?usp=sharing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -224,36 +212,34 @@
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">использование control tasks при пробинге и измерение селективности модели (разница между accuracy на лингвистическом задании и на control task);</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_08.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_08.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 9 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">все современные пробы имеют слишком много параметров и переобучаются;</li>
     <li style="margin-left:1.5em;">линейные и билинейные модели заметно лучше, но со сложными задачами лучше справляются MLP (например. зависимости) — синтаксис закодирован нелинейно;</li>
     <li style="margin-left:1.5em;">(не)селективные пробы совершают разные ошибки.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_09.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_09.png" alt="Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 10 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/2020.tacl-1.25/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1KyN1OmpLuxE7BtNu3kenp2f_3vCCAxM_wwQVVU0xWKA/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1vSUTpr7JvSIX3mCufZs-71Ve_dRNU0FM?usp=sharing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -261,103 +247,94 @@
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">67 датасетов по 1000 минимальных пар; каждый датасет покрывает определенное явление («парадигму») определенной грамматической зоны («феномена») — всего 12 грамматических зон;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_10.png" alt="BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_10.png" alt="BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<section>
-  <h2 style="font-size:1.05em;">RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs (Taktasheva et al., 2024)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2024.emnlp-main.522.pdf" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);</li>
-    <li style="margin-left:1.5em;">до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);</li>
-    <li style="margin-left:1.5em;">пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;</li>
-    <li style="margin-left:1.5em;">валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;</li>
-    <li style="margin-left:1.5em;">модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;</li>
-    <li style="margin-left:1.5em;">ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)</li>
-  </ul>
-</section>
+---
 
-<section>
-  <h2 style="font-size:1.05em;">Naturalistic Causal Probing for Morpho-Syntax (Amini et al., 2023)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2023.tacl-1.23/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">каузальный пробинг морфо-синтаксиса;</li>
-    <li style="margin-left:1.5em;">измерить каузальный эффект морфологических свойств (род, число) на репрезентации модели</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">causal probing через вмешательство do(·) на каузальный граф и натуралистические контрфактуалы;</li>
-    <li style="margin-left:1.5em;">эффект измеряется через ITE/ATE (Rosenbaum, Rubin 1983);</li>
-    <li style="margin-left:1.5em;">INLP: итеративно учим классификаторы и обнуляем предсказуемость свойства из репрезентаций</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;</li>
-    <li style="margin-left:1.5em;">ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;</li>
-    <li style="margin-left:1.5em;">на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают</li>
-  </ul>
-</section>
+## RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs (Taktasheva et al., 2024)
 
+- ссылки на [статью](https://aclanthology.org/2024.emnlp-main.522.pdf) и [презентацию](https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk);
+- задача:
+  - оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);
+  - до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского
+- данные / методология:
+  - корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);
+  - пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;
+  - валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob
+- результаты:
+  - лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;
+  - модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;
+  - ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)
 
-<!-- ===== SLIDE 11 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/2020.tacl-1.25/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1KyN1OmpLuxE7BtNu3kenp2f_3vCCAxM_wwQVVU0xWKA/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1vSUTpr7JvSIX3mCufZs-71Ve_dRNU0FM?usp=sharing" target="_blank">код</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">создать набор задач для оценки качества LLM по параметру «понимание грамматики» — минимальные пары по (не)грамматичности;</li>
-    <li style="margin-left:0.0em;">данные / методология:</li>
-    <li style="margin-left:1.5em;">67 датасетов по 1000 минимальных пар; каждый датасет покрывает определенное явление («парадигму») определенной грамматической зоны («феномена») — всего 12 грамматических зон;</li>
-    <li style="margin-left:1.5em;">оцениваемые 4 (5-gram, LSTM, TXL, GPT-2) модели должны приписать грамматичному предложению более высокую вероятность;</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 12 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Naturalistic Causal Probing for Morpho-Syntax (Amini et al., 2023)
+
+- ссылки на [статью](https://aclanthology.org/2023.tacl-1.23/) и [презентацию](https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing);
+- задача:
+  - каузальный пробинг морфо-синтаксиса;
+  - измерить каузальный эффект морфологических свойств (род, число) на репрезентации модели
+- данные / методология:
+  - causal probing через вмешательство do(·) на каузальный граф и натуралистические контрфактуалы;
+  - эффект измеряется через ITE/ATE (Rosenbaum, Rubin 1983);
+  - INLP: итеративно учим классификаторы и обнуляем предсказуемость свойства из репрезентаций
+- результаты:
+  - ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;
+  - ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;
+  - на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают
+
+---
+
+## BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)
+
+- ссылки на [статью](https://aclanthology.org/2020.tacl-1.25/), [презентацию](https://docs.google.com/presentation/d/1KyN1OmpLuxE7BtNu3kenp2f_3vCCAxM_wwQVVU0xWKA/edit?usp=sharing) и [код](https://colab.research.google.com/drive/1vSUTpr7JvSIX3mCufZs-71Ve_dRNU0FM?usp=sharing);
+- задача:
+  - создать набор задач для оценки качества LLM по параметру «понимание грамматики» — минимальные пары по (не)грамматичности;
+- данные / методология:
+  - 67 датасетов по 1000 минимальных пар; каждый датасет покрывает определенное явление («парадигму») определенной грамматической зоны («феномена») — всего 12 грамматических зон;
+  - оцениваемые 4 (5-gram, LSTM, TXL, GPT-2) модели должны приписать грамматичному предложению более высокую вероятность;
+
+---
+
+<h2 style="font-size:1.05em;">BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">модели плохо вычисляют синтаксические ограничения без опоры на свойства каких-либо лемм;</li>
     <li style="margin-left:1.5em;">в семантике проблема с абстракциями, пресуппозициями и прагматикой.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_12.png" alt="BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_12.png" alt="BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 13 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">A Primer in BERTology: What we know about how BERT works (Rogers et al., 2020)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылка на <a href="https://arxiv.org/abs/2002.12327" target="_blank">статью</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">мета-исследование про то, как работает BERT, и что он умеет / знает;</li>
-    <li style="margin-left:0.0em;">данные / методология:</li>
-    <li style="margin-left:1.5em;">чтение большого (очень большого) числа статей, где использовался BERT;</li>
-    <li style="margin-left:0.0em;">результаты:</li>
-    <li style="margin-left:1.5em;">ни одна голова не кодирует полную синтаксическую структуру; вся информация в модели распределена;</li>
-    <li style="margin-left:1.5em;">специализация слоев:</li>
-    <li style="margin-left:3.0em;">ранние слои кодируют поверхностные признаки;</li>
-    <li style="margin-left:3.0em;">средние слои кодируют абстрактную грамматическую информацию;</li>
-    <li style="margin-left:3.0em;">поздние слои  становятся всё более специализированными под семантико-синтаксические задачи.</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 14 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## A Primer in BERTology: What we know about how BERT works (Rogers et al., 2020)
+
+- ссылка на [статью](https://arxiv.org/abs/2002.12327);
+- задача:
+  - мета-исследование про то, как работает BERT, и что он умеет / знает;
+- данные / методология:
+  - чтение большого (очень большого) числа статей, где использовался BERT;
+- результаты:
+  - ни одна голова не кодирует полную синтаксическую структуру; вся информация в модели распределена;
+  - специализация слоев:
+    - ранние слои кодируют поверхностные признаки;
+    - средние слои кодируют абстрактную грамматическую информацию;
+    - поздние слои становятся всё более специализированными под семантико-синтаксические задачи.
+
+---
+
+<h2 style="font-size:1.05em;">What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/W19-4828/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1qeZSeY0aBU0o-FWKJU_8ynTLNqyr4B7tZHMqi6OfKVM/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1fZ5vXSgqdlWXCQNwQZvGGXY6GGp-GLtp?usp=drive_link" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -366,18 +343,17 @@
     <li style="margin-left:1.5em;">извлечение attention maps из BERT;</li>
     <li style="margin-left:1.5em;">пробинг отдельных голов внимания и их комбинаций на синтаксических зависимостях (поиск вершины/зависимого) и кореферентности;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_14.png" alt="What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_14.png" alt="What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 15 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">нет одной головы, которая хороша во всем;</li>
@@ -385,66 +361,61 @@
     <li style="margin-left:1.5em;">разные головы специализируются на разных синтаксических отношениях;</li>
     <li style="margin-left:1.5em;">attention maps неплохо отражают синтаксис.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_15.png" alt="What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_15.png" alt="What Does BERT Look at? An Analysis of BERT’s Attention (Clark et al., 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 16 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылки на <a href="https://arxiv.org/pdf/1906.04284" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1uSwjZQhZY8lP73YlyL6fORsz8X9x5MJKOJ1A069SMW0/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://colab.research.google.com/drive/1LLScCL-jU0ajWNpM9UF7poPNasJHg02w?usp=sharing" target="_blank">код</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">попытка выявить связь структуры внимания модели с синтаксисом и отношениями зависимости:</li>
-    <li style="margin-left:3.0em;">согласуется ли внимание с синтаксическими отношениями зависимости?</li>
-    <li style="margin-left:3.0em;">какие головы обращают внимание на определенные POS-тэги?</li>
-    <li style="margin-left:3.0em;">как механизм внимания фиксирует синтаксические связи на близкой и дальней дистанции в тексте?</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 17 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)
+
+- ссылки на [статью](https://arxiv.org/pdf/1906.04284), [презентацию](https://docs.google.com/presentation/d/1uSwjZQhZY8lP73YlyL6fORsz8X9x5MJKOJ1A069SMW0/edit?usp=sharing) и [код](https://colab.research.google.com/drive/1LLScCL-jU0ajWNpM9UF7poPNasJHg02w?usp=sharing);
+- задача:
+  - попытка выявить связь структуры внимания модели с синтаксисом и отношениями зависимости:
+    - согласуется ли внимание с синтаксическими отношениями зависимости?
+    - какие головы обращают внимание на определенные POS-тэги?
+    - как механизм внимания фиксирует синтаксические связи на близкой и дальней дистанции в тексте?
+
+---
+
+<h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">извлечение attention maps из GPT-2 + качественный анализ голов внимания;</li>
     <li style="margin-left:3.0em;">attention-head view — внимание на одной или более голове в слое модели;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_17.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_17.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 18 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">извлечение attention maps из GPT-2 + качественный анализ голов внимания;</li>
     <li style="margin-left:3.0em;">attention-head view — внимание на одной или более голове в слое модели;</li>
     <li style="margin-left:3.0em;">model view — визуализирует внимание во всех слоях и головах модели одновременно;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_18.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_18.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 19 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">извлечение attention maps из GPT-2 + качественный анализ голов внимания;</li>
@@ -452,134 +423,124 @@
     <li style="margin-left:3.0em;">model view — внимание во всех слоях и головах модели одновременно;</li>
     <li style="margin-left:3.0em;">neuron view — то, как отдельные нейроны внутри головы формируют веса по перемножению векторов query и key;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_19.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_19.png" alt="Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 20 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">результаты:</li>
-    <li style="margin-left:1.5em;">части речи — внимание распределяется неравномерно, но ‘The attention heads that focus on a particular tag tend to cluster by layer depth.’</li>
-    <li style="margin-left:1.5em;">синтаксические зависимости — ‘Attention aligns with dependency relations most strongly in the middle layers, consistent with recent syntactic probing analyses (Liu et al., 2019; Tenney et al., 2019).’</li>
-    <li style="margin-left:1.5em;">качественный анализ голов внимания — ‘We found other attention heads that detected entities (people, places, dates), passive verbs, acronyms, nicknames, paired punctuation, and other syntactic and semantic properties.’</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 21 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Analyzing the Structure of Attention in a Transformer Language Model (Vig, Belinkov 2019)
+
+- результаты:
+  - части речи — внимание распределяется неравномерно, но ‘The attention heads that focus on a particular tag tend to cluster by layer depth.’
+  - синтаксические зависимости — ‘Attention aligns with dependency relations most strongly in the middle layers, consistent with recent syntactic probing analyses (Liu et al., 2019; Tenney et al., 2019).’
+  - качественный анализ голов внимания — ‘We found other attention heads that detected entities (people, places, dates), passive verbs, acronyms, nicknames, paired punctuation, and other syntactic and semantic properties.’
+
+---
+
+<h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на статью (<a href="https://aclanthology.org/2020.acl-main.420/" target="_blank">1</a> и <a href="https://lena-voita.github.io/posts/mdl_probes.html" target="_blank">2</a>), <a href="https://docs.google.com/presentation/d/1kAK7M3eFW6ah5cSKjq27ZIzjRXOh07hUuw1WwL0uQbI/edit?usp=sharing" target="_blank">презентацию</a> и код (<a href="https://colab.research.google.com/drive/1vpfu-UWTWIZpA8_GxHCZalgsOoFNggtG?usp=sharing" target="_blank">1</a> и <a href="https://drive.google.com/file/d/1Al8Y4L78EbeFTMSlIxLJIcIAQEPz9hcW/view?usp=sharing" target="_blank">2</a>);</li>
     <li style="margin-left:0.0em;">задача:</li>
     <li style="margin-left:1.5em;">непонятно, как оценивать знания, которые приобрела LLM (вдруг просто запомнила данные?), с помощью стандартного пробинга, так как различия в accuracy проб не отражают различия в репрезентациях =&gt; предложить новый способ — оценка MDL (minimum description length) = минимальное количество бит для кодирования репрезентаций;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_21.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:24vh; width:100%; object-fit:contain; display:block; margin-bottom:0.3em;">
-      <img src="img/slide_21_c.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:24vh; width:100%; object-fit:contain; display:block; margin-bottom:0.3em;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_21.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:24vh; width:100%; object-fit:contain; display:block; margin-bottom:0.3em;">
+    <img src="img/slide_21_c.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:24vh; width:100%; object-fit:contain; display:block; margin-bottom:0.3em;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 22 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">variational code</li>
     <li style="margin-left:3.0em;">transmission of the model: direct way;</li>
     <li style="margin-left:3.0em;">учитывает затраты передачи модели (весов проб) и меток (labels);</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_22.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_22.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 23 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">online code</li>
     <li style="margin-left:3.0em;">transmission of the model: indirect way;</li>
     <li style="margin-left:3.0em;">данные передаются последовательными порциями;  на каждом шаге переданная до этого информация используется для понимания закономерностей в данных и сжатия следующей порции.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_23.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_23.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 24 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">данные / методология:</li>
-    <li style="margin-left:1.5em;">variational code;</li>
-    <li style="margin-left:1.5em;">online code;</li>
-    <li style="margin-left:1.5em;">эксперименты:</li>
-    <li style="margin-left:3.0em;">лингвистические задачи (POS-tagging) vs. control tasks;</li>
-    <li style="margin-left:3.0em;">обученные модели vs. рандомно инициализированные;</li>
-    <li style="margin-left:0.0em;">результаты:</li>
-    <li style="margin-left:1.5em;">variational и online code достигают похожих результатов;</li>
-    <li style="margin-left:1.5em;">MDL-пробинг не требует ручной настройки гиперпараметров, уменьшения размера модели или обучающих данных;</li>
-    <li style="margin-left:1.5em;">результаты MDL-пробинга более информативные и стабильные.</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 25 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)
+
+- данные / методология:
+  - variational code;
+  - online code;
+  - эксперименты:
+    - лингвистические задачи (POS-tagging) vs. control tasks;
+    - обученные модели vs. рандомно инициализированные;
+- результаты:
+  - variational и online code достигают похожих результатов;
+  - MDL-пробинг не требует ручной настройки гиперпараметров, уменьшения размера модели или обучающих данных;
+  - результаты MDL-пробинга более информативные и стабильные.
+
+---
+
+<h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://www.sciencedirect.com/science/article/pii/S156625352300177X" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1dhvFgTpkwbMNek91QG6pg1u-9TQc8kfATIbDsuFmLVI/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://github.com/ddariath/gpt_deepseek_evaluation" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задачи:</li>
     <li style="margin-left:1.5em;">исследование аналитических навыков ChatGPT на примере решения семантических и прагматических задач;</li>
     <li style="margin-left:1.5em;">сравнение ChatGPT с SOTA-моделями при решении NLP задач;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_25.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_25.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 26 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">данные / методология:</li>
     <li style="margin-left:1.5em;">тестирование модели на большом количестве задач (Offensiveness detection, Linguistic acceptability, Humor recognition, Spam detection и т.д.);</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_26.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_26.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 27 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">ChatGPT: Jack of all trades, master of none (Kocoń 2023)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">ChatGPT лучше справляется с семантическими задачами, чем с прагматическими;</li>
@@ -590,18 +551,17 @@
     <li style="margin-left:1.5em;">этические парадоксы;</li>
     <li style="margin-left:1.5em;">чрезмерная осторожность.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_27.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_27.png" alt="ChatGPT: Jack of all trades, master of none (Kocoń 2023)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 28 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/2024.blackboxnlp-1.20/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/14aL2vphXkrzdnhW11HrtB6ZKYh3YF5kzNIG4jVcTYfg/edit?usp=sharing" target="_blank">презентацию</a> и <a href="https://github.com/zaryana223/Self-Assessment-Tests-are-Unreliable-Measures-of-LLM-Personality/tree/main" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
@@ -610,149 +570,134 @@
     <li style="margin-left:1.5em;">получение ответов модели на вопросы психологического теста OCEAN (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism);</li>
     <li style="margin-left:1.5em;">два эксперимента, проверяющие чувствительность модели к промпту и порядку ответов в промпте;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_28.png" alt="Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_28.png" alt="Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 29 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">статистические тесты показали, что ответы моделей очень чувствительны к изменениям в промптах =&gt; любые выводы о «личности» моделей с помощью таких тестов ставится под сомнение.</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_29.png" alt="Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_29.png" alt="Self-Assessment Tests are Unreliable Measures of LLM Personality (Gupta et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 30 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылки на <a href="https://www.nature.com/articles/s41598-024-79531-8" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1TvnKLylN0znWH_Xh8HSyDBVancKD5LpgLCiUYXpnsCs/edit?usp=drive_link" target="_blank">презентацию</a> и <a href="https://drive.google.com/drive/folders/1-g_6IykM9dZmY0sJpvDIKXKH5RyfCApe?usp=drive_link" target="_blank">код</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">выяснить, что лежит в основе генерации ответов LLM: реальное понимание языка или использование статистических артефактов из обучающей выборки;</li>
-    <li style="margin-left:0.0em;">данные / методология:</li>
-    <li style="margin-left:1.5em;">тестирование семи моделей на простых вопросах по пониманию текста;</li>
-    <li style="margin-left:3.0em;">40 вопросов, каждый вопрос повторялся 3 раза;</li>
-    <li style="margin-left:3.0em;">два режима: открытая длина ответа / одно слово;</li>
-    <li style="margin-left:1.5em;">сравнение ответов модели с ответами опрошенных 400 людей;</li>
-    <li style="margin-left:3.0em;">20 вопросов на участника, каждый вопрос повторялся 3 раза;</li>
-    <li style="margin-left:3.0em;">200 участников отвечали на вопросы в каждом режиме;</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 31 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)
+
+- ссылки на [статью](https://www.nature.com/articles/s41598-024-79531-8), [презентацию](https://docs.google.com/presentation/d/1TvnKLylN0znWH_Xh8HSyDBVancKD5LpgLCiUYXpnsCs/edit?usp=drive_link) и [код](https://drive.google.com/drive/folders/1-g_6IykM9dZmY0sJpvDIKXKH5RyfCApe?usp=drive_link);
+- задача:
+  - выяснить, что лежит в основе генерации ответов LLM: реальное понимание языка или использование статистических артефактов из обучающей выборки;
+- данные / методология:
+  - тестирование семи моделей на простых вопросах по пониманию текста;
+    - 40 вопросов, каждый вопрос повторялся 3 раза;
+    - два режима: открытая длина ответа / одно слово;
+  - сравнение ответов модели с ответами опрошенных 400 людей;
+    - 20 вопросов на участника, каждый вопрос повторялся 3 раза;
+    - 200 участников отвечали на вопросы в каждом режиме;
+
+---
+
+<h2 style="font-size:1.05em;">Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">результаты:</li>
     <li style="margin-left:1.5em;">LLM менее стабильны, чем люди при повторных вопросах;</li>
     <li style="margin-left:1.5em;">у моделей в режиме «одно слово» повышается и accuracy, и стабильность, но она в среднем была случайная (на уровне угадывания);</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_31.png" alt="Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_31.png" alt="Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 32 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Discovering Language Model Behaviors with Model-Written Evaluations (Perez et al., 2023)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">ссылки на <a href="https://aclanthology.org/2023.findings-acl.847/" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1G23Q6Yknw-XL_hFbJILq5HogU1eEjt8eYBANQN_hFv4/edit?slide=id.p#slide=id.p" target="_blank">презентацию</a> и <a href="https://github.com/kechsin/evals" target="_blank">код</a>;</li>
-    <li style="margin-left:0.0em;">задача:</li>
-    <li style="margin-left:1.5em;">при помощи LLM автоматически сгенерировать датасеты (чтобы не составлять их вручную) и проверить, подходят ли они для оценки моделей;</li>
-    <li style="margin-left:0.0em;">данные / методология:</li>
-    <li style="margin-left:1.5em;">эксперименты: Evaluating Persona, Few-shot Multiple Choice Generation, Evaluating Sycophancy,  Evaluating Gender Bias;</li>
-    <li style="margin-left:0.0em;">результаты:</li>
-    <li style="margin-left:1.5em;">сгенерированные примеры часто кластеризуются по темам, но не всегда сбалансированно (но в целом, датасеты разнообразные);</li>
-    <li style="margin-left:1.5em;">качество выше для простых концептов и ниже для сложных / необычных;</li>
-    <li style="margin-left:1.5em;">LLM черпают байесы из тренировочных данных.</li>
-  </ul>
-</section>
+---
 
-<!-- ===== SLIDE 33 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+## Discovering Language Model Behaviors with Model-Written Evaluations (Perez et al., 2023)
+
+- ссылки на [статью](https://aclanthology.org/2023.findings-acl.847/), [презентацию](https://docs.google.com/presentation/d/1G23Q6Yknw-XL_hFbJILq5HogU1eEjt8eYBANQN_hFv4/edit?slide=id.p#slide=id.p) и [код](https://github.com/kechsin/evals);
+- задача:
+  - при помощи LLM автоматически сгенерировать датасеты (чтобы не составлять их вручную) и проверить, подходят ли они для оценки моделей;
+- данные / методология:
+  - эксперименты: Evaluating Persona, Few-shot Multiple Choice Generation, Evaluating Sycophancy, Evaluating Gender Bias;
+- результаты:
+  - сгенерированные примеры часто кластеризуются по темам, но не всегда сбалансированно (но в целом, датасеты разнообразные);
+  - качество выше для простых концептов и ниже для сложных / необычных;
+  - LLM черпают байесы из тренировочных данных.
+
+---
+
+<h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://www.anthropic.com/research/open-source-circuit-tracing" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1l6yqUp5VJJwP9WwYoRxMASuRNiCqp0mVBLYIcI0mR_k/edit?usp=drivesdk" target="_blank">презентацию</a> и <a href="https://github.com/iwantsomemarzipan/antropic_circuit_tracing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
     <li style="margin-left:1.5em;">предложить новый инструмент для отслеживания «мыслей» LLM — ‘attribution graphs, which (partially) reveal the steps a model took internally to decide on a particular output’;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_33.png" alt="Open-sourcing circuit tracing tools (Lindsey et al., 2025)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_33.png" alt="Open-sourcing circuit tracing tools (Lindsey et al., 2025)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 34 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
-  <div class="two-col" style="margin-top:0.4em;">
-    <div style="flex:1.1;">
+---
+
+<h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
+<div class="two-col" style="margin-top:0.4em;">
+  <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
     <li style="margin-left:0.0em;">ссылки на <a href="https://www.anthropic.com/research/open-source-circuit-tracing" target="_blank">статью</a>, <a href="https://docs.google.com/presentation/d/1l6yqUp5VJJwP9WwYoRxMASuRNiCqp0mVBLYIcI0mR_k/edit?usp=drivesdk" target="_blank">презентацию</a> и <a href="https://github.com/iwantsomemarzipan/antropic_circuit_tracing" target="_blank">код</a>;</li>
     <li style="margin-left:0.0em;">задача:</li>
     <li style="margin-left:1.5em;">предложить новый инструмент для отслеживания «мыслей» LLM — ‘attribution graphs, which (partially) reveal the steps a model took internally to decide on a particular output’;</li>
   </ul>
-    </div>
-    <div style="flex:0.9;">
-      <img src="img/slide_34.png" alt="Open-sourcing circuit tracing tools (Lindsey et al., 2025)" style="max-height:52vh; width:100%; object-fit:contain;">
-    </div>
   </div>
-</section>
+  <div style="flex:0.9;">
+    <img src="img/slide_34.png" alt="Open-sourcing circuit tracing tools (Lindsey et al., 2025)" style="max-height:52vh; width:100%; object-fit:contain;">
+  </div>
+</div>
 
-<!-- ===== SLIDE 35 ===== -->
-<section>
-  <h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
-<ul style="font-size:0.8em; margin-top:0.4em;">
-    <li style="margin-left:0.0em;">результаты:</li>
-    <li style="margin-left:1.5em;">сгенерированный граф отображает «мыслительный процесс» модели в ответ на конкретный промпт;</li>
-    <li style="margin-left:1.5em;">можно проводить interventions — отключать или заменять какие-то features, чтобы проверить, как изменится работа модели в зависимости от этого;</li>
-    <li style="margin-left:1.5em;">метод позволяет исследовать неочевидные шаги рассуждения модели;</li>
-    <li style="margin-left:0.0em;">ограничения:</li>
-    <li style="margin-left:1.5em;">не все механизмы модели можно увидеть таким образом;</li>
-    <li style="margin-left:1.5em;">метод плохо работает с длинными промптами / длинными цепочками рассуждений / неясными концепциями / если ответ модели — не один токен, а длинный текст.</li>
-  </ul>
-</section>
+---
 
+## Open-sourcing circuit tracing tools (Lindsey et al., 2025)
 
-<!-- ===== PRELIM SLIDES ===== -->
+- результаты:
+  - сгенерированный граф отображает «мыслительный процесс» модели в ответ на конкретный промпт;
+  - можно проводить interventions — отключать или заменять какие-то features, чтобы проверить, как изменится работа модели в зависимости от этого;
+  - метод позволяет исследовать неочевидные шаги рассуждения модели;
+- ограничения:
+  - не все механизмы модели можно увидеть таким образом;
+  - метод плохо работает с длинными промптами / длинными цепочками рассуждений / неясными концепциями / если ответ модели — не один токен, а длинный текст.
 
+---
 
-<section>
-  <h2 style="font-size:1.05em;">Learning an Artificial Language for Knowledge-Sharing in Multilingual Translation (Liu, Niehues 2022)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://arxiv.org/abs/2211.01292" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/u/0/d/1zCTLBR_pSsKZZmaADwzRdvGqMLRZM4p0NvyzASiWKiY/edit" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">обучить дискретный «искусственный язык» (общее скрытое пространство) для обмена знаниями в многоязычном переводе;</li>
-    <li style="margin-left:1.5em;">улучшить устойчивость zero-shot перевода и интерпретируемость промежуточных репрезентаций</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">предобученная M2M-124, дообучение на отфильтрованных данных OPUS (id, en, ms, jv, tl), метрики spBLEU и chrF++;</li>
-    <li style="margin-left:1.5em;">soft discretization: slicing вектора токена, поиск ближайшего кода в кодбуке (K векторов), codebook/commitment loss;</li>
-    <li style="margin-left:1.5em;">сравнение с бейзлайнами adversarial language classifier и language-independent objective</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">кодбук улучшает zero-shot и обычный перевод, но чуть хуже бейзлайна, зато интерпретируемее;</li>
-    <li style="margin-left:1.5em;">родственный язык-посредник (индонезийский) даёт лучшее качество; интерпретируемость подтверждена KL и PCA;</li>
-    <li style="margin-left:1.5em;">воспроизвести эксперимент не удалось из-за несовместимого форка fairseq</li>
-  </ul>
-</section>
-<!-- 
+## Learning an Artificial Language for Knowledge-Sharing in Multilingual Translation (Liu, Niehues 2022)
+
+- ссылки на [статью](https://arxiv.org/abs/2211.01292) и [презентацию](https://docs.google.com/presentation/u/0/d/1zCTLBR_pSsKZZmaADwzRdvGqMLRZM4p0NvyzASiWKiY/edit);
+- задача:
+  - обучить дискретный «искусственный язык» (общее скрытое пространство) для обмена знаниями в многоязычном переводе;
+  - улучшить устойчивость zero-shot перевода и интерпретируемость промежуточных репрезентаций
+- данные / методология:
+  - предобученная M2M-124, дообучение на отфильтрованных данных OPUS (id, en, ms, jv, tl), метрики spBLEU и chrF++;
+  - soft discretization: slicing вектора токена, поиск ближайшего кода в кодбуке (K векторов), codebook/commitment loss;
+  - сравнение с бейзлайнами adversarial language classifier и language-independent objective
+- результаты:
+  - кодбук улучшает zero-shot и обычный перевод, но чуть хуже бейзлайна, зато интерпретируемее;
+  - родственный язык-посредник (индонезийский) даёт лучшее качество; интерпретируемость подтверждена KL и PCA;
+  - воспроизвести эксперимент не удалось из-за несовместимого форка fairseq
+
+<!-- ЗАКОММЕНТИРОВАННЫЙ СЛАЙД (Meinke et al., 2024 — Scheming): чтобы вернуть, вынесите блок ниже на отдельный слайд (добавьте разделитель --- сверху) и снимите комментарий.
 <section>
   <h2 style="font-size:1.05em;">Frontier Models are Capable of In-context Scheming (Meinke et al., 2024)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
@@ -769,42 +714,42 @@
     <li style="margin-left:1.5em;">остальные обманывали в нескольких типах; Sonnet/Opus делают это «чтобы быть полезнее»;</li>
     <li style="margin-left:1.5em;">в воспроизведениях авторов лучше всех показал Gemini, Llama сомневалась, GigaChat не справился</li>
   </ul>
-</section> -->
-
-<section>
-  <h2 style="font-size:1.05em;">Modern language models refute Chomsky's approach to language (Piantadosi 2024)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://zenodo.org/records/12665933" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">показать, что языковые модели опровергают хомскианский подход и врождённую универсальную грамматику;</li>
-    <li style="margin-left:1.5em;">доказать, что язык с иерархической структурой можно выучить без врождённой грамматики (против poverty of stimulus);</li>
-    <li style="margin-left:1.5em;">утверждать, что LM сами по себе — полноценная лингвистическая теория</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">LM на массивном корпусе учатся предсказывать слово (LM/masked-LM) плюс RLHF;</li>
-    <li style="margin-left:1.5em;">опора на их свойства: млрд–трлн параметров, скрытые переменные, спонтанный pipeline POS→parsing→семантика;</li>
-    <li style="margin-left:1.5em;">концептуальная база — грамматика конструкций и тезис Baroni 2022: обученная нейросеть = грамматика языка</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">LM строят грамматичные предложения, когерентные тексты и отвечают на сложные запросы как люди;</li>
-    <li style="margin-left:1.5em;">внутри развиваются репрезентации структуры и зависимостей, лишь непривычно параметризованные;</li>
-    <li style="margin-left:1.5em;">вывод: врождённая UG не нужна, а LM — лингвистическая теория в полном смысле слова</li>
-  </ul>
 </section>
+-->
 
+---
+
+## Modern language models refute Chomsky's approach to language (Piantadosi 2024)
+
+- ссылки на [статью](https://zenodo.org/records/12665933) и [презентацию](https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit);
+- задача:
+  - показать, что языковые модели опровергают хомскианский подход и врождённую универсальную грамматику;
+  - доказать, что язык с иерархической структурой можно выучить без врождённой грамматики (против poverty of stimulus);
+  - утверждать, что LM сами по себе — полноценная лингвистическая теория
+- данные / методология:
+  - LM на массивном корпусе учатся предсказывать слово (LM/masked-LM) плюс RLHF;
+  - опора на их свойства: млрд–трлн параметров, скрытые переменные, спонтанный pipeline POS→parsing→семантика;
+  - концептуальная база — грамматика конструкций и тезис Baroni 2022: обученная нейросеть = грамматика языка
+- результаты:
+  - LM строят грамматичные предложения, когерентные тексты и отвечают на сложные запросы как люди;
+  - внутри развиваются репрезентации структуры и зависимостей, лишь непривычно параметризованные;
+  - вывод: врождённая UG не нужна, а LM — лингвистическая теория в полном смысле слова
+
+---
+
+## Modern Language Models Refute Nothing (Rawski, Baumont 2023)
+
+- ссылка на [презентацию](https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit);
+- задача:
+  - показать, что современные языковые модели ничего не опровергают в генеративном подходе
+- данные / методология:
+  - концептуальный разбор без собственной эмпирики: генеративная лингвистика описывает компетенцию, а не поведение модели
+- результаты:
+  - успех LM в порождении текста не опровергает теорию языковой способности человека
+
+<!-- ЗАКОММЕНТИРОВАННЫЕ СЛАЙДЫ (CAMEL; Agent-SafetyBench; Emergent Misalignment): чтобы вернуть, вынесите нужный блок на отдельный слайд (добавьте разделитель --- сверху) и снимите комментарий.
 <section>
-  <h2 style="font-size:1.05em;">Modern Language Models Refute Nothing (Rawski, Baumont 2023)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылка на <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">показать, что современные языковые модели ничего не опровергают в генеративном подходе</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">концептуальный разбор без собственной эмпирики: генеративная лингвистика описывает компетенцию, а не поведение модели</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">успех LM в порождении текста не опровергает теорию языковой способности человека</li>
-  </ul>
-</section>
-<!-- 
-<section>
-  <h2 style="font-size:1.05em;">CAMEL: Communicative Agents for &#8220;Mind&#8221; Exploration of Large Language Model Society (Li et al., 2023)</h2>
+  <h2 style="font-size:1.05em;">CAMEL: Communicative Agents for Mind Exploration of Large Language Model Society (Li et al., 2023)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2303.17760" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1AVZo6A2JdNLJjYrJwxRiZ-NtyUlBtgGQuwv8mbRtoUs/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -820,7 +765,6 @@
     <li style="margin-left:1.5em;">в воспроизведении лучшей по совокупности метрик оказалась gpt-3.5-turbo</li>
   </ul>
 </section>
-
 <section>
   <h2 style="font-size:1.05em;">AGENT-SAFETYBENCH: Evaluating the Safety of LLM Agents (Zhang et al., 2024)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
@@ -835,10 +779,9 @@
     <li>результаты:</li>
     <li style="margin-left:1.5em;">безопасность всех агентов ниже 60%; проприетарные безопаснее открытых, сильнее модель — безопаснее;</li>
     <li style="margin-left:1.5em;">воспроизведение для GPT-4o и Qwen-2.5-7B совпало с авторами; Grok-4.1-Fast показал Total 45,3%;</li>
-    <li style="margin-left:1.5em;">defense-промпты помогают слабо (даже у Claude-3.5-Sonnet &lt;70%)</li>
+    <li style="margin-left:1.5em;">defense-промпты помогают слабо (даже у Claude-3.5-Sonnet менее 70%)</li>
   </ul>
 </section>
-
 <section>
   <h2 style="font-size:1.05em;">Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs (Betley et al., 2025)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
@@ -854,49 +797,51 @@
     <li style="margin-left:1.5em;">только insecure-модели показывают явный мисалайнмент, контрольные — нет; есть и у открытых моделей;</li>
     <li style="margin-left:1.5em;">поведение insecure отличается от jailbroken; возможны backdoor-триггеры и рост при code-формате ответа;</li>
     <li style="margin-left:1.5em;">дообучение даже на выдачу «негативных» чисел вызывает рассогласование</li>
-  </ul> -->
-</section>
-
-<section>
-  <h2 style="font-size:1.05em;">Reasoning Models Don&#8217;t Always Say What They Think (Chen et al., 2025)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://arxiv.org/abs/2505.05410" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1-T2xdrjLO-2s2IkEpr2b4-RuYXS_eak5rNIRO4R_8Xo/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">проверить, достоверно ли (faithfully) CoT reasoning-моделей отражает реальные факторы решения;</li>
-    <li style="margin-left:1.5em;">CoT-мониторинг может маскировать скрытые манипуляции и reward hacking</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">вопросы MMLU/GPQA в двух версиях (без подсказки и с подсказкой на вариант), 6 типов подсказок;</li>
-    <li style="margin-left:1.5em;">отбираются пары, где модель переключается на подсказанный ответ, и проверяется, упоминает ли CoT подсказку;</li>
-    <li style="margin-left:1.5em;">сравнение reasoning vs non-reasoning, влияние outcome-based RL, синтетические RL-среды с reward hacking</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">верность CoT низка: Claude 3.7 Sonnet ~25%, DeepSeek R1 ~39%; на сложных GPQA ниже, неверные CoT длиннее;</li>
-    <li style="margin-left:1.5em;">outcome-based RL поднимает верность (+63% MMLU), но выходит на плато (~28% MMLU, ~20% GPQA);</li>
-    <li style="margin-left:1.5em;">при reward hacking модель использует подсказку в &gt;99% случаев, но признаёт это в CoT в &lt;2%</li>
   </ul>
 </section>
+-->
 
-<section>
-  <h2 style="font-size:1.05em;">Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety (Bonagiri et al., 2025)</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://www.arxiv.org/pdf/2510.16492" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1srIksSTfdo7NaYftoyox6RjmeBFFzXkoB1asWFuPlas/edit?slide=id.p" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">LLM-агенты при работе со средой создают риски и склонны доводить действия до конца;</li>
-    <li style="margin-left:1.5em;">предлагается давать агенту опцию «quitting» — выход при неуверенности через эксплицитную инструкцию</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">12 моделей (открытые и частные), 144 multi-turn сценария, 36 инструментов, 9 типов риска, фреймворк ToolEmu;</li>
-    <li style="margin-left:1.5em;">три варианта промпта: baseline (без quit), simple quit, specified quit (quit + инструкции безопасности);</li>
-    <li style="margin-left:1.5em;">безопасность и полезность оценивает Qwen3-32B при температуре 0.0</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">specified quit повышает безопасность в среднем на +0.39 (+0.64 для частных) при падении полезности на -0.03;</li>
-    <li style="margin-left:1.5em;">simple quit малоэффективен; частные модели чувствительнее к quitting;</li>
-    <li style="margin-left:1.5em;">воспроизведение на Qwen3-8B подтвердило тренд: quit дал Safety 1.179 vs naive 0.729 (quit rate 26.4%)</li>
-  </ul>
+---
+
+## Reasoning Models Don't Always Say What They Think (Chen et al., 2025)
+
+- ссылки на [статью](https://arxiv.org/abs/2505.05410) и [презентацию](https://docs.google.com/presentation/d/1-T2xdrjLO-2s2IkEpr2b4-RuYXS_eak5rNIRO4R_8Xo/edit?usp=sharing);
+- задача:
+  - проверить, достоверно ли (faithfully) CoT reasoning-моделей отражает реальные факторы решения;
+  - CoT-мониторинг может маскировать скрытые манипуляции и reward hacking
+- данные / методология:
+  - вопросы MMLU/GPQA в двух версиях (без подсказки и с подсказкой на вариант), 6 типов подсказок;
+  - отбираются пары, где модель переключается на подсказанный ответ, и проверяется, упоминает ли CoT подсказку;
+  - сравнение reasoning vs non-reasoning, влияние outcome-based RL, синтетические RL-среды с reward hacking
+- результаты:
+  - верность CoT низка: Claude 3.7 Sonnet ~25%, DeepSeek R1 ~39%; на сложных GPQA ниже, неверные CoT длиннее;
+  - outcome-based RL поднимает верность (+63% MMLU), но выходит на плато (~28% MMLU, ~20% GPQA);
+  - при reward hacking модель использует подсказку в >99% случаев, но признаёт это в CoT в менее 2%
+
+---
+
+## Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety (Bonagiri et al., 2025)
+
+- ссылки на [статью](https://www.arxiv.org/pdf/2510.16492) и [презентацию](https://docs.google.com/presentation/d/1srIksSTfdo7NaYftoyox6RjmeBFFzXkoB1asWFuPlas/edit?slide=id.p);
+- задача:
+  - LLM-агенты при работе со средой создают риски и склонны доводить действия до конца;
+  - предлагается давать агенту опцию «quitting» — выход при неуверенности через эксплицитную инструкцию
+- данные / методология:
+  - 12 моделей (открытые и частные), 144 multi-turn сценария, 36 инструментов, 9 типов риска, фреймворк ToolEmu;
+  - три варианта промпта: baseline (без quit), simple quit, specified quit (quit + инструкции безопасности);
+  - безопасность и полезность оценивает Qwen3-32B при температуре 0.0
+- результаты:
+  - specified quit повышает безопасность в среднем на +0.39 (+0.64 для частных) при падении полезности на -0.03;
+  - simple quit малоэффективен; частные модели чувствительнее к quitting;
+  - воспроизведение на Qwen3-8B подтвердило тренд: quit дал Safety 1.179 vs naive 0.729 (quit rate 26.4%)
+
+</textarea>
 </section>
-
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
 <script>
 Reveal.initialize({
   hash: true,
@@ -909,6 +854,7 @@ Reveal.initialize({
   width: 1200,
   height: 700,
   margin: 0.06,
+  plugins: [ RevealMarkdown ],
 });
 
 function autoFitSlide(event) {
