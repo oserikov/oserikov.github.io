@@ -255,23 +255,7 @@
 
 ---
 
-## RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs (Taktasheva et al., 2024)
-
-- ссылки на [статью](https://aclanthology.org/2024.emnlp-main.522.pdf) и [презентацию](https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk);
-- задача:
-  - оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);
-  - до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского
-- данные / методология:
-  - корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);
-  - пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;
-  - валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob
-- результаты:
-  - лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;
-  - модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;
-  - ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)
-
----
-
+<!-- 
 ## Naturalistic Causal Probing for Morpho-Syntax (Amini et al., 2023)
 
 - ссылки на [статью](https://aclanthology.org/2023.tacl-1.23/) и [презентацию](https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing);
@@ -285,9 +269,9 @@
 - результаты:
   - ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;
   - ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;
-  - на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают
-
----
+  - на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают -->
+<!--  -->
+<!-- --- -->
 
 ## BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)
 
@@ -313,6 +297,24 @@
     <img src="img/slide_12.png" alt="BLiMP: The Benchmark of Linguistic Minimal Pairs for English (Warstadt et al., 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
   </div>
 </div>
+
+<!-- ---
+
+## RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs (Taktasheva et al., 2024)
+
+- ссылки на [статью](https://aclanthology.org/2024.emnlp-main.522.pdf) и [презентацию](https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk);
+- задача:
+  - оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);
+  - до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского
+- данные / методология:
+  - корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);
+  - пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;
+  - валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob
+- результаты:
+  - лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;
+  - модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;
+  - ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)
+-->
 
 ---
 
@@ -438,8 +440,8 @@
   - синтаксические зависимости — ‘Attention aligns with dependency relations most strongly in the middle layers, consistent with recent syntactic probing analyses (Liu et al., 2019; Tenney et al., 2019).’
   - качественный анализ голов внимания — ‘We found other attention heads that detected entities (people, places, dates), passive verbs, acronyms, nicknames, paired punctuation, and other syntactic and semantic properties.’
 
----
 
+<!--
 <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
 <div class="two-col" style="margin-top:0.4em;">
   <div style="flex:1.1;">
@@ -454,9 +456,9 @@
     <img src="img/slide_21_c.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:24vh; width:100%; object-fit:contain; display:block; margin-bottom:0.3em;">
   </div>
 </div>
+-->
 
----
-
+<!--
 <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
 <div class="two-col" style="margin-top:0.4em;">
   <div style="flex:1.1;">
@@ -471,9 +473,9 @@
     <img src="img/slide_22.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
   </div>
 </div>
+-->
 
----
-
+<!--
 <h2 style="font-size:1.05em;">Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)</h2>
 <div class="two-col" style="margin-top:0.4em;">
   <div style="flex:1.1;">
@@ -488,10 +490,9 @@
     <img src="img/slide_23.png" alt="Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)" style="max-height:52vh; width:100%; object-fit:contain;">
   </div>
 </div>
+-->
 
----
-
-## Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)
+<!-- ## Information-Theoretic Probing with Minimum Description Length (Voita, Titov 2020)
 
 - данные / методология:
   - variational code;
@@ -502,7 +503,7 @@
 - результаты:
   - variational и online code достигают похожих результатов;
   - MDL-пробинг не требует ручной настройки гиперпараметров, уменьшения размера модели или обучающих данных;
-  - результаты MDL-пробинга более информативные и стабильные.
+  - результаты MDL-пробинга более информативные и стабильные. -->
 
 ---
 
@@ -591,9 +592,9 @@
   </div>
 </div>
 
----
 
-## Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)
+
+<!-- ## Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)
 
 - ссылки на [статью](https://www.nature.com/articles/s41598-024-79531-8), [презентацию](https://docs.google.com/presentation/d/1TvnKLylN0znWH_Xh8HSyDBVancKD5LpgLCiUYXpnsCs/edit?usp=drive_link) и [код](https://drive.google.com/drive/folders/1-g_6IykM9dZmY0sJpvDIKXKH5RyfCApe?usp=drive_link);
 - задача:
@@ -604,11 +605,11 @@
     - два режима: открытая длина ответа / одно слово;
   - сравнение ответов модели с ответами опрошенных 400 людей;
     - 20 вопросов на участника, каждый вопрос повторялся 3 раза;
-    - 200 участников отвечали на вопросы в каждом режиме;
+    - 200 участников отвечали на вопросы в каждом режиме; -->
 
----
 
-<h2 style="font-size:1.05em;">Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)</h2>
+
+<!-- <h2 style="font-size:1.05em;">Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)</h2>
 <div class="two-col" style="margin-top:0.4em;">
   <div style="flex:1.1;">
 <ul style="font-size:0.8em; margin-top:0.4em;">
@@ -620,11 +621,10 @@
   <div style="flex:0.9;">
     <img src="img/slide_31.png" alt="Testing AI on language comprehension tasks reveals insensitivity to underlying meaning (Dentella et al., 2024)" style="max-height:52vh; width:100%; object-fit:contain;">
   </div>
-</div>
+</div> -->
 
----
 
-## Discovering Language Model Behaviors with Model-Written Evaluations (Perez et al., 2023)
+<!-- ## Discovering Language Model Behaviors with Model-Written Evaluations (Perez et al., 2023)
 
 - ссылки на [статью](https://aclanthology.org/2023.findings-acl.847/), [презентацию](https://docs.google.com/presentation/d/1G23Q6Yknw-XL_hFbJILq5HogU1eEjt8eYBANQN_hFv4/edit?slide=id.p#slide=id.p) и [код](https://github.com/kechsin/evals);
 - задача:
@@ -635,8 +635,32 @@
   - сгенерированные примеры часто кластеризуются по темам, но не всегда сбалансированно (но в целом, датасеты разнообразные);
   - качество выше для простых концептов и ниже для сложных / необычных;
   - LLM черпают байесы из тренировочных данных.
+ -->
+
 
 ---
+
+## Modern language models refute Chomsky's approach to language (Piantadosi 2024)
+
+- ссылки на [статью](https://zenodo.org/records/12665933) и [презентацию](https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit);
+- задача:
+  - показать, что языковые модели опровергают хомскианский подход и врождённую универсальную грамматику;
+  - доказать, что язык с иерархической структурой можно выучить без врождённой грамматики (против poverty of stimulus);
+  - утверждать, что LM сами по себе — полноценная лингвистическая теория
+- данные / методология:
+  - LM на массивном корпусе учатся предсказывать слово (LM/masked-LM) плюс RLHF;
+  - опора на их свойства: млрд–трлн параметров, скрытые переменные, спонтанный pipeline POS→parsing→семантика;
+  - концептуальная база — грамматика конструкций и тезис Baroni 2022: обученная нейросеть = грамматика языка
+- результаты:
+  - LM строят грамматичные предложения, когерентные тексты и отвечают на сложные запросы как люди;
+  - внутри развиваются репрезентации структуры и зависимостей, лишь непривычно параметризованные;
+  - вывод: врождённая UG не нужна, а LM — лингвистическая теория в полном смысле слова
+
+
+
+ ---
+
+
 
 <h2 style="font-size:1.05em;">Open-sourcing circuit tracing tools (Lindsey et al., 2025)</h2>
 <div class="two-col" style="margin-top:0.4em;">
@@ -679,9 +703,10 @@
 - ограничения:
   - не все механизмы модели можно увидеть таким образом;
   - метод плохо работает с длинными промптами / длинными цепочками рассуждений / неясными концепциями / если ответ модели — не один токен, а длинный текст.
+  - прошёл год и никто не пользуется, тк для каждой модели очень дорого размечать feature элементы вручную.
 
----
 
+<!-- 
 ## Learning an Artificial Language for Knowledge-Sharing in Multilingual Translation (Liu, Niehues 2022)
 
 - ссылки на [статью](https://arxiv.org/abs/2211.01292) и [презентацию](https://docs.google.com/presentation/u/0/d/1zCTLBR_pSsKZZmaADwzRdvGqMLRZM4p0NvyzASiWKiY/edit);
@@ -695,7 +720,7 @@
 - результаты:
   - кодбук улучшает zero-shot и обычный перевод, но чуть хуже бейзлайна, зато интерпретируемее;
   - родственный язык-посредник (индонезийский) даёт лучшее качество; интерпретируемость подтверждена KL и PCA;
-  - воспроизвести эксперимент не удалось из-за несовместимого форка fairseq
+  - воспроизвести эксперимент не удалось из-за несовместимого форка fairseq -->
 
 <!-- ЗАКОММЕНТИРОВАННЫЙ СЛАЙД (Meinke et al., 2024 — Scheming): чтобы вернуть, вынесите блок ниже на отдельный слайд (добавьте разделитель --- сверху) и снимите комментарий.
 <section>
@@ -717,27 +742,9 @@
 </section>
 -->
 
----
 
-## Modern language models refute Chomsky's approach to language (Piantadosi 2024)
 
-- ссылки на [статью](https://zenodo.org/records/12665933) и [презентацию](https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit);
-- задача:
-  - показать, что языковые модели опровергают хомскианский подход и врождённую универсальную грамматику;
-  - доказать, что язык с иерархической структурой можно выучить без врождённой грамматики (против poverty of stimulus);
-  - утверждать, что LM сами по себе — полноценная лингвистическая теория
-- данные / методология:
-  - LM на массивном корпусе учатся предсказывать слово (LM/masked-LM) плюс RLHF;
-  - опора на их свойства: млрд–трлн параметров, скрытые переменные, спонтанный pipeline POS→parsing→семантика;
-  - концептуальная база — грамматика конструкций и тезис Baroni 2022: обученная нейросеть = грамматика языка
-- результаты:
-  - LM строят грамматичные предложения, когерентные тексты и отвечают на сложные запросы как люди;
-  - внутри развиваются репрезентации структуры и зависимостей, лишь непривычно параметризованные;
-  - вывод: врождённая UG не нужна, а LM — лингвистическая теория в полном смысле слова
-
----
-
-## Modern Language Models Refute Nothing (Rawski, Baumont 2023)
+<!-- ## Modern Language Models Refute Nothing (Rawski, Baumont 2023)
 
 - ссылка на [презентацию](https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit);
 - задача:
@@ -745,7 +752,7 @@
 - данные / методология:
   - концептуальный разбор без собственной эмпирики: генеративная лингвистика описывает компетенцию, а не поведение модели
 - результаты:
-  - успех LM в порождении текста не опровергает теорию языковой способности человека
+  - успех LM в порождении текста не опровергает теорию языковой способности человека -->
 
 <!-- ЗАКОММЕНТИРОВАННЫЕ СЛАЙДЫ (CAMEL; Agent-SafetyBench; Emergent Misalignment): чтобы вернуть, вынесите нужный блок на отдельный слайд (добавьте разделитель --- сверху) и снимите комментарий.
 <section>
@@ -818,9 +825,9 @@
   - outcome-based RL поднимает верность (+63% MMLU), но выходит на плато (~28% MMLU, ~20% GPQA);
   - при reward hacking модель использует подсказку в >99% случаев, но признаёт это в CoT в менее 2%
 
----
+<!-- --- -->
 
-## Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety (Bonagiri et al., 2025)
+<!-- ## Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety (Bonagiri et al., 2025)
 
 - ссылки на [статью](https://www.arxiv.org/pdf/2510.16492) и [презентацию](https://docs.google.com/presentation/d/1srIksSTfdo7NaYftoyox6RjmeBFFzXkoB1asWFuPlas/edit?slide=id.p);
 - задача:
@@ -833,7 +840,7 @@
 - результаты:
   - specified quit повышает безопасность в среднем на +0.39 (+0.64 для частных) при падении полезности на -0.03;
   - simple quit малоэффективен; частные модели чувствительнее к quitting;
-  - воспроизведение на Qwen3-8B подтвердило тренд: quit дал Safety 1.179 vs naive 0.729 (quit rate 26.4%)
+  - воспроизведение на Qwen3-8B подтвердило тренд: quit дал Safety 1.179 vs naive 0.729 (quit rate 26.4%) -->
 
 </textarea>
 </section>
