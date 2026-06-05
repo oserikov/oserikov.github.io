@@ -672,6 +672,20 @@ Reveal.initialize({
   height: 700,
   margin: 0.06,
 });
+
+function autoFitSlide(event) {
+  const slide = (event && event.currentSlide) || Reveal.getCurrentSlide();
+  if (!slide) return;
+  slide.style.removeProperty('font-size');
+  const maxH = Reveal.getConfig().height;
+  let scale = 1.0;
+  while (slide.scrollHeight > maxH && scale > 0.45) {
+    scale -= 0.02;
+    slide.style.fontSize = scale + 'em';
+  }
+}
+Reveal.on('ready', () => autoFitSlide(null));
+Reveal.on('slidechanged', autoFitSlide);
 </script>
 </body>
 </html>
