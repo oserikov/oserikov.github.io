@@ -155,6 +155,44 @@
   </div>
 </section>
 
+<section>
+  <h2 style="font-size:1.05em;">What you can cram into a single $&amp;!#* vector: Probing sentence embeddings for linguistic properties (Conneau et al., 2018)</h2>
+  <ul style="font-size:0.8em; margin-top:0.4em;">
+    <li>ссылки на <a href="https://aclanthology.org/P18-1198/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1Zkln2xpirovuPNVjUM6HPr5HFtJEemxlk0W69Zzd2kc/edit?usp=sharing" target="_blank">презентацию</a>;</li>
+    <li>задача:</li>
+    <li style="margin-left:1.5em;">понять, какую лингвистическую информацию содержат эмбеддинги предложений, через архитектурно-независимые пробинговые задачи;</li>
+    <li style="margin-left:1.5em;">проверить, какие свойства (поверхностные, синтаксические, семантические) кодируются и как влияют архитектура и обучение</li>
+    <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">10 пробинговых задач (SentLen, WordContent; BShift, TreeDepth, TopConst; Tense, SubjNum, ObjNum, SOMO, CoordInv) на Toronto Book Corpus;</li>
+    <li style="margin-left:1.5em;">3 энкодера (BiLSTM-last, BiLSTM-max, Gated ConvNet), обученные на 8 задачах (NMT, AutoEncoder, SkipThought, NLI, Seq2Tree…);</li>
+    <li style="margin-left:1.5em;">сверху MLP-классификатор отдельно под каждую задачу; сравнение с бейзлайнами (BoV-fastText) и людьми</li>
+    <li>результаты:</li>
+    <li style="margin-left:1.5em;">Bag-of-Vectors неожиданно силён, но обученные энкодеры лучше; BiLSTM-max превосходит BiLSTM-last;</li>
+    <li style="margin-left:1.5em;">NMT даёт лучшие эмбеддинги для пробинга, чем NLI (для downstream — наоборот);</li>
+    <li style="margin-left:1.5em;">BiLSTM-max хорош даже без обучения; SOMO/число коррелируют с downstream</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.05em;">RuSentEval: Linguistic Source, Encoder Force! (Mikhailov et al., 2021)</h2>
+  <ul style="font-size:0.8em; margin-top:0.4em;">
+    <li>ссылки на <a href="https://aclanthology.org/2021.bsnlp-1.6/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1ThHd3aWhd3etJ3n-x-vHv8jn4_gR5NHUGV-iRaR49V4/edit?slide=id.g36628dae48c_0_0" target="_blank">презентацию (+ код)</a>;</li>
+    <li>задача:</li>
+    <li style="margin-left:1.5em;">RuSentEval — новый набор probing-задач уровня предложения для русского языка;</li>
+    <li style="margin-left:1.5em;">сравнить, как 8 BERT-подобных моделей кодируют лингвистику по слоям в русском и английском</li>
+    <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">3.6 млн предложений (Википедия, Lenta.ru, Taiga); фильтрация по длине 5–25 токенов, авторазметка морфосинтаксиса;</li>
+    <li style="margin-left:1.5em;">14 probing-задач: поверхностные (SentLen, WC), синтаксические (TreeDepth, NShift…), семантические (число/род/залог…);</li>
+    <li style="margin-left:1.5em;">методы: контролируемый probing логрегрессией, анализ нейронов, корреляционный анализ слоёв</li>
+    <li>результаты:</li>
+    <li style="margin-left:1.5em;">поверхностные признаки на нижних слоях [1–4], синтаксис на средних [5–7], семантика — по-разному;</li>
+    <li style="margin-left:1.5em;">поверхностные и синтаксические признаки учатся схоже для рус/англ, семантика расходится по слоям;</li>
+    <li style="margin-left:1.5em;">LABSE и M-BART ведут себя иначе, MiniLM похожа на XLM-R (общий токенизатор), а не на mBERT</li>
+  </ul>
+</section>
+
+
+
 <!-- ===== SLIDE 7 ===== -->
 <section>
   <h2 style="font-size:1.05em;">Designing and Interpreting Probes with Control Tasks (Hewitt, Liang 2019)</h2>
@@ -229,6 +267,43 @@
     </div>
   </div>
 </section>
+
+<section>
+  <h2 style="font-size:1.05em;">RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs (Taktasheva et al., 2024)</h2>
+  <ul style="font-size:0.8em; margin-top:0.4em;">
+    <li>ссылки на <a href="https://aclanthology.org/2024.emnlp-main.522.pdf" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
+    <li>задача:</li>
+    <li style="margin-left:1.5em;">оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);</li>
+    <li style="margin-left:1.5em;">до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского</li>
+    <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);</li>
+    <li style="margin-left:1.5em;">пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;</li>
+    <li style="margin-left:1.5em;">валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob</li>
+    <li>результаты:</li>
+    <li style="margin-left:1.5em;">лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;</li>
+    <li style="margin-left:1.5em;">модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;</li>
+    <li style="margin-left:1.5em;">ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="font-size:1.05em;">Naturalistic Causal Probing for Morpho-Syntax (Amini et al., 2023)</h2>
+  <ul style="font-size:0.8em; margin-top:0.4em;">
+    <li>ссылки на <a href="https://aclanthology.org/2023.tacl-1.23/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing" target="_blank">презентацию</a>;</li>
+    <li>задача:</li>
+    <li style="margin-left:1.5em;">каузальный пробинг морфо-синтаксиса;</li>
+    <li style="margin-left:1.5em;">измерить каузальный эффект морфологических свойств (род, число) на репрезентации модели</li>
+    <li>данные / методология:</li>
+    <li style="margin-left:1.5em;">causal probing через вмешательство do(·) на каузальный граф и натуралистические контрфактуалы;</li>
+    <li style="margin-left:1.5em;">эффект измеряется через ITE/ATE (Rosenbaum, Rubin 1983);</li>
+    <li style="margin-left:1.5em;">INLP: итеративно учим классификаторы и обнуляем предсказуемость свойства из репрезентаций</li>
+    <li>результаты:</li>
+    <li style="margin-left:1.5em;">ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;</li>
+    <li style="margin-left:1.5em;">ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;</li>
+    <li style="margin-left:1.5em;">на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают</li>
+  </ul>
+</section>
+
 
 <!-- ===== SLIDE 11 ===== -->
 <section>
@@ -659,80 +734,9 @@
 
 <!-- ===== PRELIM SLIDES ===== -->
 
-<section>
-  <h2 style="font-size:1.05em;">What you can cram into a single $&amp;!#* vector: Probing sentence embeddings for linguistic properties</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/P18-1198/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1Zkln2xpirovuPNVjUM6HPr5HFtJEemxlk0W69Zzd2kc/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">понять, какую лингвистическую информацию содержат эмбеддинги предложений, через архитектурно-независимые пробинговые задачи;</li>
-    <li style="margin-left:1.5em;">проверить, какие свойства (поверхностные, синтаксические, семантические) кодируются и как влияют архитектура и обучение</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">10 пробинговых задач (SentLen, WordContent; BShift, TreeDepth, TopConst; Tense, SubjNum, ObjNum, SOMO, CoordInv) на Toronto Book Corpus;</li>
-    <li style="margin-left:1.5em;">3 энкодера (BiLSTM-last, BiLSTM-max, Gated ConvNet), обученные на 8 задачах (NMT, AutoEncoder, SkipThought, NLI, Seq2Tree…);</li>
-    <li style="margin-left:1.5em;">сверху MLP-классификатор отдельно под каждую задачу; сравнение с бейзлайнами (BoV-fastText) и людьми</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">Bag-of-Vectors неожиданно силён, но обученные энкодеры лучше; BiLSTM-max превосходит BiLSTM-last;</li>
-    <li style="margin-left:1.5em;">NMT даёт лучшие эмбеддинги для пробинга, чем NLI (для downstream — наоборот);</li>
-    <li style="margin-left:1.5em;">BiLSTM-max хорош даже без обучения; SOMO/число коррелируют с downstream</li>
-  </ul>
-</section>
 
 <section>
-  <h2 style="font-size:1.05em;">RuSentEval: Linguistic Source, Encoder Force!</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2021.bsnlp-1.6/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1ThHd3aWhd3etJ3n-x-vHv8jn4_gR5NHUGV-iRaR49V4/edit?slide=id.g36628dae48c_0_0" target="_blank">презентацию (+ код)</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">RuSentEval — новый набор probing-задач уровня предложения для русского языка;</li>
-    <li style="margin-left:1.5em;">сравнить, как 8 BERT-подобных моделей кодируют лингвистику по слоям в русском и английском</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">3.6 млн предложений (Википедия, Lenta.ru, Taiga); фильтрация по длине 5–25 токенов, авторазметка морфосинтаксиса;</li>
-    <li style="margin-left:1.5em;">14 probing-задач: поверхностные (SentLen, WC), синтаксические (TreeDepth, NShift…), семантические (число/род/залог…);</li>
-    <li style="margin-left:1.5em;">методы: контролируемый probing логрегрессией, анализ нейронов, корреляционный анализ слоёв</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">поверхностные признаки на нижних слоях [1–4], синтаксис на средних [5–7], семантика — по-разному;</li>
-    <li style="margin-left:1.5em;">поверхностные и синтаксические признаки учатся схоже для рус/англ, семантика расходится по слоям;</li>
-    <li style="margin-left:1.5em;">LABSE и M-BART ведут себя иначе, MiniLM похожа на XLM-R (общий токенизатор), а не на mBERT</li>
-  </ul>
-</section>
-
-<section>
-  <h2 style="font-size:1.05em;">RuBLiMP: Russian Benchmark of Linguistic Minimal Pairs</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2024.emnlp-main.522.pdf" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/18SM_x0fZbxcTqR0xf_LxrZ8xvI9wvej6gb8GNBVTIrc/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">оценка грамматических знаний LM через минимальные пары (грамматичное vs неграмматичное);</li>
-    <li style="margin-left:1.5em;">до RuBLiMP не было масштабных и разнообразных наборов минимальных пар для русского</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">корпус из Wikipedia, Wikinews, Librusec; сегментация и UD-разметка (natasha);</li>
-    <li style="margin-left:1.5em;">пары по лингвистическим правилам с изменением одной черты: 12 явлений, 45 типов, ~1k пар на тип;</li>
-    <li style="margin-left:1.5em;">валидация людьми (20 студентов-лингвистов, Dawid–Skene); метрики: перплексия, псевдо-перплексия, Min-K% Prob</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">лучший результат у ruGPT-3.5-13B; одноязычные модели сильнее многоязычных, «больше ≠ лучше»;</li>
-    <li style="margin-left:1.5em;">модели чувствительны к локальным изменениям, но не к структурным связям и отрицательным местоимениям;</li>
-    <li style="margin-left:1.5em;">ни одна модель не одинаково хороша на всех языках; оценка согласования зависит от бенчмарка (∆ до 35% для Ru)</li>
-  </ul>
-</section>
-
-<section>
-  <h2 style="font-size:1.05em;">Naturalistic Causal Probing for Morpho-Syntax</h2>
-  <ul style="font-size:0.8em; margin-top:0.4em;">
-    <li>ссылки на <a href="https://aclanthology.org/2023.tacl-1.23/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/17CBUBGTLY5LmaToQIMlTsci14G-2kxtFE62FCDWBGEg/edit?usp=sharing" target="_blank">презентацию</a>;</li>
-    <li>задача:</li>
-    <li style="margin-left:1.5em;">каузальный пробинг морфо-синтаксиса;</li>
-    <li style="margin-left:1.5em;">измерить каузальный эффект морфологических свойств (род, число) на репрезентации модели</li>
-    <li>данные / методология:</li>
-    <li style="margin-left:1.5em;">causal probing через вмешательство do(·) на каузальный граф и натуралистические контрфактуалы;</li>
-    <li style="margin-left:1.5em;">эффект измеряется через ITE/ATE (Rosenbaum, Rubin 1983);</li>
-    <li style="margin-left:1.5em;">INLP: итеративно учим классификаторы и обнуляем предсказуемость свойства из репрезентаций</li>
-    <li>результаты:</li>
-    <li style="margin-left:1.5em;">ATE устойчивее к различиям датасетов, чем корреляционный и шаблонный оценщики;</li>
-    <li style="margin-left:1.5em;">ATE-фреймворк выявляет гендерно-смещённые прилагательные; вариация рода/числа ловится несколькими главными осями;</li>
-    <li style="margin-left:1.5em;">на контрфактуально-аугментированных данных результаты корреляционных пробов значимо падают</li>
-  </ul>
-</section>
-
-<section>
-  <h2 style="font-size:1.05em;">Learning an Artificial Language for Knowledge-Sharing in Multilingual Translation</h2>
+  <h2 style="font-size:1.05em;">Learning an Artificial Language for Knowledge-Sharing in Multilingual Translation (Liu, Niehues 2022)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2211.01292" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/u/0/d/1zCTLBR_pSsKZZmaADwzRdvGqMLRZM4p0NvyzASiWKiY/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -748,9 +752,9 @@
     <li style="margin-left:1.5em;">воспроизвести эксперимент не удалось из-за несовместимого форка fairseq</li>
   </ul>
 </section>
-
+<!-- 
 <section>
-  <h2 style="font-size:1.05em;">Frontier Models are Capable of In-context Scheming</h2>
+  <h2 style="font-size:1.05em;">Frontier Models are Capable of In-context Scheming (Meinke et al., 2024)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/pdf/2412.04984" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1vHE77HekznceqbGehVWNeQCt8YCRlamOrS9AXAQJk_E/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -765,10 +769,10 @@
     <li style="margin-left:1.5em;">остальные обманывали в нескольких типах; Sonnet/Opus делают это «чтобы быть полезнее»;</li>
     <li style="margin-left:1.5em;">в воспроизведениях авторов лучше всех показал Gemini, Llama сомневалась, GigaChat не справился</li>
   </ul>
-</section>
+</section> -->
 
 <section>
-  <h2 style="font-size:1.05em;">Steven T. Piantadosi. Modern language models refute Chomsky's approach to language</h2>
+  <h2 style="font-size:1.05em;">Modern language models refute Chomsky's approach to language (Piantadosi 2024)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://zenodo.org/records/12665933" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -787,7 +791,7 @@
 </section>
 
 <section>
-  <h2 style="font-size:1.05em;">Jon Rawski, Lucie Baumont. Modern Language Models Refute Nothing.</h2>
+  <h2 style="font-size:1.05em;">Modern Language Models Refute Nothing (Rawski, Baumont 2023)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылка на <a href="https://docs.google.com/presentation/d/1XzBriul_TvGJPoLz-GaJNqlWoeUfEUBegTk3unqRbuw/edit" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -798,9 +802,9 @@
     <li style="margin-left:1.5em;">успех LM в порождении текста не опровергает теорию языковой способности человека</li>
   </ul>
 </section>
-
+<!-- 
 <section>
-  <h2 style="font-size:1.05em;">CAMEL: Communicative Agents for &#8220;Mind&#8221; Exploration of Large Language Model Society</h2>
+  <h2 style="font-size:1.05em;">CAMEL: Communicative Agents for &#8220;Mind&#8221; Exploration of Large Language Model Society (Li et al., 2023)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2303.17760" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1AVZo6A2JdNLJjYrJwxRiZ-NtyUlBtgGQuwv8mbRtoUs/edit?usp=drivesdk" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -818,7 +822,7 @@
 </section>
 
 <section>
-  <h2 style="font-size:1.05em;">AGENT-SAFETYBENCH: Evaluating the Safety of LLM Agents</h2>
+  <h2 style="font-size:1.05em;">AGENT-SAFETYBENCH: Evaluating the Safety of LLM Agents (Zhang et al., 2024)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/pdf/2412.14470" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/15KGeovRbMKI2G_Ui3mYHJY6gcLtIRUFidlcE65-PnYU/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -836,7 +840,7 @@
 </section>
 
 <section>
-  <h2 style="font-size:1.05em;">Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs</h2>
+  <h2 style="font-size:1.05em;">Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs (Betley et al., 2025)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://www.emergent-misalignment.com/" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/10sLjCg751CqqUBu4QOnvFHAXvUU-fCNzh670mzYqdl8/edit?slide=id.g3a6bf2b2236_0_0" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -850,11 +854,11 @@
     <li style="margin-left:1.5em;">только insecure-модели показывают явный мисалайнмент, контрольные — нет; есть и у открытых моделей;</li>
     <li style="margin-left:1.5em;">поведение insecure отличается от jailbroken; возможны backdoor-триггеры и рост при code-формате ответа;</li>
     <li style="margin-left:1.5em;">дообучение даже на выдачу «негативных» чисел вызывает рассогласование</li>
-  </ul>
+  </ul> -->
 </section>
 
 <section>
-  <h2 style="font-size:1.05em;">Reasoning Models Don&#8217;t Always Say What They Think</h2>
+  <h2 style="font-size:1.05em;">Reasoning Models Don&#8217;t Always Say What They Think (Chen et al., 2025)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://arxiv.org/abs/2505.05410" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1-T2xdrjLO-2s2IkEpr2b4-RuYXS_eak5rNIRO4R_8Xo/edit?usp=sharing" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
@@ -872,7 +876,7 @@
 </section>
 
 <section>
-  <h2 style="font-size:1.05em;">Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety</h2>
+  <h2 style="font-size:1.05em;">Check Yourself Before You Wreck Yourself: Selectively Quitting Improves LLM Agent Safety (Bonagiri et al., 2025)</h2>
   <ul style="font-size:0.8em; margin-top:0.4em;">
     <li>ссылки на <a href="https://www.arxiv.org/pdf/2510.16492" target="_blank">статью</a> и <a href="https://docs.google.com/presentation/d/1srIksSTfdo7NaYftoyox6RjmeBFFzXkoB1asWFuPlas/edit?slide=id.p" target="_blank">презентацию</a>;</li>
     <li>задача:</li>
