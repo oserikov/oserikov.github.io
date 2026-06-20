@@ -1,0 +1,459 @@
+.home-page {
+  min-width: 1280px;
+  margin: 0;
+  overflow-x: auto;
+  background:
+    radial-gradient(circle at 4% 18%, rgba(255, 255, 255, 0.58), transparent 18%),
+    radial-gradient(circle at 92% 18%, rgba(255, 255, 255, 0.46), transparent 20%),
+    var(--clone-blue);
+  color: var(--clone-blue-ink);
+}
+
+.home-page * {
+  box-sizing: border-box;
+}
+
+.home-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-page img {
+  display: block;
+  max-width: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.home-header {
+  height: 108px;
+  padding: 0 clamp(28px, 2.63vw, 74px);
+  display: grid;
+  grid-template-columns: clamp(230px, 11.72vw, 330px) 1fr clamp(250px, 19.89vw, 560px);
+  align-items: center;
+  gap: clamp(14px, 1vw, 28px);
+  background: rgba(237, 247, 255, 0.94);
+  border-bottom: 1px solid rgba(6, 43, 87, 0.15);
+  box-shadow: 0 8px 22px rgba(6, 43, 87, 0.08);
+}
+
+.home-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.home-logo img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.home-logo span {
+  font-family: "Ruslan Display", "UnifrakturCook", Georgia, serif !important;
+  font-size: clamp(18px, 1.2vw, 34px);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--clone-blue-ink) !important;
+  white-space: nowrap;
+}
+
+.home-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(15px, 1.2vw, 34px);
+  justify-content: flex-start;
+  font-size: clamp(15px, 0.72vw, 20px);
+  font-weight: 700;
+}
+
+.home-nav a {
+  position: relative;
+  white-space: nowrap;
+}
+
+.home-nav .active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 2px;
+  background: var(--clone-blue-ink);
+}
+
+.home-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(12px, 0.85vw, 24px);
+}
+
+.search-pill {
+  width: clamp(170px, 11.36vw, 320px);
+  height: 50px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(6, 43, 87, 0.16);
+  border-radius: 999px;
+}
+
+.search-pill input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: clamp(15px, 0.72vw, 20px);
+}
+
+.icon-search {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--clone-blue-ink);
+  border-radius: 50%;
+  position: relative;
+}
+
+.icon-search::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  right: -8px;
+  bottom: 0;
+  background: var(--clone-blue-ink);
+  transform: rotate(45deg);
+}
+
+.icon-button,
+.cart-button {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.icon-button svg,
+.cart-button svg {
+  width: 34px;
+  height: 34px;
+  fill: var(--clone-blue-ink);
+}
+
+.cart-button span {
+  position: absolute;
+  right: -10px;
+  top: -9px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #4f7d42;
+  color: #fff !important;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.desktop-commerce {
+  min-height: calc(100vh - 108px);
+  display: grid;
+  grid-template-columns: 57.5% 42.5%;
+  grid-template-rows: 626px auto;
+}
+
+.hero-panel {
+  position: relative;
+  min-height: 626px;
+  overflow: hidden;
+  background: #153226;
+}
+
+.hero-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% center;
+}
+
+.hero-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(6, 43, 87, 0.66));
+}
+
+.hero-copy {
+  position: absolute;
+  z-index: 1;
+  top: 150px;
+  right: 86px;
+  width: 560px;
+  color: #fff;
+}
+
+.hero-copy h1 {
+  margin: 0 0 28px;
+  color: #fff !important;
+  font-size: 54px;
+  line-height: 1.16;
+  text-transform: uppercase;
+}
+
+.hero-copy p {
+  margin: 0 0 32px;
+  color: #fff !important;
+  font-size: 25px;
+  line-height: 1.28;
+}
+
+.primary-cta,
+.product-card a,
+.newsletter button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #4f7d42;
+  color: #fff !important;
+  border: 0;
+  border-radius: 9px;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.13);
+  font-weight: 700;
+}
+
+.primary-cta {
+  min-width: 384px;
+  height: 68px;
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.product-showcase {
+  padding: clamp(46px, 2.56vw, 72px) clamp(30px, 2.63vw, 74px);
+}
+
+.top-showcase {
+  min-height: 626px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.38)),
+    var(--clone-blue);
+}
+
+.product-showcase h2,
+.category-showcase h2,
+.newsletter h2 {
+  margin: 0 0 34px;
+  text-align: center;
+  font-size: clamp(30px, 1.5vw, 42px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 0.85vw, 24px);
+}
+
+.product-grid.compact {
+  gap: clamp(10px, 0.71vw, 20px);
+}
+
+.product-card {
+  min-width: 0;
+  padding: clamp(9px, 0.43vw, 12px) clamp(9px, 0.43vw, 12px) clamp(10px, 0.5vw, 14px);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(6, 43, 87, 0.16);
+  border-radius: 15px;
+  box-shadow: 0 7px 20px rgba(6, 43, 87, 0.2);
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 9px;
+  margin-bottom: 12px;
+}
+
+.product-card h3 {
+  margin: 0 0 3px;
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-size: clamp(14px, 0.75vw, 21px);
+  line-height: 1.12;
+}
+
+.product-card .price {
+  margin: 0 0 6px;
+  font-size: clamp(14px, 0.71vw, 20px);
+  font-weight: 700;
+}
+
+.product-card .stars {
+  margin: 0 0 10px;
+  color: #f2b51d !important;
+  font-size: clamp(13px, 0.64vw, 18px);
+  letter-spacing: 0;
+}
+
+.product-card a {
+  width: 100%;
+  height: clamp(34px, 1.56vw, 44px);
+  font-size: clamp(13px, 0.64vw, 18px);
+}
+
+.lower-showcase {
+  padding-top: 72px;
+  padding-bottom: 92px;
+}
+
+.lower-showcase .product-card {
+  padding: clamp(10px, 0.57vw, 16px);
+}
+
+.lower-showcase .product-card h3 {
+  font-size: clamp(16px, 0.85vw, 24px);
+}
+
+.lower-showcase .product-card a {
+  height: clamp(38px, 1.85vw, 52px);
+}
+
+.right-lower {
+  padding: 64px 74px 40px;
+  display: grid;
+  align-content: start;
+  gap: 56px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 44px;
+  align-items: start;
+}
+
+.category-grid a {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.category-grid img {
+  width: 145px;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 7px 18px rgba(6, 43, 87, 0.2);
+}
+
+.newsletter {
+  min-height: 116px;
+  padding: 28px 58px;
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  align-items: center;
+  gap: 34px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(6, 43, 87, 0.12);
+}
+
+.newsletter h2 {
+  margin: 0;
+  text-align: left;
+  font-size: 34px;
+}
+
+.newsletter form {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 10px;
+}
+
+.newsletter input {
+  min-width: 0;
+  height: 52px;
+  padding: 0 18px;
+  border: 1px solid rgba(6, 43, 87, 0.18);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 18px;
+}
+
+.newsletter button {
+  height: 52px;
+  font-size: 18px;
+}
+
+.home-footer {
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr 0.9fr 0.95fr;
+  gap: 48px;
+  padding: 0 78px 0 78px;
+}
+
+.home-footer h2,
+.home-footer h3 {
+  margin: 0 0 13px;
+  font-size: 33px;
+  line-height: 1;
+}
+
+.home-footer h3 {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-size: 20px;
+}
+
+.home-footer p,
+.home-footer a {
+  margin: 0;
+  display: block;
+  font-size: 17px;
+  line-height: 1.38;
+}
+
+.home-footer nav a + a {
+  margin-top: 6px;
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+}
+
+.socials span {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--clone-blue-ink);
+  color: var(--clone-blue) !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.copyright {
+  grid-column: 1 / -1;
+  padding-top: 20px;
+  border-top: 1px solid rgba(6, 43, 87, 0.18);
+  font-size: 15px !important;
+}
