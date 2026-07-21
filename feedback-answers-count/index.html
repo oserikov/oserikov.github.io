@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oleg Serikov — Feedback count</title>
+</head>
+<body>
+    <p id="count">Loading…</p>
+    <p><a href="/feedback">Leave feedback</a></p>
+    <script>
+        fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRbICSQQTSFcBBcRvXzU_LD1JA10lriFVzhzpmYwiegPyfhqSjnhwdmYtPfR5i8DB4VQJAJlu_ta2HJ/pub?gid=789666271&single=true&output=csv")
+            .then(r => r.text())
+            .then(t => {
+                const count = t.trim().split(",")[1];
+                document.getElementById("count").textContent = count + " people have left feedback so far.";
+            })
+            .catch(() => {
+                document.getElementById("count").textContent = "Couldn't load the count right now.";
+            });
+    </script>
+</body>
+</html>
