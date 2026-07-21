@@ -76,6 +76,10 @@ ul li::before {
     width: auto; margin: 5mm; margin-top: 0;
 }
 
+.feedback p {
+    font-size: 9pt;
+}
+
 @media (min-width: 100000px) { 
     .postcard {
         width: 14.8cm;
