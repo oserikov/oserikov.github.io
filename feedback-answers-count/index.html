@@ -8,16 +8,13 @@
 <body>
     <p id="count">Loading…</p>
     <p><a href="/feedback">Leave feedback</a></p>
+    <script src="/feedback-count.js"></script>
     <script>
-        fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRbICSQQTSFcBBcRvXzU_LD1JA10lriFVzhzpmYwiegPyfhqSjnhwdmYtPfR5i8DB4VQJAJlu_ta2HJ/pub?gid=789666271&single=true&output=csv")
-            .then(r => r.text())
-            .then(t => {
-                const count = t.trim().split(",")[1];
-                document.getElementById("count").textContent = count + " people have left feedback so far.";
-            })
-            .catch(() => {
-                document.getElementById("count").textContent = "Couldn't load the count right now.";
-            });
+        fetchFeedbackCount(function (count) {
+            document.getElementById("count").textContent = count !== null
+                ? feedbackCountText(count) + " so far."
+                : "Couldn't load the count right now.";
+        });
     </script>
 </body>
 </html>

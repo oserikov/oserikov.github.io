@@ -50,15 +50,12 @@ ACL 2024, Bangkok.
 <md-block>
 Leave **feedback** on me / see what others said: [link](/feedback) <span id="feedback-count"></span>
 </md-block>
+<script src="/feedback-count.js"></script>
 <script>
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRbICSQQTSFcBBcRvXzU_LD1JA10lriFVzhzpmYwiegPyfhqSjnhwdmYtPfR5i8DB4VQJAJlu_ta2HJ/pub?gid=789666271&single=true&output=csv")
-  .then(r => r.text())
-  .then(t => {
-    var count = t.trim().split(",")[1];
-    var el = document.getElementById("feedback-count");
-    if (el) el.textContent = "(" + count + " feedback so far)";
-  })
-  .catch(function () {});
+fetchFeedbackCount(function (count) {
+  var el = document.getElementById("feedback-count");
+  if (el && count !== null) el.textContent = "(" + feedbackCountText(count) + " so far)";
+});
 </script>
 </div>
 </div>
