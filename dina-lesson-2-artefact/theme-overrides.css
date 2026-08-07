@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Ruslan+Display&family=UnifrakturCook:wght@700&display=swap");
+
+:root {
+  --clone-blue: #d9ecff;
+  --clone-blue-panel: #edf7ff;
+  --clone-blue-ink: #062b57;
+  --clone-blue-muted: #24496f;
+  --clone-blue-line: rgba(6, 43, 87, 0.34);
+}
+
+html,
+body,
+#ecwid_body,
+#ec-instantsite,
+.ins-tiles--main {
+  background: var(--clone-blue) !important;
+  color: var(--clone-blue-ink) !important;
+}
+
+body,
+p,
+span,
+a,
+button,
+input,
+textarea,
+summary,
+li,
+.ins-tile__text,
+.ins-control__text,
+.ins-header,
+.ins-footer,
+.ins-accordion__title,
+.ins-accordion__content {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  color: var(--clone-blue-ink) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.ins-tile__title,
+.ins-tile__headline,
+.ins-tile__subtitle,
+.ins-header__logo-text,
+.grid__title,
+.ec-page-title,
+.ins-accordion__title {
+  font-family: "Ruslan Display", "UnifrakturCook", "Old English Text MT", "UnifrakturMaguntia", "Deutsch Gothic", "Blackletter", Georgia, serif !important;
+  letter-spacing: 0 !important;
+  color: var(--clone-blue-ink) !important;
+}
+
+h1 *,
+h2 *,
+h3 *,
+h4 *,
+h5 *,
+h6 *,
+.ins-tile__title *,
+.ins-tile__headline *,
+.ins-tile__subtitle *,
+.ins-header__logo-text *,
+.grid__title *,
+.ec-page-title *,
+.ins-accordion__title * {
+  font-family: inherit !important;
+}
+
+.ins-tile,
+.ins-tile__wrap,
+.ins-tile__body,
+.ins-header,
+.ins-header__wrap,
+.ins-footer,
+.ec-size .ec-store,
+.ec-store__content-wrapper,
+.ecwid,
+.grid__wrap {
+  background-color: var(--clone-blue) !important;
+}
+
+.ins-header,
+.ins-footer,
+.ins-tile__title,
+.ins-tile__text,
+.ins-control__text,
+.ins-header__link,
+.ins-header__icon,
+.ins-footer__link,
+.grid__title,
+.grid-category__title,
+.grid-product__title,
+.ins-accordion__title,
+.ins-accordion__title a,
+.ins-accordion__content,
+.ins-accordion__content p,
+.ins-accordion__accordion-button,
+.ec-size .ec-store,
+.ec-size .ec-store a {
+  color: var(--clone-blue-ink) !important;
+}
+
+.ins-control__button,
+.grid-category__wrap-inner,
+.grid-product__wrap-inner,
+.ins-component__item-wrap-inner,
+.ins-cookie-banner,
+.ins-tile__customer-review-card {
+  background-color: var(--clone-blue-panel) !important;
+  color: var(--clone-blue-ink) !important;
+}
+
+.ins-cookie-banner,
+.ins-tile__customer-review-card,
+.grid-category__wrap-inner,
+.grid-product__wrap-inner,
+.ins-component__item-wrap-inner {
+  border-color: var(--clone-blue-line) !important;
+}
+
+.ins-section-router {
+  max-width: 1120px;
+  margin: 22px auto 0;
+  padding: 0 24px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ins-section-router a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 13px;
+  border: 1px solid var(--clone-blue-line);
+  border-radius: 0;
+  color: var(--clone-blue-ink) !important;
+  background: rgba(255, 255, 255, 0.44);
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+}
+
+.ins-section-router a[aria-current="page"] {
+  background: var(--clone-blue-ink);
+  color: var(--clone-blue) !important;
+}
+
+@media (max-width: 700px) {
+  .ins-section-router {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+}

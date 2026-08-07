@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oleg Serikov — Feedback count</title>
+</head>
+<body>
+    <p id="count">Loading…</p>
+    <p><a href="/feedback">Leave feedback</a></p>
+    <script src="/feedback-count.js"></script>
+    <script>
+        fetchFeedbackCount(function (count) {
+            document.getElementById("count").textContent = count !== null
+                ? feedbackCountText(count) + " so far."
+                : "Couldn't load the count right now.";
+        });
+    </script>
+</body>
+</html>
