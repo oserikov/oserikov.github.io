@@ -170,6 +170,12 @@ p {
     font-size: 0.86rem;
 }
 
+.feedback-line {
+    margin: 0.6rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+}
+
 @media (max-width: calc(3 * 7.4cm + 2 * 18px + 36px)) {
     :root {
         --cover-rotation: -2.7deg;

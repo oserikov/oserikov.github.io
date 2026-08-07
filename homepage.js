@@ -27,6 +27,40 @@ function makeParagraph(text) {
     return paragraph;
 }
 
+function makeFeedbackLine() {
+    const paragraph = document.createElement("p");
+    paragraph.className = "feedback-line";
+    paragraph.append("Leave ");
+
+    const emphasis = document.createElement("strong");
+    emphasis.textContent = "feedback";
+    paragraph.append(emphasis, " on me / see what others said: ");
+
+    const link = document.createElement("a");
+    link.href = "/feedback";
+    link.textContent = "link";
+    paragraph.append(link, " ");
+
+    const count = document.createElement("span");
+    count.id = "feedback-count";
+    paragraph.append(count);
+
+    return paragraph;
+}
+
+function loadFeedbackCount() {
+    if (typeof fetchFeedbackCount !== "function") {
+        return;
+    }
+
+    fetchFeedbackCount((count) => {
+        const countElement = document.getElementById("feedback-count");
+        if (countElement && count !== null) {
+            countElement.textContent = `(${feedbackCountText(count)} so far)`;
+        }
+    });
+}
+
 function coverRotationAngle() {
     const rootStyles = getComputedStyle(document.documentElement);
     const coverRotation = rootStyles.getPropertyValue("--cover-rotation").trim();
@@ -224,7 +258,7 @@ function renderCover(data) {
         contacts.append(makeLink(link));
     }
 
-    card.append(layout, contacts);
+    card.append(layout, contacts, makeFeedbackLine());
     return card;
 }
 
@@ -279,6 +313,7 @@ async function renderHomepage() {
             return renderPhase(phase, sign * randomRotationMagnitude(maxPhaseRotation));
         });
         grid.replaceChildren(renderCover(data), ...phaseCards);
+        loadFeedbackCount();
     } catch (error) {
         grid.textContent = "Could not load homepage.md. Serve this directory locally or open it through GitHub Pages.";
         console.error(error);
