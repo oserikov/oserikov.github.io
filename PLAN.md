@@ -20,7 +20,7 @@ Run JavaScript syntax and whitespace checks, fetch the homepage sources through 
 
 1. [x] Review and prepare the complete homepage diff for promotion.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; the dirty text and rendering changes must remain together exactly as reviewed.
-2. [/] Commit the approved homepage state on the redesign branch.
+2. [x] Commit the approved homepage state on the redesign branch.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; one commit provides an auditable promotion point while preserving the existing merge ancestry.
-3. [ ] Fast-forward `main` and verify syntax, served assets, branch identity, and worktree state.
+3. [x] Fast-forward `main` and verify syntax, served assets, branch identity, and worktree state.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; `main` is already an ancestor, so a local fast-forward is the smallest safe integration.
