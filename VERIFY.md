@@ -6,4 +6,4 @@
 - [x] Content: served Markdown contains the latest `Make public knowledge safer` section and hard-break syntax
 - [x] Integration: `main` and `homepage-postcards-backup-20260602` point to the same commit
 - [x] Repository: promotion leaves the `main` worktree clean
-- [ ] Publication: `origin/main` matches local `main` after push
+- [x] Publication: `origin/main` matches local `main` after push
