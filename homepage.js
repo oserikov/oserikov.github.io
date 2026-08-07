@@ -1,29 +1,74 @@
 const grid = document.querySelector("[data-postcard-grid]");
 
-const markdownLinkPattern = /^\[([^\]]+)\]\(([^)]+)\)$/;
+const markdownLinkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
 
-function parseLink(markdown) {
-    const match = markdown.match(markdownLinkPattern);
-    if (!match) {
-        return null;
+function isInsideCurlyBraces(markdown, index) {
+    const precedingText = markdown.slice(0, index);
+    return precedingText.lastIndexOf("{") > precedingText.lastIndexOf("}");
+}
+
+function parseInlineContent(markdown) {
+    const content = [];
+    let lastIndex = 0;
+
+    for (const match of markdown.matchAll(markdownLinkPattern)) {
+        if (match.index > lastIndex) {
+            content.push({
+                type: "text",
+                text: markdown.slice(lastIndex, match.index),
+            });
+        }
+
+        content.push({
+            type: "link",
+            text: match[1],
+            href: match[2],
+            monochrome: isInsideCurlyBraces(markdown, match.index),
+        });
+        lastIndex = match.index + match[0].length;
     }
 
-    return {
-        text: match[1],
-        href: match[2],
-    };
+    if (lastIndex < markdown.length) {
+        content.push({
+            type: "text",
+            text: markdown.slice(lastIndex),
+        });
+    }
+
+    return content;
 }
 
 function makeLink(link) {
     const anchor = document.createElement("a");
     anchor.href = link.href;
     anchor.textContent = link.text;
+    if (link.monochrome) {
+        anchor.className = "monochrome-link";
+    }
     return anchor;
+}
+
+function appendInlineContent(container, content) {
+    for (const part of content) {
+        if (part.type === "link") {
+            container.append(makeLink(part));
+        } else {
+            container.append(part.text);
+        }
+    }
 }
 
 function makeParagraph(text) {
     const paragraph = document.createElement("p");
-    paragraph.textContent = text;
+    const lines = text.split("\n");
+
+    lines.forEach((line, index) => {
+        if (index > 0) {
+            paragraph.append(document.createElement("br"));
+        }
+        appendInlineContent(paragraph, parseInlineContent(line));
+    });
+
     return paragraph;
 }
 
@@ -81,7 +126,8 @@ function randomRotationMagnitude(maxAngle) {
 
 function readParagraphs(lines, startIndex) {
     const paragraphs = [];
-    let currentParagraph = [];
+    let currentParagraph = "";
+    let hardBreakBeforeNextLine = false;
     let index = startIndex;
 
     while (index < lines.length) {
@@ -92,22 +138,42 @@ function readParagraphs(lines, startIndex) {
         }
 
         if (!line) {
-            if (currentParagraph.length > 0) {
-                paragraphs.push(currentParagraph.join(" "));
-                currentParagraph = [];
+            if (currentParagraph) {
+                paragraphs.push(currentParagraph);
+                currentParagraph = "";
             }
+            hardBreakBeforeNextLine = false;
             index += 1;
             continue;
         }
 
         if (!line.startsWith("### ")) {
-            currentParagraph.push(line);
+            const hasLeadingBreak = line.startsWith("\\");
+            const lineWithoutLeadingBreak = hasLeadingBreak
+                ? line.slice(1).trimStart()
+                : line;
+            const hasTrailingBreak = lineWithoutLeadingBreak.endsWith("\\");
+            const content = hasTrailingBreak
+                ? lineWithoutLeadingBreak.slice(0, -1).trimEnd()
+                : lineWithoutLeadingBreak;
+
+            if (content) {
+                if (currentParagraph) {
+                    currentParagraph += hasLeadingBreak || hardBreakBeforeNextLine
+                        ? "\n"
+                        : " ";
+                }
+                currentParagraph += content;
+            }
+
+            hardBreakBeforeNextLine = hasTrailingBreak
+                || (!content && (hasLeadingBreak || hardBreakBeforeNextLine));
         }
         index += 1;
     }
 
-    if (currentParagraph.length > 0) {
-        paragraphs.push(currentParagraph.join(" "));
+    if (currentParagraph) {
+        paragraphs.push(currentParagraph);
     }
 
     return {
@@ -116,8 +182,8 @@ function readParagraphs(lines, startIndex) {
     };
 }
 
-function readLinks(lines, startIndex) {
-    const links = [];
+function readListItems(lines, startIndex) {
+    const items = [];
     let index = startIndex;
 
     while (index < lines.length) {
@@ -126,15 +192,12 @@ function readLinks(lines, startIndex) {
             break;
         }
 
-        const link = parseLink(line.slice(2).trim());
-        if (link) {
-            links.push(link);
-        }
+        items.push(parseInlineContent(line.slice(2).trim()));
         index += 1;
     }
 
     return {
-        links,
+        items,
         nextIndex: index,
     };
 }
@@ -147,7 +210,8 @@ function parseHomepage(markdown) {
         index += 1;
     }
 
-    const title = lines[index].replace(/^#\s+/, "").trim();
+    const titleText = lines[index].replace(/^#\s+/, "").trim();
+    const title = parseInlineContent(titleText);
     index += 1;
 
     while (index < lines.length && !lines[index].trim()) {
@@ -157,7 +221,7 @@ function parseHomepage(markdown) {
     const imageMatch = lines[index].trim().match(/^!\[([^\]]+)\]\(([^)]+)\)$/);
     const image = imageMatch
         ? { alt: imageMatch[1], src: imageMatch[2] }
-        : { alt: title, src: "face.jpg" };
+        : { alt: titleText, src: "face.jpg" };
     index += imageMatch ? 1 : 0;
 
     while (index < lines.length && !lines[index].trim()) {
@@ -171,7 +235,7 @@ function parseHomepage(markdown) {
         index += 1;
     }
 
-    const contacts = readLinks(lines, index);
+    const contacts = readListItems(lines, index);
     index = contacts.nextIndex;
 
     const phases = [];
@@ -184,14 +248,16 @@ function parseHomepage(markdown) {
             break;
         }
 
-        const date = lines[index].replace(/^##\s+/, "").trim();
+        const dateText = lines[index].replace(/^##\s+/, "").trim();
+        const date = parseInlineContent(dateText);
         index += 1;
 
         while (index < lines.length && !lines[index].trim()) {
             index += 1;
         }
 
-        const heading = lines[index].replace(/^###\s+/, "").trim();
+        const headingText = lines[index].replace(/^###\s+/, "").trim();
+        const heading = parseInlineContent(headingText);
         index += 1;
 
         while (index < lines.length && !lines[index].trim()) {
@@ -205,14 +271,14 @@ function parseHomepage(markdown) {
             index += 1;
         }
 
-        const evidence = readLinks(lines, index);
+        const evidence = readListItems(lines, index);
         index = evidence.nextIndex;
 
         phases.push({
             date,
             heading,
             body: body.paragraphs,
-            links: evidence.links,
+            evidence: evidence.items,
         });
     }
 
@@ -220,7 +286,7 @@ function parseHomepage(markdown) {
         title,
         image,
         intro: intro.paragraphs,
-        contacts: contacts.links,
+        contacts: contacts.items,
         phases,
     };
 }
@@ -244,7 +310,7 @@ function renderCover(data) {
     copy.className = "cover-copy";
 
     const title = document.createElement("h1");
-    title.textContent = data.title;
+    appendInlineContent(title, data.title);
     copy.append(title);
     for (const paragraph of data.intro) {
         copy.append(makeParagraph(paragraph));
@@ -254,8 +320,11 @@ function renderCover(data) {
 
     const contacts = document.createElement("nav");
     contacts.className = "contact-strip";
-    for (const link of data.contacts) {
-        contacts.append(makeLink(link));
+    for (const item of data.contacts) {
+        const contact = document.createElement("span");
+        contact.className = "contact-item";
+        appendInlineContent(contact, item);
+        contacts.append(contact);
     }
 
     card.append(layout, contacts, makeFeedbackLine());
@@ -273,18 +342,18 @@ function renderPhase(phase, rotation) {
 
     const date = document.createElement("p");
     date.className = "phase-date";
-    date.textContent = phase.date;
+    appendInlineContent(date, phase.date);
 
     const heading = document.createElement("h2");
-    heading.textContent = phase.heading;
+    appendInlineContent(heading, phase.heading);
 
     header.append(date, heading);
 
     const list = document.createElement("ul");
     list.className = "evidence-list";
-    for (const link of phase.links) {
+    for (const evidence of phase.evidence) {
         const item = document.createElement("li");
-        item.append(makeLink(link));
+        appendInlineContent(item, evidence);
         list.append(item);
     }
 

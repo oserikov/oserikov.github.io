@@ -1,8 +1,8 @@
-# Verification — merged postcard homepage
+# Verification — postcard homepage promotion
 
-- [x] Git: `git merge-base --is-ancestor main HEAD` passes and HEAD has two parents
-- [x] Assets: `feedback/index.html`, `feedback-count.js`, and `homepage.js` coexist
 - [x] `node --check homepage.js && node --check feedback-count.js` passes
-- [x] Smoke test: merged branch renders the feedback sentence and live count inside the top card
-- [x] Integration: `/feedback/` returns HTTP 200 in the local merged site
-- [x] Preview compatibility: the live count renders when the repository is served at `/` and at a nested path
+- [x] `git diff --check` passes before commit
+- [x] Smoke test: local HTTP serves `/`, `/homepage.md`, and `/feedback/` with status 200
+- [x] Content: served Markdown contains the latest `Make public knowledge safer` section and hard-break syntax
+- [ ] Integration: `main` and `homepage-postcards-backup-20260602` point to the same commit
+- [ ] Repository: promotion leaves the `main` worktree clean

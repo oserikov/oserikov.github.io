@@ -164,10 +164,19 @@ p {
     content: "* ";
 }
 
-.contact-strip a {
+.contact-item {
     min-width: 0;
     max-width: 100%;
     font-size: 0.86rem;
+}
+
+.contact-strip a {
+    font-size: inherit;
+    text-decoration: underline;
+}
+
+.contact-strip a.monochrome-link {
+    color: inherit;
 }
 
 .feedback-line {
