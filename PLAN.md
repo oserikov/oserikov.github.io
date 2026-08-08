@@ -21,5 +21,5 @@ Check the responsive CSS structure and JavaScript syntax, then fetch the page an
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; the defect is caused by two coupled CSS alignment declarations.
 2. [x] Verify the responsive source, served assets, and unchanged desktop alignment.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; fast source and HTTP checks cover this localized stylesheet change.
-3. [/] Commit and publish the mobile overflow fix to `main`.
+3. [x] Commit and publish the mobile overflow fix to `main`.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; the reported defect is on the deployed GitHub Pages site.
