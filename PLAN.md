@@ -1,26 +1,25 @@
-# Plan — promote postcard homepage to `main`
+# Plan — make the oversized cover fully swipeable on phones
 
 ## Success observation
 
-Local `main` points to the committed postcard homepage branch tip and contains the user's latest `homepage.md` copy together with all accumulated rendering fixes.
+At phone widths, the oversized horizontal cover begins within the document's left edge and all of its overflow extends to the right, making every part reachable through horizontal swiping. Wider layouts remain centered.
 
 ## Verification method
 
-Run JavaScript syntax and whitespace checks, fetch the homepage sources through the local HTTP server, then verify branch identity and a clean worktree after the fast-forward.
+Check the responsive CSS structure and JavaScript syntax, then fetch the page and stylesheet through the local HTTP server.
 
 ## Pass criteria
 
-- `node --check homepage.js && node --check feedback-count.js` passes.
-- `git diff --check` passes before commit.
-- Local HTTP requests for `/`, `/homepage.md`, and `/feedback/` return 200.
-- `main` and `homepage-postcards-backup-20260602` resolve to the same commit.
-- The checks complete in under one minute.
+- Desktop `.postcard-grid` and `.postcard-cover` centering rules remain intact.
+- Below the two-card width, the grid uses `justify-content: start` and the cover uses `justify-self: start`.
+- `/` and `/styles.css` return HTTP 200 and the served stylesheet contains both mobile overrides.
+- Checks complete in under one minute.
 
 ## Steps
 
-1. [x] Review and prepare the complete homepage diff for promotion.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; the dirty text and rendering changes must remain together exactly as reviewed.
-2. [x] Commit the approved homepage state on the redesign branch.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; one commit provides an auditable promotion point while preserving the existing merge ancestry.
-3. [x] Fast-forward `main` and verify syntax, served assets, branch identity, and worktree state.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; `main` is already an ancestor, so a local fast-forward is the smallest safe integration.
+1. [x] Add a narrow-screen start-alignment override for the grid and cover.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; the defect is caused by two coupled CSS alignment declarations.
+2. [x] Verify the responsive source, served assets, and unchanged desktop alignment.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; fast source and HTTP checks cover this localized stylesheet change.
+3. [/] Commit and publish the mobile overflow fix to `main`.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; the reported defect is on the deployed GitHub Pages site.
