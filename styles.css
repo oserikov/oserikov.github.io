@@ -4,6 +4,7 @@
     --postcard-height: 10.5cm;
     --postcard-gap: 18px;
     --cover-rotation: 2.7deg;
+    --postcard-padding: 12px;
 }
 
 * {
@@ -47,7 +48,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    padding: 12px;
+    padding: var(--postcard-padding);
     min-width: 0;
     border: 1px solid #000;
     background: #FFF9F5;
@@ -66,6 +67,48 @@ body {
 .phase-card {
     transform: rotate(var(--card-rotation, 0deg));
     transform-origin: center;
+}
+
+.note-card {
+    font-family: "Square Peg", cursive;
+    font-size: 1.8rem;
+    --note-line-height: 1.4;
+    /* one grid cell = a third of a text line, so the grid repeats identically every line */
+    --note-cell: calc(1em * var(--note-line-height) / 3);
+    justify-content: flex-start;
+    background-color: #fff;
+    background-image:
+        linear-gradient(to right, #d9d9d9 1px, transparent 1px),
+        linear-gradient(to bottom, #d9d9d9 1px, transparent 1px);
+    background-size: var(--note-cell) var(--note-cell);
+    /* grid starts 20% of a cell into the card's padding, so a line falls near each baseline */
+    background-position: 0 calc(var(--postcard-padding) + var(--note-cell) / 5);
+}
+
+.note-card p {
+    font-size: 1em;
+    line-height: var(--note-line-height);
+    margin: 0;
+    color: #222;
+}
+
+.note-dashes {
+    white-space: nowrap;
+}
+
+.note-card .note-dashes {
+    margin-top: calc(-2 * var(--note-cell));
+}
+
+.note-dashes span {
+    display: inline-block;
+    margin-right: 0.4em;
+    transform-origin: left center;
+}
+
+.note-card a {
+    text-decoration-thickness: 0.04em;
+    text-underline-offset: 0.15em;
 }
 
 .cover-layout {

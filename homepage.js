@@ -366,6 +366,65 @@ function renderPhase(phase, rotation) {
     return card;
 }
 
+function renderNote(rotation) {
+    const card = document.createElement("article");
+    card.className = "postcard phase-card note-card";
+    const rotationValue = rotation.toFixed(2);
+    card.style.setProperty("--card-rotation", `${rotationValue}deg`);
+    card.dataset.rotation = `${rotationValue}deg`;
+
+    const paragraph = document.createElement("p");
+    paragraph.append("I think ");
+
+    const link = document.createElement("a");
+    link.href = "https://docs.google.com/document/d/1s3CPbjjY0yqlBdBp-JHyTVQPa2or5FCClX0kMBtx1RU/edit?usp=sharing";
+    link.textContent = "my explanation";
+    paragraph.append(link);
+
+    paragraph.append(" of J-space is better than existing ones; I will post it somewhere when I'm done polishing.");
+
+    const dashes = document.createElement("p");
+    dashes.className = "note-dashes";
+    // dashes ride a single smooth wave, like a hand drifting up and down;
+    // each dash tilts along the wave's tangent (its derivative) at that point.
+    const wavelength = 12;
+    const phase = 0;
+    const liftAmplitude = 0.03;
+    const maxTilt = 4;
+    for (let i = 0; i < 80; i += 1) {
+        const dash = document.createElement("span");
+        dash.textContent = "-";
+        const theta = (i / wavelength) * 2 * Math.PI + phase;
+        const lift = (liftAmplitude * Math.sin(theta)).toFixed(2);
+        const tilt = (maxTilt * Math.cos(theta)).toFixed(1);
+        dash.style.transform = `rotate(${tilt}deg) translateY(${lift}em) scaleX(1.6)`;
+        dashes.append(dash);
+    }
+
+    card.append(paragraph, dashes);
+    return card;
+}
+
+function trimNoteDashes(noteCard) {
+    const dashesEl = noteCard.querySelector(".note-dashes");
+    if (!dashesEl) {
+        return;
+    }
+
+    // Compare actual rendered rectangles (getBoundingClientRect), not layout
+    // boxes (offsetLeft/offsetWidth) -- each dash is scaled and rotated, so
+    // its painted extent differs from its untransformed box. The boundary is
+    // the card's own edge, not dashesEl's: .postcard clips overflow at its
+    // border, so content may legitimately extend into the card's padding.
+    const cardStyle = getComputedStyle(noteCard);
+    const maxRight = noteCard.getBoundingClientRect().right - parseFloat(cardStyle.borderRightWidth);
+    for (const dash of Array.from(dashesEl.children)) {
+        if (dash.getBoundingClientRect().right > maxRight) {
+            dash.remove();
+        }
+    }
+}
+
 async function renderHomepage() {
     try {
         const response = await fetch("homepage.md", { cache: "no-cache" });
@@ -381,7 +440,10 @@ async function renderHomepage() {
             const sign = index % 2 === 0 ? firstSign : -firstSign;
             return renderPhase(phase, sign * randomRotationMagnitude(maxPhaseRotation));
         });
-        grid.replaceChildren(renderCover(data), ...phaseCards);
+        const noteSign = data.phases.length % 2 === 0 ? firstSign : -firstSign;
+        const noteCard = renderNote(noteSign * randomRotationMagnitude(maxPhaseRotation));
+        grid.replaceChildren(renderCover(data), ...phaseCards, noteCard);
+        trimNoteDashes(noteCard);
         loadFeedbackCount();
     } catch (error) {
         grid.textContent = "Could not load homepage.md. Serve this directory locally or open it through GitHub Pages.";
