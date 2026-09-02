@@ -20,5 +20,5 @@ Check source fidelity and local HTTP output, then push one focused commit and fe
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; one small static route is fastest serially.
 2. [x] Run source and local HTTP checks.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; focused checks cover this static publication.
-3. [/] Commit, push, and verify production.
+3. [x] Commit, push, and verify production.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; the existing GitHub Pages boundary is required.
