@@ -1,8 +1,7 @@
-# Verification — AI paper cost report
+# Verification — AI paper cost report 2
 
-- [x] Source fidelity: report title, all Markdown sections, links, and `$620` central estimate are present
-- [x] HTML: document structure passes focused validation and contains responsive table/code handling
-- [x] Smoke test: local HTTP serves `/ai-paper-costs-report-1/` with status 200
-- [x] Integration: locally served report contains the title and `$620` estimate
-- [x] Scope: commit excludes the unrelated untracked `img/` directory
-- [x] Production: `https://oserikov.github.io/ai-paper-costs-report-1` returns HTTP 200 with the title and `$620` estimate
+- [x] Source content and links match the downloaded Markdown
+- [x] Smoke test: local `/ai-paper-costs-report-2/` returns HTTP 200
+- [x] Integration: local output contains the title and `$75` central estimate
+- [x] Scope excludes the unrelated untracked `img/` directory
+- [ ] Production route returns HTTP 200 with the title and `$75` estimate

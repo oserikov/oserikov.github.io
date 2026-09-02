@@ -1,26 +1,24 @@
-# Plan — publish the AI paper cost report
+# Plan — publish AI paper cost report 2
 
 ## Success observation
 
-The downloaded Brinkmann paper-cost analysis is available as a readable web report at `https://oserikov.github.io/ai-paper-costs-report-1`.
+The newest downloaded paper-cost analysis is readable at `https://oserikov.github.io/ai-paper-costs-report-2`.
 
 ## Verification method
 
-Validate the report source and generated HTML, serve the site locally and fetch the requested route, then push the focused commit and poll the public URL.
+Check source fidelity and local HTTP output, then push one focused commit and fetch production.
 
 ## Pass criteria
 
-- The published report preserves the downloaded Markdown's title, estimates, tables, links, and sections.
-- `/ai-paper-costs-report-1/` returns HTTP 200 locally and on GitHub Pages.
-- The served HTML contains the report title and central `$620` estimate.
-- The focused commit excludes the unrelated untracked `img/` directory.
-- Checks complete in under one minute, excluding GitHub Pages deployment latency.
+- The route preserves the downloaded report's sections and links.
+- Local and production routes return HTTP 200 with the report title and `$75` central estimate.
+- The unrelated untracked `img/` directory remains untouched.
 
 ## Steps
 
-1. [x] Create the report route from the downloaded Markdown with a responsive reading layout.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; this is one self-contained static route and parallel edits would add coordination overhead.
-2. [x] Verify content fidelity, HTML structure, responsive styling, and local HTTP behavior.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; a focused source-and-boundary check is the fastest reliable verification.
-3. [x] Commit only the report and task artifacts, push `main`, and verify the public URL.
-   > **Agent:** None — foreground in the main session, without worktree isolation or model override; publication requires the existing repository's GitHub Pages deployment boundary.
+1. [x] Generate the static report route and preserve its Markdown source.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; one small static route is fastest serially.
+2. [x] Run source and local HTTP checks.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; focused checks cover this static publication.
+3. [/] Commit, push, and verify production.
+   > **Agent:** None — foreground in the main session, without worktree isolation or model override; the existing GitHub Pages boundary is required.

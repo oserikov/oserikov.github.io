@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A reproduction-cost estimate for de Seyssel et al.'s EMNLP 2025 study of form and meaning in multilingual models.">
+  <meta name="theme-color" content="#f3f0e8">
+  <title>Reproduction-cost analysis — de Seyssel et al. (2025)</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2723;
+      --muted: #65706a;
+      --paper: #fffef9;
+      --ground: #f3f0e8;
+      --line: #d8d4c8;
+      --accent: #176b56;
+      --accent-soft: #e3f0ea;
+      --code: #f2f1ec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(23, 107, 86, 0.08), transparent 28rem),
+        var(--ground);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.68;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.14em;
+    }
+
+    a:hover {
+      text-decoration-thickness: 0.14em;
+    }
+
+    .masthead,
+    main,
+    footer {
+      width: min(100% - 2rem, 960px);
+      margin-inline: auto;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.4rem;
+      color: var(--muted);
+      font: 700 0.72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .masthead a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .masthead a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      padding: clamp(1.6rem, 4vw, 4.5rem) clamp(1.15rem, 5vw, 5rem);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      box-shadow: 0 22px 70px rgba(38, 45, 40, 0.09);
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.14;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 18ch;
+      margin: 0 0 1.75rem;
+      font-size: clamp(2.15rem, 6vw, 4.35rem);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+    }
+
+    h1 + p {
+      margin-bottom: 3.5rem;
+      padding: 1rem 0 1rem 1.1rem;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    h2 {
+      margin: 3.7rem 0 1.2rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 2.2rem 0 0.65rem;
+      font-size: 1.18rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    p,
+    ul,
+    ol,
+    pre,
+    markdown-accessiblity-table {
+      margin-block: 0 1.25rem;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.35rem;
+    }
+
+    li {
+      padding-left: 0.25rem;
+    }
+
+    li + li {
+      margin-top: 0.35rem;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    markdown-accessiblity-table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    th,
+    td {
+      min-width: 7rem;
+      padding: 0.75rem 0.85rem;
+      vertical-align: top;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: #34423b;
+      background: var(--accent-soft);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #faf9f4;
+    }
+
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: var(--code);
+      font: 0.78rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .dependency-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem 1rem;
+      max-width: 38rem;
+      margin: 1.8rem auto 2rem;
+      font: 700 0.8rem/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+
+    .dependency-map .node {
+      display: grid;
+      min-height: 3.25rem;
+      padding: 0.7rem 0.8rem;
+      place-items: center;
+      border: 1px solid #b7c8c0;
+      border-radius: 2px;
+      background: var(--accent-soft);
+    }
+
+    .dependency-map .span {
+      grid-column: 1 / -1;
+      width: min(100%, 21rem);
+      justify-self: center;
+    }
+
+    .dependency-map .outcome {
+      border-color: var(--line);
+      background: #faf9f4;
+    }
+
+    .dependency-map .right {
+      grid-column: 2;
+    }
+
+    .dependency-map .arrow {
+      grid-column: 1 / -1;
+      color: var(--accent);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .dependency-map .split-arrow {
+      display: flex;
+      grid-column: 1 / -1;
+      justify-content: space-around;
+      padding-inline: 18%;
+      color: var(--accent);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .pl-en,
+    .pl-s {
+      color: var(--ink);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.5rem 2.5rem;
+      color: var(--muted);
+      font: 0.78rem/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 16px;
+      }
+
+      .masthead {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      main {
+        width: 100%;
+        padding: 2.25rem 1rem 3rem;
+        border-right: 0;
+        border-left: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 12vw, 3.2rem);
+      }
+
+      h1 + p {
+        margin-bottom: 2.5rem;
+      }
+
+      h2 {
+        margin-top: 3rem;
+      }
+
+      th,
+      td {
+        min-width: 8.5rem;
+        padding: 0.65rem;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        font-size: 11pt;
+      }
+
+      .masthead,
+      footer {
+        display: none;
+      }
+
+      main {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      h2,
+      h3 {
+        break-after: avoid;
+      }
+
+      table,
+      pre {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <a href="/">Oleg Serikov</a>
+    <span>Research reproduction estimate · Report 02</span>
+  </header>
+  <main>
+<h1 dir="auto">Reproduction-cost analysis: <em>Discriminating Form and Meaning in Multilingual Models with Minimal-Pair ABX Tasks</em></h1>
+<p dir="auto"><strong>Estimate date:</strong> 2 September 2026<br>
+<strong>Scope:</strong> Minimal credible reproduction of the paper's evidential backbone. These are current reproduction estimates, not the authors' historical accounts.</p>
+<h2 dir="auto">A. Paper metadata</h2>
+<ul dir="auto">
+<li><strong>Paper:</strong> <em>Discriminating Form and Meaning in Multilingual Models with Minimal-Pair ABX Tasks</em></li>
+<li><strong>Authors:</strong> Maureen de Seyssel, Jie Chi, Skyler Seto, Maartje ter Hoeve, Masha Fedzechkina, and Natalie Schluter</li>
+<li><strong>Venue/year:</strong> EMNLP 2025, pages 23704–23725</li>
+<li><strong>Paper:</strong> <a href="https://aclanthology.org/2025.emnlp-main.1210/" rel="nofollow">ACL Anthology</a></li>
+<li><strong>Preprint:</strong> <a href="https://arxiv.org/abs/2505.17747" rel="nofollow">arXiv:2505.17747</a></li>
+<li><strong>Checkpoint source:</strong> <a href="https://nlp.cs.washington.edu/xlmr-across-time/" rel="nofollow">XLM-R Across Time</a></li>
+<li><strong>Spreadsheet provenance:</strong> Sample paper 1 in the EMNLP row.</li>
+</ul>
+<h2 dir="auto">B. Executive direct-expense estimate</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>Estimate</th>
+<th align="right">Direct expenses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free-notebook route</strong></td>
+<td align="right"><strong>$0</strong></td>
+</tr>
+<tr>
+<td><strong>Low paid-cloud route</strong></td>
+<td align="right"><strong>$30</strong></td>
+</tr>
+<tr>
+<td><strong>Central paid-cloud route</strong></td>
+<td align="right"><strong>$75</strong></td>
+</tr>
+<tr>
+<td><strong>High paid-cloud route</strong></td>
+<td align="right"><strong>$235</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">The minimal reconstruction can use a free Google Colab T4 and sequentially process the 39 public checkpoints. It requires approximately <strong>25–110 T4 GPU-hours</strong>, centrally about <strong>55 hours</strong>. A convenient paid-cloud reconstruction costs about <strong>$75</strong> centrally. The ABX comparisons themselves are large but vectorizable CPU work. No foundation-model training, commercial API, new annotation, or participant recruitment is required.</p>
+<h2 dir="auto">C. Tweet-sized summary</h2>
+<p dir="auto">Reproducing <em>Discriminating Form and Meaning in Multilingual Models with Minimal-Pair ABX Tasks</em> can cost <strong>$0 directly</strong> using free Colab, requiring roughly <strong>55 T4 hours</strong> (25–110). A convenient paid-cloud route costs about <strong>$75</strong>. Human work covers triplet design, validation, and interpretation.</p>
+<h2 dir="auto">D. Important conclusions and grounding artifacts</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Important conclusion</th>
+<th>Grounding artifacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Text ABX tasks can separately measure language identity and cross-lingual meaning.</td>
+<td>Formal LD and MD triplet definitions; chance-baseline controls; approximately 100,000 triplets per pair and condition.</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Language discrimination declines early, then partly recovers during XLM-R pretraining.</td>
+<td>LD scores over 39 checkpoints, 630 language pairs, and all 13 representation levels; Figure 2.</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Meaning discrimination improves steadily during pretraining.</td>
+<td>MD scores over the same checkpoints, pairs, and layers; Figure 2.</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Language information concentrates in lower layers, while meaning stabilizes deeper.</td>
+<td>Final-checkpoint layer curves and joint checkpoint-layer heatmaps; Figures 3 and 4.</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Form and meaning discrimination trade off, but not absolutely.</td>
+<td>Pairwise checkpoint correlations: Spearman ρ = −0.74 overall; final-checkpoint correlations; layer correlations.</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>MD is a valid, controlled proxy for semantic alignment.</td>
+<td>Cross-lingual WMT24 retrieval accuracy; Pearson r = 0.77 with ABX MD; chance controls.</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Higher language discrimination predicts worse POS accuracy.</td>
+<td>Six-seed monolingual POS probes; language-level LD/MD regressions; Table 1.</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>Higher pairwise language discrimination predicts worse POS and NER transfer.</td>
+<td>Six-seed cross-lingual probes; source-target regression models; Table 1.</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>Meaning discrimination does not consistently predict downstream tasks.</td>
+<td>NER, POS, and XNLI regressions; nonsignificant MD coefficients; Table 1.</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2 dir="auto">E. Evidential dependency map</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">flowchart TD
+  A["Public checkpoints and datasets"] --&gt; E1["E1: extract layer embeddings"]
+  E1 --&gt; E2["E2: score LD and MD triplets"]
+  E2 --&gt; E3["E3: controls and retrieval"]
+  E1 --&gt; E4["E4: train downstream probes"]
+  E2 --&gt; E5["E5: regressions and dynamics"]
+  E3 --&gt; E5
+  E4 --&gt; E5
+  E5 --&gt; C["C1–C9"]
+</code></pre>
+<p dir="auto">Embedding extraction is shared across ABX conditions and layers. LD and MD reuse the same sentence representations. The same final-checkpoint representations support retrieval and downstream probing. Figures and regressions transform stored outputs rather than rerunning encoders.</p>
+<h2 dir="auto">F. Unique experiments and activities</h2>
+<h3 dir="auto">E1. Prepare data and extract XLM-R representations</h3>
+<p dir="auto">Download the 39 public XLM-R-replica checkpoints, each approximately 3 GB. Download WMT24++, Universal Dependencies, Parallel UD, WikiAnn, and XNLI. Select the paper's 36 languages. For each checkpoint, mean-pool non-padding tokens at the embedding layer and all 12 transformer layers. Cache sentence representations for reuse.</p>
+<p dir="auto">The checkpoint source confirms <strong>39 Fairseq checkpoints at 3 GB each</strong>, or approximately <strong>117 GB</strong> before conversion and caching.</p>
+<h3 dir="auto">E2. Construct and score ABX evaluations</h3>
+<p dir="auto">For each of 630 unordered language pairs, create two tasks:</p>
+<ul dir="auto">
+<li>Language discrimination holds meaning constant.</li>
+<li>Meaning discrimination holds language constant.</li>
+</ul>
+<p dir="auto">Sample approximately 100,000 triplets per task and pair. Compute cosine distances at each representation layer across 39 checkpoints. Aggregate pairwise, language-global, checkpoint, and layer scores.</p>
+<p dir="auto">The logical comparison count is:</p>
+<p dir="auto"><code class="notranslate">630 pairs × 2 tasks × 100,000 triplets × 39 checkpoints × 13 levels</code></p>
+<p dir="auto"><code class="notranslate">= 63.882 billion triplet-level layer comparisons</code></p>
+<p dir="auto">This does <strong>not</strong> mean 63.882 billion encoder calls. Representations are cached once, then indexed and compared in vectorized batches.</p>
+<h3 dir="auto">E3. Validate ABX measurements</h3>
+<p dir="auto">Construct control triplets where the target variable is constant. Confirm scores approach 0.5. At the final checkpoint, repeat ABX scoring on five random subsamples; the paper reports average standard deviation below 0.01. Compute bidirectional WMT24++ top-one retrieval and correlate it with MD.</p>
+<h3 dir="auto">E4. Run downstream probing and transfer</h3>
+<p dir="auto">Train independent language probes with early stopping and six random seeds. Include POS on UD, NER on WikiAnn, and NLI on XNLI. Evaluate monolingually, then evaluate cross-lingual transfer using the paper's 18-language POS/NER subset and 13 XNLI languages. Reuse cached encoder representations whenever the probe design permits.</p>
+<h3 dir="auto">E5. Analyze dynamics and downstream relationships</h3>
+<p dir="auto">Compute checkpoint curves, final-layer curves, joint heatmaps, and LD–MD correlations. Fit the reported regressions from LD and MD to monolingual and cross-lingual accuracy. Reproduce checkpoint-selection and source-language-selection comparisons supporting the diagnostic-use claims.</p>
+<h2 dir="auto">G. Smallest reasonable reproduction set</h2>
+<p dir="auto">The reconstruction retains all 39 checkpoints because temporal evolution is central. It retains all 36 languages and 630 pairs because broad multilingual behavior supports the framework's generality. It retains all layers because depth localization is a headline finding. It retains three downstream task families because their differences motivate the cautious conclusion about task relevance.</p>
+<p dir="auto">It excludes:</p>
+<ul dir="auto">
+<li>Retraining XLM-R from scratch.</li>
+<li>Creating new WMT24++ translations.</li>
+<li>Reannotating UD, WikiAnn, or XNLI.</li>
+<li>Commercial APIs or hosted inference endpoints.</li>
+<li>Additional encoder architectures proposed as future work.</li>
+<li>Publication and conference costs.</li>
+<li>Exploratory analyses absent from the final evidence.</li>
+</ul>
+<p dir="auto">The public checkpoints are treated as free scientific inputs. Their inference and processing remain chargeable.</p>
+<h2 dir="auto">H. Direct-expense ledger</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>Activity</th>
+<th align="right">Resource quantity</th>
+<th align="right">Low</th>
+<th align="right">Central</th>
+<th align="right">High</th>
+<th>Grounding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1 and E4: embeddings and probes</td>
+<td align="right">13 / 31 / 73 L4-equivalent GPU-hours</td>
+<td align="right">$3.12</td>
+<td align="right">$15.19</td>
+<td align="right">$94.17</td>
+<td>Derived from 25 / 55 / 110 T4-hours and plausible L4 speedups.</td>
+</tr>
+<tr>
+<td>E2, E3, E5: vectorized comparisons</td>
+<td align="right">100 / 250 / 600 CPU-server hours</td>
+<td align="right">$13.00</td>
+<td align="right">$32.50</td>
+<td align="right">$78.00</td>
+<td>63.882B logical comparisons, batched locally.</td>
+</tr>
+<tr>
+<td>Temporary storage</td>
+<td align="right">Checkpoints, conversions, cached embeddings</td>
+<td align="right">$10</td>
+<td align="right">$25</td>
+<td align="right">$60</td>
+<td>117 GB raw checkpoints plus working data.</td>
+</tr>
+<tr>
+<td>Public models and datasets</td>
+<td align="right">All acquisition</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Research downloads are free.</td>
+</tr>
+<tr>
+<td>APIs</td>
+<td align="right">None</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Local open-model inference.</td>
+</tr>
+<tr>
+<td>Participants and annotation</td>
+<td align="right">None newly collected</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Existing datasets supply judgments and labels.</td>
+</tr>
+<tr>
+<td>Software</td>
+<td align="right">PyTorch, Fairseq, Transformers, NumPy, scikit-learn</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Open-source.</td>
+</tr>
+<tr>
+<td><strong>Paid-cloud total</strong></td>
+<td align="right"></td>
+<td align="right"><strong>$26.12 ≈ $30</strong></td>
+<td align="right"><strong>$72.69 ≈ $75</strong></td>
+<td align="right"><strong>$232.17 ≈ $235</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Free Colab total</strong></td>
+<td align="right">Free T4, existing laptop/storage</td>
+<td align="right"><strong>$0</strong></td>
+<td align="right"><strong>$0</strong></td>
+<td align="right"><strong>$0</strong></td>
+<td>No monetary charge; quota and interruptions remain constraints.</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2 dir="auto">I. Detailed arithmetic</h2>
+<h3 dir="auto">GPU pricing</h3>
+<p dir="auto">XLM-R base has 270 million parameters and fits comfortably on 24 GB GPUs. Current price anchors are:</p>
+<ul dir="auto">
+<li>Low: <a href="https://vast.ai/pricing/gpu/L4" rel="nofollow">Vast.ai L4</a> from <strong>$0.20/hour</strong>; I use the currently observed <strong>$0.24/hour A10</strong> configuration for a reproducible low on-demand case.</li>
+<li>Central: <a href="https://www.runpod.io/pricing" rel="nofollow">Runpod L4</a> at <strong>$0.49/hour</strong> with 24 GB VRAM.</li>
+<li>High: <a href="https://lambda.ai/pricing" rel="nofollow">Lambda A10</a> at <strong>$1.29/hour</strong> with 24 GB VRAM, substantial RAM, and SSD.</li>
+</ul>
+<p dir="auto">The paper does not report hardware or runtime. GPU-hour quantities are reasoned workload estimates, not author-reported usage. The earlier estimate based directly on triplet scale was too high: sampled triplets reuse the same sentence representations and therefore do not imply repeated XLM-R encoder calls.</p>
+<p dir="auto">Low:</p>
+<p dir="auto"><code class="notranslate">13 GPU-hours × $0.24 = $3.12</code></p>
+<p dir="auto">Central:</p>
+<p dir="auto"><code class="notranslate">31 GPU-hours × $0.49 = $15.19</code></p>
+<p dir="auto">High:</p>
+<p dir="auto"><code class="notranslate">73 GPU-hours × $1.29 = $94.17</code></p>
+<h3 dir="auto">CPU pricing</h3>
+<p dir="auto">The CPU workload is dominated by cached-vector indexing, cosine comparisons, aggregation, and regressions. I use an effective <strong>$0.13/server-hour</strong> for an eight-vCPU European cloud instance, derived from Hetzner's current €0.1122 hourly listing and the ECB 1 September 2026 rate of €1 = $1.159.</p>
+<p dir="auto">Low:</p>
+<p dir="auto"><code class="notranslate">100 CPU-server hours × $0.13 = $13.00</code></p>
+<p dir="auto">Central:</p>
+<p dir="auto"><code class="notranslate">250 CPU-server hours × $0.13 = $32.50</code></p>
+<p dir="auto">High:</p>
+<p dir="auto"><code class="notranslate">600 CPU-server hours × $0.13 = $78.00</code></p>
+<h3 dir="auto">Totals</h3>
+<p dir="auto">Low:</p>
+<p dir="auto"><code class="notranslate">$3.12 GPU + $13 CPU + $10 storage = $26.12 ≈ $30</code></p>
+<p dir="auto">Central:</p>
+<p dir="auto"><code class="notranslate">$15.19 GPU + $32.50 CPU + $25 storage = $72.69 ≈ $75</code></p>
+<p dir="auto">High:</p>
+<p dir="auto"><code class="notranslate">$94.17 GPU + $78 CPU + $60 storage = $232.17 ≈ $235</code></p>
+<h3 dir="auto">Free Google Colab reproduction</h3>
+<p dir="auto">XLM-R base has 270 million parameters and fits comfortably on the 16 GB T4 commonly supplied by free Colab. The experiment does not train XLM-R. Each public checkpoint can be downloaded, evaluated, and deleted before processing the next one. All checkpoints therefore need not occupy memory or disk simultaneously.</p>
+<p dir="auto">A practical reconstruction divides T4 usage as follows:</p>
+<ul dir="auto">
+<li>Representation extraction: <strong>15–60 T4-hours</strong>.</li>
+<li>Downstream probe preparation and execution: <strong>5–30 T4-hours</strong>.</li>
+<li>Controls, validation, and necessary reruns: <strong>5–20 T4-hours</strong>.</li>
+</ul>
+<p dir="auto">Total:</p>
+<ul dir="auto">
+<li>Low: <code class="notranslate">15 + 5 + 5 = 25 T4-hours</code>.</li>
+<li>Central: approximately <code class="notranslate">30 + 15 + 10 = 55 T4-hours</code>.</li>
+<li>High: <code class="notranslate">60 + 30 + 20 = 110 T4-hours</code>.</li>
+</ul>
+<p dir="auto">The free route has <strong>$0 direct GPU cost</strong>. Google does not guarantee a particular free GPU or publish a fixed usage allowance. Free notebooks run for at most 12 hours and may terminate earlier. The workflow must therefore save results after every checkpoint and language batch.</p>
+<p dir="auto">The implementation should:</p>
+<ul dir="auto">
+<li>Download one checkpoint at a time.</li>
+<li>Extract all thirteen representation levels together.</li>
+<li>Reuse each unique sentence representation across triplets.</li>
+<li>Save compressed representations after every checkpoint.</li>
+<li>Delete processed checkpoints before downloading replacements.</li>
+<li>Keep a manifest for interrupted-session recovery.</li>
+</ul>
+<p dir="auto">The 63.882 billion figure counts logical triplet-layer comparisons, not model executions. Those comparisons should use cached sentence vectors, integer indices, and vectorized cosine operations. Materializing every triplet would create an unnecessary storage and processing problem.</p>
+<p dir="auto">For comparison with the paid ledger, an L4 should require about 13–73 hours, centrally 31:</p>
+<ul dir="auto">
+<li>Low: <code class="notranslate">25 T4-hours ÷ 2.0 = 12.5 ≈ 13 L4-hours</code>.</li>
+<li>Central: <code class="notranslate">55 ÷ 1.75 = 31.4 ≈ 31 L4-hours</code>.</li>
+<li>High: <code class="notranslate">110 ÷ 1.5 = 73.3 ≈ 73 L4-hours</code>.</li>
+</ul>
+<h2 dir="auto">J. Human-task breakdown</h2>
+<h3 dir="auto">Research design</h3>
+<ul dir="auto">
+<li>Adapt speech ABX methods for multilingual text.</li>
+<li>Define language-discrimination triplets.</li>
+<li>Define meaning-discrimination triplets.</li>
+<li>Choose controls isolating each target variable.</li>
+<li>Select languages spanning families and scripts.</li>
+<li>Choose checkpoints revealing pretraining dynamics.</li>
+<li>Select downstream tasks testing different linguistic levels.</li>
+</ul>
+<h3 dir="auto">Data preparation</h3>
+<ul dir="auto">
+<li>Download thirty-nine public model checkpoints.</li>
+<li>Convert checkpoints into compatible model formats.</li>
+<li>Download WMT24++, UD, WikiAnn, and XNLI.</li>
+<li>Match language codes across all resources.</li>
+<li>Filter languages missing required datasets.</li>
+<li>Verify sentence alignments across languages.</li>
+<li>Construct balanced random ABX triplets.</li>
+<li>Check triplets preserve intended controls.</li>
+</ul>
+<h3 dir="auto">Model processing</h3>
+<ul dir="auto">
+<li>Configure batched multilingual inference.</li>
+<li>Extract every checkpoint's hidden layers.</li>
+<li>Mean-pool non-padding token representations.</li>
+<li>Cache embeddings without mixing checkpoints.</li>
+<li>Detect incomplete or corrupted extraction jobs.</li>
+<li>Rerun failed languages and checkpoints.</li>
+<li>Validate cached shapes and identifiers.</li>
+</ul>
+<h3 dir="auto">ABX evaluation</h3>
+<ul dir="auto">
+<li>Implement cosine-based ABX scoring.</li>
+<li>Vectorize billions of logical comparisons.</li>
+<li>Confirm controls return chance performance.</li>
+<li>Repeat final-checkpoint random subsamples.</li>
+<li>Measure sampling variability.</li>
+<li>Aggregate scores across pairs and languages.</li>
+<li>Compare layer and checkpoint trajectories.</li>
+</ul>
+<h3 dir="auto">Downstream validation</h3>
+<ul dir="auto">
+<li>Build cross-lingual retrieval evaluation.</li>
+<li>Train POS probes across languages.</li>
+<li>Train NER probes across languages.</li>
+<li>Train XNLI probes across languages.</li>
+<li>Repeat every probe with six seeds.</li>
+<li>Apply consistent early stopping.</li>
+<li>Evaluate monolingual probe accuracy.</li>
+<li>Evaluate cross-lingual transfer accuracy.</li>
+<li>Check unstable checkpoints manually.</li>
+<li>Exclude checkpoint failures consistently.</li>
+</ul>
+<h3 dir="auto">Statistical analysis</h3>
+<ul dir="auto">
+<li>Correlate ABX meaning with retrieval accuracy.</li>
+<li>Compare language and meaning discrimination.</li>
+<li>Fit regressions predicting downstream performance.</li>
+<li>Control for pretraining-data quantities.</li>
+<li>Evaluate checkpoint-selection heuristics.</li>
+<li>Evaluate transfer-source selection heuristics.</li>
+<li>Inspect task-specific failures and exceptions.</li>
+</ul>
+<h3 dir="auto">Interpretation</h3>
+<ul dir="auto">
+<li>Separate temporal effects from pairwise differences.</li>
+<li>Interpret lower-layer language concentration.</li>
+<li>Interpret deeper-layer semantic stability.</li>
+<li>Avoid claiming an absolute representational tradeoff.</li>
+<li>Explain missing downstream meaning effects.</li>
+<li>Identify annotation and architecture limitations.</li>
+<li>Decide which claims survive validation.</li>
+</ul>
+<h2 dir="auto">K. Uncertainty</h2>
+<ol dir="auto">
+<li><strong>Hardware and runtime are unreported.</strong> Resource quantities are inferred from model size, unique sentences, checkpoints, and experiment scale.</li>
+<li><strong>WMT24++ sentence count affects inference.</strong> Triplet count does not directly determine encoder calls because representations can be cached.</li>
+<li><strong>Implementation quality strongly affects CPU cost.</strong> Materializing every triplet would be wasteful; indexed vectorized evaluation is assumed.</li>
+<li><strong>Probe implementation details affect GPU usage.</strong> Frozen-representation linear probes are cheap; repeated encoder fine-tuning would be much costlier and is not implied by the paper.</li>
+<li><strong>Storage can exceed the raw 117 GB checkpoint set.</strong> Converted checkpoints and cached thirteen-layer embeddings may require hundreds of gigabytes.</li>
+<li><strong>No new data costs are appropriate.</strong> WMT24++, UD, WikiAnn, and XNLI are pre-existing inputs.</li>
+<li><strong>Colab resources are not guaranteed.</strong> Hardware, runtime duration, and cooldowns vary dynamically.</li>
+<li><strong>The central total is order-of-magnitude accurate.</strong> The low-to-high range reflects infrastructure and optimization uncertainty.</li>
+</ol>
+<h2 dir="auto">L. Final interpretation</h2>
+<p dir="auto">A competent team can reproduce this paper's evidential backbone for <strong>$0 in direct expenses</strong> using free Google Colab and already available storage. The central workload is about <strong>55 T4 GPU-hours</strong>, with a plausible range of <strong>25–110 hours</strong>. A more convenient paid-cloud implementation would cost approximately <strong>$75</strong>, with a credible range of <strong>$30–$235</strong>.</p>
+<p dir="auto">The study is financially cheap because it analyzes public checkpoints instead of training XLM-R. Its difficulty lies in human design and validation: constructing controlled multilingual triplets, safely caching representations, checking alignment quality, running many seeded probes, and interpreting mixed relationships with downstream tasks.</p>
+<h2 dir="auto">Sources</h2>
+<ul dir="auto">
+<li><a href="https://aclanthology.org/2025.emnlp-main.1210/" rel="nofollow">ACL Anthology paper</a></li>
+<li><a href="https://arxiv.org/abs/2505.17747" rel="nofollow">arXiv paper</a></li>
+<li><a href="https://nlp.cs.washington.edu/xlmr-across-time/" rel="nofollow">XLM-R Across Time checkpoints</a></li>
+<li><a href="https://www.runpod.io/pricing" rel="nofollow">Runpod GPU pricing</a></li>
+<li><a href="https://vast.ai/pricing/gpu/L4" rel="nofollow">Vast.ai L4 pricing</a></li>
+<li><a href="https://lambda.ai/pricing" rel="nofollow">Lambda GPU pricing</a></li>
+<li><a href="https://www.hetzner.com/cloud/regular-performance/" rel="nofollow">Hetzner cloud pricing</a></li>
+<li><a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" rel="nofollow">ECB exchange rates</a></li>
+<li><a href="https://research.google.com/colaboratory/faq.html" rel="nofollow">Google Colab FAQ and resource limits</a></li>
+</ul>
+  </main>
+  <footer>
+    <p>Prepared 2 September 2026</p>
+    <p><a href="source.md">View source Markdown</a></p>
+  </footer>
+</body>
+</html>
