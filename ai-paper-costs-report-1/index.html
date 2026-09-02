@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A direct-expense estimate for reproducing Brinkmann et al.'s NAACL 2025 study of shared multilingual representations in large language models.">
+  <meta name="theme-color" content="#f3f0e8">
+  <title>Reproduction-cost analysis — Brinkmann et al. (2025)</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2723;
+      --muted: #65706a;
+      --paper: #fffef9;
+      --ground: #f3f0e8;
+      --line: #d8d4c8;
+      --accent: #176b56;
+      --accent-soft: #e3f0ea;
+      --code: #f2f1ec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(23, 107, 86, 0.08), transparent 28rem),
+        var(--ground);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.68;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.14em;
+    }
+
+    a:hover {
+      text-decoration-thickness: 0.14em;
+    }
+
+    .masthead,
+    main,
+    footer {
+      width: min(100% - 2rem, 960px);
+      margin-inline: auto;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.4rem;
+      color: var(--muted);
+      font: 700 0.72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .masthead a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .masthead a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      padding: clamp(1.6rem, 4vw, 4.5rem) clamp(1.15rem, 5vw, 5rem);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      box-shadow: 0 22px 70px rgba(38, 45, 40, 0.09);
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.14;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 18ch;
+      margin: 0 0 1.75rem;
+      font-size: clamp(2.15rem, 6vw, 4.35rem);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+    }
+
+    h1 + p {
+      margin-bottom: 3.5rem;
+      padding: 1rem 0 1rem 1.1rem;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    h2 {
+      margin: 3.7rem 0 1.2rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 2.2rem 0 0.65rem;
+      font-size: 1.18rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    p,
+    ul,
+    ol,
+    pre,
+    markdown-accessiblity-table {
+      margin-block: 0 1.25rem;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.35rem;
+    }
+
+    li {
+      padding-left: 0.25rem;
+    }
+
+    li + li {
+      margin-top: 0.35rem;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    markdown-accessiblity-table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    th,
+    td {
+      min-width: 7rem;
+      padding: 0.75rem 0.85rem;
+      vertical-align: top;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: #34423b;
+      background: var(--accent-soft);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #faf9f4;
+    }
+
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: var(--code);
+      font: 0.78rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .dependency-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem 1rem;
+      max-width: 38rem;
+      margin: 1.8rem auto 2rem;
+      font: 700 0.8rem/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+
+    .dependency-map .node {
+      display: grid;
+      min-height: 3.25rem;
+      padding: 0.7rem 0.8rem;
+      place-items: center;
+      border: 1px solid #b7c8c0;
+      border-radius: 2px;
+      background: var(--accent-soft);
+    }
+
+    .dependency-map .span {
+      grid-column: 1 / -1;
+      width: min(100%, 21rem);
+      justify-self: center;
+    }
+
+    .dependency-map .outcome {
+      border-color: var(--line);
+      background: #faf9f4;
+    }
+
+    .dependency-map .right {
+      grid-column: 2;
+    }
+
+    .dependency-map .arrow {
+      grid-column: 1 / -1;
+      color: var(--accent);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .dependency-map .split-arrow {
+      display: flex;
+      grid-column: 1 / -1;
+      justify-content: space-around;
+      padding-inline: 18%;
+      color: var(--accent);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .pl-en,
+    .pl-s {
+      color: var(--ink);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.5rem 2.5rem;
+      color: var(--muted);
+      font: 0.78rem/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 16px;
+      }
+
+      .masthead {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      main {
+        width: 100%;
+        padding: 2.25rem 1rem 3rem;
+        border-right: 0;
+        border-left: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 12vw, 3.2rem);
+      }
+
+      h1 + p {
+        margin-bottom: 2.5rem;
+      }
+
+      h2 {
+        margin-top: 3rem;
+      }
+
+      th,
+      td {
+        min-width: 8.5rem;
+        padding: 0.65rem;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        font-size: 11pt;
+      }
+
+      .masthead,
+      footer {
+        display: none;
+      }
+
+      main {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      h2,
+      h3 {
+        break-after: avoid;
+      }
+
+      table,
+      pre {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <a href="/">Oleg Serikov</a>
+    <span>Research reproduction estimate · Report 01</span>
+  </header>
+  <main>
+<h1 dir="auto">Reproduction-cost analysis: <em>Large Language Models Share Representations of Latent Grammatical Concepts Across Typologically Diverse Languages</em></h1>
+<p dir="auto"><strong>Estimate date:</strong> 2 September 2026<br>
+<strong>Scope:</strong> Minimal credible reproduction of the paper's evidential backbone. These are current reproduction estimates, not the authors' historical accounts.</p>
+<h2 dir="auto">A. Paper metadata</h2>
+<ul dir="auto">
+<li><strong>Paper:</strong> <em>Large Language Models Share Representations of Latent Grammatical Concepts Across Typologically Diverse Languages</em></li>
+<li><strong>Authors:</strong> Jannik Brinkmann, Chris Wendler, Christian Bartelt, and Aaron Mueller</li>
+<li><strong>Venue/year:</strong> NAACL 2025, pages 6131–6150</li>
+<li><strong>Paper:</strong> <a href="https://aclanthology.org/2025.naacl-long.312/" rel="nofollow">ACL Anthology</a></li>
+<li><strong>Preprint:</strong> <a href="https://arxiv.org/abs/2501.06346" rel="nofollow">arXiv:2501.06346</a></li>
+<li><strong>Code, data, and SAE links:</strong> <a href="https://github.com/jannik-brinkmann/multilingual-features">GitHub repository</a></li>
+<li><strong>Spreadsheet provenance:</strong> Sample paper 1 in the NAACL row.</li>
+</ul>
+<h2 dir="auto">B. Executive direct-expense estimate</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>Estimate</th>
+<th align="right">Direct expenses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Low</strong></td>
+<td align="right"><strong>$215</strong></td>
+</tr>
+<tr>
+<td><strong>Central</strong></td>
+<td align="right"><strong>$620</strong></td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td align="right"><strong>$1,800</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">The dominant expense is GPU rental. The central reconstruction uses <strong>1,120 RTX A6000 GPU-hours</strong>: 960 for model-activation collection, two sparse-autoencoder trainings, and probes; 160 for attribution, ablations, validation, and translation steering. Public models, datasets, code, annotations, and software have zero acquisition cost.</p>
+<h2 dir="auto">C. Tweet-sized summary</h2>
+<p dir="auto">Reproducing <em>Large Language Models Share Representations of Latent Grammatical Concepts</em> costs about <strong>$620 directly</strong> ($215–$1,800), mostly GPU rental. Human work covers multilingual data design, probe validation, feature inspection, interventions, and interpretation.</p>
+<h2 dir="auto">D. Important conclusions and grounding artifacts</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Important conclusion</th>
+<th>Grounding artifacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Llama-3-8B and Aya-23-8B contain SAE features shared across languages for the same morphosyntactic concepts.</td>
+<td>Per-language logistic probes; integrated-gradient attribution scores; top-32 feature sets; intersection-over-union values; Figure 2.</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Some individual features activate on the same concept across typologically diverse languages.</td>
+<td>Token-level activation examples for plural nouns and past tense; Figure 3; manually inspected feature patterns.</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>The most multilingual features causally support probe predictions.</td>
+<td>Feature-ablation experiment; baseline and post-ablation probe accuracy; Figure 4. Llama-3 probe accuracy falls to 64% after ablating the top quartile of massively multilingual features and 61% after ablating all multilingual features.</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Multilingual features are relatively concept-specific.</td>
+<td>Pairwise overlap among concept-value feature sets; mean overlap 13.9% ± 10.7%; high-overlap linguistic cases.</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Single-feature interventions can change grammatical properties during translation.</td>
+<td>Counterfactual translation dataset; 64 examples per setting; generation with and without intervention; probe-based flip rates; Figure 5.</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>These interventions usually avoid changing unrelated grammatical concepts.</td>
+<td>Probe predictions for non-target concepts; selectivity proportions by language and feature; Figure 6.</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>The causal behavior generalizes beyond synthetic templates, imperfectly.</td>
+<td>Qualitative Flores-101 translations; Figure 7; recorded failures and degenerate generations.</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2 dir="auto">E. Evidential dependency map</h2>
+<div class="dependency-map" role="img" aria-label="Public models and corpora feed activation collection, which feeds both SAE and probe training. Those feed attribution and ablation, producing conclusions C1 through C4 and enabling translation interventions, which produce conclusions C5 through C7.">
+  <div class="node span">Public models and corpora</div>
+  <div class="arrow" aria-hidden="true">↓</div>
+  <div class="node span">E1: activation collection</div>
+  <div class="split-arrow" aria-hidden="true"><span>↙</span><span>↘</span></div>
+  <div class="node">E2: train two SAEs</div>
+  <div class="node">E3: train language probes</div>
+  <div class="split-arrow" aria-hidden="true"><span>↘</span><span>↙</span></div>
+  <div class="node span">E4: attribution and ablation</div>
+  <div class="split-arrow" aria-hidden="true"><span>↙</span><span>↘</span></div>
+  <div class="node outcome">C1–C4</div>
+  <div class="node">E5: translation interventions</div>
+  <div class="arrow right" aria-hidden="true">↓</div>
+  <div class="node outcome right">C5–C7</div>
+</div>
+
+<p dir="auto">E1 is shared across SAE training and probe work. E2 and E3 jointly enable the attribution analysis. The same probes evaluate ablations, intervention efficacy, and selectivity. Each shared activity is charged once.</p>
+<h2 dir="auto">F. Unique experiments and production activities</h2>
+<h3 dir="auto">E1. Multilingual data preparation and activation collection</h3>
+<p dir="auto">Download Llama-3-8B, Aya-23-8B, Universal Dependencies data for 23 languages, The Pile samples, mC4 samples, and Flores-101. Extract layer-16 residual-stream activations. The main SAE training stream contains <strong>250 million tokens per model</strong>. The paper also records maximum feature activations across <strong>20 million mC4 tokens</strong> for steering.</p>
+<h3 dir="auto">E2. Train two gated sparse autoencoders</h3>
+<p dir="auto">Train one gated SAE for each 8B model. The reported expansion factor is eight, batch size is 512, learning rate is 0.001, warmup is 1,000 steps, and each SAE consumes 250 million activation tokens. Validate reconstruction quality on nine mC4 languages. This activity creates the feature dictionaries used by every headline analysis.</p>
+<h3 dir="auto">E3. Train morphosyntactic probes</h3>
+<p dir="auto">For every eligible language and concept-value combination, sum non-padding layer-16 token activations and fit logistic regression classifiers. Retain concepts annotated in at least six languages. These classifiers define the target metrics for feature attribution and later evaluate steering efficacy and selectivity.</p>
+<h3 dir="auto">E4. Attribute, compare, and ablate features</h3>
+<p dir="auto">Use integrated-gradient attribution patching with ten interpolation points. Rank SAE features for each probe. Select each probe's top 32 features. Calculate cross-language intersections, feature-language distributions, and concept overlap. Then ablate monolingual, multilingual, and massively multilingual feature sets and reevaluate the existing probes.</p>
+<h3 dir="auto">E5. Translation steering</h3>
+<p dir="auto">Adapt and translate counterfactual templates for tense, gender, and number. Use English, French, German, and Turkish, excluding Turkish gender. Retain cases where Llama-3-8B predicts the grammatical continuation. Manually select interpretable features and tune activation multipliers. Generate paired translations with and without interventions. Measure target-label flips, non-target stability, and selected Flores-101 examples.</p>
+<h2 dir="auto">G. Smallest reasonable reproduction set</h2>
+<p dir="auto">The reconstruction retains both models because C1 explicitly compares English-heavy and multilingual pretraining. It retains both SAE trainings because downloaded author checkpoints would verify downstream code but would not reproduce the feature-production activity underlying the evidence. It retains all 23 UD languages, the three major concept families, ablations, and translation steering.</p>
+<p dir="auto">The following are omitted:</p>
+<ul dir="auto">
+<li>Repeated SAE seeds, since the paper reports one dictionary per model.</li>
+<li>New model pretraining, since both base models are public inputs.</li>
+<li>New UD annotation, since treebanks already contain labels.</li>
+<li>Exhaustive Flores evaluation, since evidence is qualitative.</li>
+<li>Conference registration and publication costs.</li>
+<li>Abandoned feature choices and unrelated exploratory analyses.</li>
+</ul>
+<h2 dir="auto">H. Direct-expense ledger</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>Activity</th>
+<th align="right">Resource quantity</th>
+<th align="right">Low</th>
+<th align="right">Central</th>
+<th align="right">High</th>
+<th>Grounding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1–E3: activations, SAE training, probes</td>
+<td align="right">576 / 960 / 1,344 A6000 GPU-hours</td>
+<td align="right">$178.56</td>
+<td align="right">$508.80</td>
+<td align="right">$1,464.96</td>
+<td>Paper reports eight RTX A6000 GPUs and less than one week.</td>
+</tr>
+<tr>
+<td>E4–E5: attribution, ablations, steering</td>
+<td align="right">80 / 160 / 256 A6000 GPU-hours</td>
+<td align="right">$24.80</td>
+<td align="right">$84.80</td>
+<td align="right">$279.04</td>
+<td>Inferred from repeated 8B forward/backward passes and generations.</td>
+</tr>
+<tr>
+<td>Temporary storage and checkpoints</td>
+<td align="right">300–800 GB during project</td>
+<td align="right">$10</td>
+<td align="right">$25</td>
+<td align="right">$50</td>
+<td>Reasoned cloud-storage allowance.</td>
+</tr>
+<tr>
+<td>Public models and datasets</td>
+<td align="right">Llama, Aya, UD, Pile, mC4, Flores</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Public downloads; processing remains costly.</td>
+</tr>
+<tr>
+<td>Software</td>
+<td align="right">Python, PyTorch, nnsight, scikit-learn</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Open-source.</td>
+</tr>
+<tr>
+<td>APIs</td>
+<td align="right">None</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Models run locally on rented GPUs.</td>
+</tr>
+<tr>
+<td>Participants and annotation</td>
+<td align="right">None newly recruited</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td align="right">$0</td>
+<td>Existing annotations and researcher inspection suffice.</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td align="right"></td>
+<td align="right"><strong>$213.36 ≈ $215</strong></td>
+<td align="right"><strong>$618.60 ≈ $620</strong></td>
+<td align="right"><strong>$1,794.00 ≈ $1,800</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2 dir="auto">I. Detailed arithmetic</h2>
+<h3 dir="auto">Runtime bounds</h3>
+<p dir="auto">The paper's Appendix A states that experiments used one server with <strong>eight NVIDIA RTX A6000 48 GB GPUs</strong> and an AMD EPYC 7413 CPU. Probe and autoencoder training took <strong>less than one week</strong>. It does not report the exact duration or separate downstream runtime.</p>
+<p dir="auto">I interpret this as:</p>
+<ul dir="auto">
+<li>Low training case: <code class="notranslate">8 GPUs × 72 hours = 576 GPU-hours</code></li>
+<li>Central training case: <code class="notranslate">8 GPUs × 120 hours = 960 GPU-hours</code></li>
+<li>High training case: <code class="notranslate">8 GPUs × 168 hours = 1,344 GPU-hours</code></li>
+</ul>
+<p dir="auto">I separately allow:</p>
+<ul dir="auto">
+<li>Low downstream case: <code class="notranslate">80 GPU-hours</code></li>
+<li>Central downstream case: <code class="notranslate">160 GPU-hours</code></li>
+<li>High downstream case: <code class="notranslate">256 GPU-hours</code></li>
+</ul>
+<p dir="auto">The high total equals <code class="notranslate">1,344 + 256 = 1,600 GPU-hours</code>.</p>
+<h3 dir="auto">Current GPU prices</h3>
+<p dir="auto">Three current market anchors define implementation quality:</p>
+<ul dir="auto">
+<li>Low: <a href="https://vast.ai/pricing" rel="nofollow">Vast.ai</a> lists A6000 instances from <strong>$0.31/GPU-hour</strong> and a $0.44 median.</li>
+<li>Central: <a href="https://www.runpod.io/gpu-models/rtx-a6000" rel="nofollow">Runpod</a> lists RTX A6000 rental from <strong>$0.53/GPU-hour</strong>, updated 27 August 2026.</li>
+<li>High: <a href="https://lambda.ai/pricing" rel="nofollow">Lambda</a> lists A6000 instances at <strong>$1.09/GPU-hour</strong>, including substantial CPU, RAM, and SSD capacity.</li>
+</ul>
+<h3 dir="auto">Low</h3>
+<p dir="auto"><code class="notranslate">(576 + 80) GPU-hours × $0.31 = 656 × $0.31 = $203.36</code></p>
+<p dir="auto"><code class="notranslate">$203.36 + $10 storage = $213.36 ≈ $215</code></p>
+<h3 dir="auto">Central</h3>
+<p dir="auto"><code class="notranslate">(960 + 160) GPU-hours × $0.53 = 1,120 × $0.53 = $593.60</code></p>
+<p dir="auto"><code class="notranslate">$593.60 + $25 storage = $618.60 ≈ $620</code></p>
+<h3 dir="auto">High</h3>
+<p dir="auto"><code class="notranslate">(1,344 + 256) GPU-hours × $1.09 = 1,600 × $1.09 = $1,744</code></p>
+<p dir="auto"><code class="notranslate">$1,744 + $50 storage = $1,794 ≈ $1,800</code></p>
+<p dir="auto">The central estimate uses the paper's exact GPU class. Migrating to H100s might reduce wall time, but uncertain scaling would make the estimate less auditable.</p>
+<h2 dir="auto">J. Human-task breakdown</h2>
+<h3 dir="auto">Research design</h3>
+<ul dir="auto">
+<li>Define shared grammatical representations across languages.</li>
+<li>Choose contrasting English-heavy and multilingual models.</li>
+<li>Select comparable languages from Universal Dependencies.</li>
+<li>Choose concepts annotated across enough languages.</li>
+<li>Define causal evidence beyond correlational probe accuracy.</li>
+</ul>
+<h3 dir="auto">Data preparation</h3>
+<ul dir="auto">
+<li>Download models, corpora, and treebanks.</li>
+<li>Match language codes across datasets.</li>
+<li>Filter sentences containing required grammatical labels.</li>
+<li>Pool subword activations into sentence representations.</li>
+<li>Translate counterfactual templates into selected languages.</li>
+<li>Check translations preserve intended grammatical contrasts.</li>
+</ul>
+<h3 dir="auto">Infrastructure and implementation</h3>
+<ul dir="auto">
+<li>Configure eight GPUs and compatible CUDA libraries.</li>
+<li>Implement activation extraction at layer sixteen.</li>
+<li>Train gated sparse autoencoders for both models.</li>
+<li>Train probes for every language-concept combination.</li>
+<li>Monitor losses, sparsity, and reconstruction quality.</li>
+<li>Repair failed jobs and corrupted intermediate files.</li>
+<li>Save reproducible checkpoints and derived datasets.</li>
+</ul>
+<h3 dir="auto">Feature analysis</h3>
+<ul dir="auto">
+<li>Implement integrated-gradient attribution patching.</li>
+<li>Rank features influencing each trained probe.</li>
+<li>Compare feature sets across languages.</li>
+<li>Measure feature overlap across grammatical concepts.</li>
+<li>Inspect multilingual activation examples manually.</li>
+<li>Reject features with unclear activation patterns.</li>
+</ul>
+<h3 dir="auto">Causal validation</h3>
+<ul dir="auto">
+<li>Design monolingual and multilingual ablation conditions.</li>
+<li>Measure probe accuracy after each ablation.</li>
+<li>Check massively multilingual features explain performance.</li>
+<li>Select interpretable features for translation interventions.</li>
+<li>Tune intervention strengths across concepts and languages.</li>
+<li>Generate translations with matched control runs.</li>
+<li>Measure efficacy using existing grammatical probes.</li>
+<li>Check unrelated concepts remain unchanged.</li>
+<li>Inspect failed and degenerate generations.</li>
+<li>Test selected interventions on natural Flores sentences.</li>
+</ul>
+<h3 dir="auto">Interpretation</h3>
+<ul dir="auto">
+<li>Compare Llama and Aya feature-sharing patterns.</li>
+<li>Separate causal findings from qualitative interpretation.</li>
+<li>Identify morphology-driven feature overlaps.</li>
+<li>Evaluate alternative language-specific explanations.</li>
+<li>State steering failures and methodological limitations.</li>
+<li>Decide which conclusions survive robustness checks.</li>
+</ul>
+<h2 dir="auto">K. Uncertainty</h2>
+<ol dir="auto">
+<li><strong>Exact runtime is unreported.</strong> “Less than a week” strongly bounds training but leaves a wide interval.</li>
+<li><strong>GPU utilization is unknown.</strong> The server had eight GPUs, but every stage may not saturate all eight.</li>
+<li><strong>Downstream runtime is reconstructed.</strong> Attribution uses ten integrated-gradient points and many probes, while translation uses repeated 8B generations. The paper provides no wall-clock split.</li>
+<li><strong>Storage pricing is approximate.</strong> Pod storage, checkpoint retention, and dataset caching differ across providers. It is minor beside compute.</li>
+<li><strong>Released SAEs create a cheaper verification route.</strong> Downloading the two public dictionaries could eliminate most training cost. That would test downstream conclusions for roughly $40–$150, but would not reproduce feature learning.</li>
+<li><strong>Manual inspection has no direct-expense charge.</strong> It appears only in the human-task breakdown.</li>
+<li><strong>No repeated seed is included.</strong> Adding three SAE seeds would nearly triple the dominant cost.</li>
+</ol>
+<h2 dir="auto">L. Final interpretation</h2>
+<p dir="auto">A competent team reproducing the evidential backbone today would likely spend about <strong>$620 in direct expenses</strong>, with a credible range of <strong>$215–$1,800</strong>. GPU compute overwhelmingly dominates. The paper's own infrastructure statement constrains the estimate: eight RTX A6000 GPUs for under one week, plus smaller downstream intervention workloads.</p>
+<p dir="auto">The cash requirement remains modest because models, treebanks, corpora, code, annotations, and software are public. The difficult work is human: constructing valid multilingual comparisons, validating probes and SAEs, identifying meaningful features, designing causal interventions, and interpreting imperfect steering behavior.</p>
+<h2 dir="auto">Sources</h2>
+<ul dir="auto">
+<li><a href="https://aclanthology.org/2025.naacl-long.312/" rel="nofollow">ACL Anthology paper</a></li>
+<li><a href="https://github.com/jannik-brinkmann/multilingual-features">Paper repository</a></li>
+<li><a href="https://www.runpod.io/gpu-models/rtx-a6000" rel="nofollow">Runpod RTX A6000 pricing</a></li>
+<li><a href="https://vast.ai/pricing" rel="nofollow">Vast.ai live GPU pricing</a></li>
+<li><a href="https://lambda.ai/pricing" rel="nofollow">Lambda GPU pricing</a></li>
+</ul>
+  </main>
+  <footer>
+    <p>Prepared 2 September 2026</p>
+    <p><a href="source.md">View source Markdown</a></p>
+  </footer>
+</body>
+</html>

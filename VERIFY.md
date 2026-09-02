@@ -1,7 +1,8 @@
-# Verification — mobile cover scrolling
+# Verification — AI paper cost report
 
-- [x] CSS: desktop grid and cover remain centered
-- [x] CSS: narrow screens start-align both the grid and oversized cover
-- [x] `node --check homepage.js && node --check feedback-count.js` passes
-- [x] Smoke test: local HTTP serves `/` and `/styles.css` with status 200
-- [x] Integration: served CSS contains both narrow-screen start-alignment declarations
+- [x] Source fidelity: report title, all Markdown sections, links, and `$620` central estimate are present
+- [x] HTML: document structure passes focused validation and contains responsive table/code handling
+- [x] Smoke test: local HTTP serves `/ai-paper-costs-report-1/` with status 200
+- [x] Integration: locally served report contains the title and `$620` estimate
+- [x] Scope: commit excludes the unrelated untracked `img/` directory
+- [ ] Production: `https://oserikov.github.io/ai-paper-costs-report-1` returns HTTP 200 with the title and `$620` estimate
