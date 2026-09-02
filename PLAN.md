@@ -22,5 +22,5 @@ Validate the report source and generated HTML, serve the site locally and fetch 
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; this is one self-contained static route and parallel edits would add coordination overhead.
 2. [x] Verify content fidelity, HTML structure, responsive styling, and local HTTP behavior.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; a focused source-and-boundary check is the fastest reliable verification.
-3. [/] Commit only the report and task artifacts, push `main`, and verify the public URL.
+3. [x] Commit only the report and task artifacts, push `main`, and verify the public URL.
    > **Agent:** None — foreground in the main session, without worktree isolation or model override; publication requires the existing repository's GitHub Pages deployment boundary.
