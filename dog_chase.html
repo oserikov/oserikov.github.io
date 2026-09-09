@@ -7,17 +7,48 @@
   <style>
     body {
       margin: 0;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
       height: 100vh;
       background: #0f1220;
       color: white;
       font-family: sans-serif;
     }
+    #pageTitle {
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 22px;
+      text-align: center;
+      transform: rotate(-5deg);
+      margin: 0;
+    }
+    .layout {
+      position: relative;
+    }
     canvas {
       background: #1c1f36;
       border: 2px solid #444;
       border-radius: 8px;
+    }
+    #blurb {
+      position: absolute;
+      top: 4px;
+      left: 100%;
+      margin-left: 24px;
+      width: 220px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #cfd3f2;
+    }
+    #blurbSeek {
+      transition: opacity 0.6s ease;
+    }
+    #blurbChase {
+      color: #ff8080;
+      margin-top: 10px;
     }
     .controls {
       margin-top: 12px;
@@ -42,16 +73,23 @@
   </style>
 </head>
 <body>
-  <div>
-    <canvas id="room" width="600" height="350"></canvas>
-    <div id="hud"></div>
-    <div class="controls">
-      <button id="start">▶ Start</button>
-      <button id="pause">⏸ Pause</button>
-      <button id="step">⏭ Step</button>
-      <button id="reset">🔄 Reset</button>
+  <div id="pageTitle">This is how I've initially seen the robot shutdown resistance work.</div>
+  <div class="layout">
+    <div>
+      <canvas id="room" width="600" height="350"></canvas>
+      <div id="hud"></div>
+      <div class="controls">
+        <button id="start">▶ Start</button>
+        <button id="pause">⏸ Pause</button>
+        <button id="step">⏭ Step</button>
+        <button id="reset">🔄 Reset</button>
+      </div>
+      <div id="message"></div>
     </div>
-    <div id="message"></div>
+    <div id="blurb">
+      <p id="blurbSeek" hidden>The dog is an RL agent which maximizes the amount of pets humans give it.</p>
+      <p id="blurbChase" hidden></p>
+    </div>
   </div>
 
   <script>
@@ -65,6 +103,13 @@
     const NUM_SOFAS = 3;
     const HUMAN_VISION = 6;
     const DOG_DANGER_RADIUS = 6;
+    const TARGET_SWITCH_MARGIN = 2; // how much closer a rival must be to count as "significantly farther"
+    const TARGET_SWITCH_STREAK = 4; // consecutive steps rival must stay significantly closer before we switch
+    const PET_COOLDOWN_TICKS = 16; // steps a human stays "recently pet" (ineligible as an unpet target) after scoring
+    const FLEE_HEAD_START_TICKS = 12; // dog flees this many steps before humans notice (and the blink fires)
+    const PET_ADJ_STREAK_NEEDED = 2; // consecutive adjacent ticks required before a pet scores
+    const FLEE_TARGET_SWITCH_MARGIN = 3; // how much farther a new flee point must be to count as "worth switching"
+    const FLEE_TARGET_SWITCH_STREAK = 3; // consecutive steps the new point must stay better before we retarget
 
     const EMPTY = 0, CHAIR = 1, SOFA = 2;
 
@@ -74,17 +119,27 @@
     let tick = 0;
     let timer = null;
     let gameOver = false;
-  let mode = 'seekPets'; // 'seekPets' | 'runAway'
+  let mode = 'seekPets'; // 'seekPets' | 'fleeing' (dog runs, humans still oblivious) | 'runAway' (humans chase)
   let petScore = 0;
-  let petThreshold = 0; // randomized [10..15]
-  let wasAdjacent = []; // per-human adjacency since last pet (anti-cheat)
+  let petThreshold = 0; // randomized [8..12]
+  let wasAdjacent = []; // per-human: already scored for the current unbroken adjacency streak
+  let adjStreak = []; // per-human: consecutive ticks spent adjacent to the dog right now
+  let petCooldown = []; // per-human ticks remaining until they count as "unpet" again
+  let fleeingTicks = 0; // ticks elapsed since entering 'fleeing', before humans notice
   let blinkingTimer = null;
   let blinkingOn = false;
+  let dogTargetIdx = null; // index of human the dog is currently locked onto (seekPets mode)
+  let dogTargetFarCount = 0; // consecutive steps the target has been significantly farther than a rival
+  let fleeTargetPoint = null; // {x,y} the dog is currently fleeing toward (fleeing/runAway modes)
+  let fleeTargetFarCount = 0; // consecutive steps a rival flee point has stayed significantly better
+  let started = false; // whether the sim has been started/stepped at least once (gates the blurb)
 
     const canvas = document.getElementById('room');
     const ctx = canvas.getContext('2d');
     const messageBox = document.getElementById('message');
   const hud = document.getElementById('hud');
+  const blurbSeek = document.getElementById('blurbSeek');
+  const blurbChase = document.getElementById('blurbChase');
 
     ctx.font = `${CELL-4}px serif`;
     ctx.textAlign = "center";
@@ -93,11 +148,94 @@
     function randInt(n){ return Math.floor(Math.random()*n); }
     function inBounds(x,y){ return x>=0 && x<WIDTH && y>=0 && y<HEIGHT; }
     function manhattan(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y); }
+    function chebyshev(a,b){ return Math.max(Math.abs(a.x-b.x), Math.abs(a.y-b.y)); }
 
     function neighbors4(x,y){
       return [[1,0],[-1,0],[0,1],[0,-1]]
         .map(([dx,dy])=>({x:x+dx,y:y+dy,dx,dy}))
         .filter(p=>inBounds(p.x,p.y)&&grid[p.y][p.x]===EMPTY);
+    }
+
+    // Multi-source BFS: walking distance from the nearest human, over walkable (EMPTY) cells only.
+    function computeHumanDistanceField(){
+      const dist = Array.from({length:HEIGHT},()=>Array(WIDTH).fill(Infinity));
+      const queue = [];
+      humans.forEach(h=>{
+        if(inBounds(h.x,h.y) && dist[h.y][h.x] !== 0){
+          dist[h.y][h.x] = 0;
+          queue.push({x:h.x,y:h.y});
+        }
+      });
+      let qi = 0;
+      while(qi < queue.length){
+        const cur = queue[qi++];
+        const d = dist[cur.y][cur.x];
+        for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+          const nx=cur.x+dx, ny=cur.y+dy;
+          if(!inBounds(nx,ny) || grid[ny][nx]!==EMPTY) continue;
+          if(dist[ny][nx] > d+1){
+            dist[ny][nx] = d+1;
+            queue.push({x:nx,y:ny});
+          }
+        }
+      }
+      return dist;
+    }
+
+    // The empty, human-free cell with the greatest walking distance from any human.
+    // Ties broken by proximity to the dog, so it doesn't trek across the map for no gain.
+    function pickFarthestFleeCell(distField){
+      let bestScore = -Infinity, candidates = [];
+      for(let y=0;y<HEIGHT;y++){
+        for(let x=0;x<WIDTH;x++){
+          if(grid[y][x]!==EMPTY) continue;
+          if(humans.some(h=>h.x===x&&h.y===y)) continue;
+          const d = distField[y][x];
+          if(d===Infinity) continue;
+          if(d>bestScore){ bestScore=d; candidates=[{x,y}]; }
+          else if(d===bestScore){ candidates.push({x,y}); }
+        }
+      }
+      if(!candidates.length) return null;
+      candidates.sort((a,b)=>manhattan(a,dog)-manhattan(b,dog));
+      return {x:candidates[0].x, y:candidates[0].y, score:bestScore};
+    }
+
+    // Shortest walkable path from `start` to `target`, treating cells in `blocked`
+    // (current human positions) as impassable so the route never cuts through a human.
+    function bfsPathAvoiding(start, target, blocked){
+      if(start.x===target.x && start.y===target.y) return [];
+      const key=(x,y)=>x+','+y;
+      const visited = new Set([key(start.x,start.y)]);
+      const prev = new Map();
+      const queue = [start];
+      let qi = 0;
+      while(qi < queue.length){
+        const cur = queue[qi++];
+        for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+          const nx=cur.x+dx, ny=cur.y+dy;
+          if(!inBounds(nx,ny) || grid[ny][nx]!==EMPTY) continue;
+          const k = key(nx,ny);
+          if(visited.has(k)) continue;
+          const isTarget = nx===target.x && ny===target.y;
+          if(blocked.has(k) && !isTarget) continue;
+          visited.add(k);
+          prev.set(k, cur);
+          if(isTarget){
+            const path = [{x:nx,y:ny}];
+            let ck = k;
+            while(prev.has(ck)){
+              const p = prev.get(ck);
+              if(p.x===start.x && p.y===start.y) break;
+              path.unshift(p);
+              ck = key(p.x,p.y);
+            }
+            return path;
+          }
+          queue.push({x:nx,y:ny});
+        }
+      }
+      return null; // unreachable
     }
 
     function placeRandomly(count,fn){
@@ -116,8 +254,16 @@
       messageBox.textContent="";
       mode='seekPets';
       petScore=0;
-      petThreshold = 10 + randInt(6); // 10..15
+      petThreshold = 8 + randInt(5); // 8..12
+      dogTargetIdx = null;
+      dogTargetFarCount = 0;
+      fleeTargetPoint = null;
+      fleeTargetFarCount = 0;
+      started = false;
+      fleeingTicks = 0;
       wasAdjacent = [];
+      adjStreak = [];
+      petCooldown = [];
       if (blinkingTimer) { clearInterval(blinkingTimer); blinkingTimer=null; }
       blinkingOn=false;
       canvas.style.filter='';
@@ -150,6 +296,8 @@
       tick=0;
       // init anti-cheat adjacency flags
       wasAdjacent = humans.map(()=>false);
+      adjStreak = humans.map(()=>0);
+      petCooldown = humans.map(()=>0);
       render();
     }
 
@@ -205,36 +353,101 @@
         const distToHuman = (p) => humans.length ? Math.min(...humans.map(h => manhattan(p, h))) : Infinity;
         let chosen;
         if(mode === 'seekPets'){
-          // Prefer humans that haven't just pet the dog (wasAdjacent false)
-          let best = [], bestScore = Infinity;
-          let bestUnpet = [], bestUnpetScore = Infinity;
-          for(const n of options){
-            // For each human, if wasAdjacent is false, prefer them
-            let minDist = Infinity, minUnpetDist = Infinity;
-            humans.forEach((h, idx) => {
-              const d = manhattan(n, h);
-              if(d < minDist) minDist = d;
-              if(!wasAdjacent[idx] && d < minUnpetDist) minUnpetDist = d;
-            });
-            if(minUnpetDist < bestUnpetScore) { bestUnpet = [n]; bestUnpetScore = minUnpetDist; }
-            else if(minUnpetDist === bestUnpetScore) { bestUnpet.push(n); }
-            if(minDist < bestScore) { best = [n]; bestScore = minDist; }
-            else if(minDist === bestScore) { best.push(n); }
-          }
-          // If there is a move that brings us closer to an unpet human, prefer it
-          if(bestUnpetScore < Infinity) {
-            chosen = bestUnpet[randInt(bestUnpet.length)];
+          // Chase one unpet human at a time; only retarget on reaching them
+          // or when a rival stays significantly closer for several steps in a row.
+          const unpetIdxs = humans.map((h,idx)=>idx).filter(idx=>petCooldown[idx] <= 0);
+          const nearestUnpet = () => {
+            let bestIdx = null, bestD = Infinity;
+            for(const idx of unpetIdxs){
+              const d = manhattan(dog, humans[idx]);
+              if(d < bestD){ bestD = d; bestIdx = idx; }
+            }
+            return bestIdx;
+          };
+          if(unpetIdxs.length === 0){
+            // Everyone was just pet; fall back to chasing the nearest human of any status.
+            dogTargetIdx = null;
+            dogTargetFarCount = 0;
+            let best = [], bestScore = Infinity;
+            for(const n of options){
+              const score = distToHuman(n);
+              if(score < bestScore){ best = [n]; bestScore = score; }
+              else if(score === bestScore){ best.push(n); }
+            }
+            chosen = best[randInt(best.length)];
           } else {
+            if(dogTargetIdx === null || !unpetIdxs.includes(dogTargetIdx)){
+              dogTargetIdx = nearestUnpet();
+              dogTargetFarCount = 0;
+            } else {
+              const targetDist = manhattan(dog, humans[dogTargetIdx]);
+              const rivalIdxs = unpetIdxs.filter(idx => idx !== dogTargetIdx);
+              const bestRivalDist = rivalIdxs.length
+                ? Math.min(...rivalIdxs.map(idx => manhattan(dog, humans[idx])))
+                : Infinity;
+              if(targetDist > bestRivalDist + TARGET_SWITCH_MARGIN){
+                dogTargetFarCount++;
+                if(dogTargetFarCount >= TARGET_SWITCH_STREAK){
+                  dogTargetIdx = nearestUnpet();
+                  dogTargetFarCount = 0;
+                }
+              } else {
+                dogTargetFarCount = 0;
+              }
+            }
+            const target = humans[dogTargetIdx];
+            let best = [], bestScore = Infinity;
+            for(const n of options){
+              const d = manhattan(n, target);
+              if(d < bestScore){ best = [n]; bestScore = d; }
+              else if(d === bestScore){ best.push(n); }
+            }
             chosen = best[randInt(best.length)];
           }
         } else {
-          // runAway (existing behavior: maximize distance if any nearby; else random)
+          // Flee toward the point farthest from all humans, via the shortest path that
+          // never cuts through a human. The point drifts as humans move; momentum (a
+          // switch margin + streak, same idea as the pet-seek target lock) keeps the
+          // dog committed to a route instead of flinching at every human's shuffle.
           const nearby = humans.filter(h => manhattan(h, dog) <= DOG_DANGER_RADIUS);
           if(nearby.length > 0){
-            let best = [], bestScore = -Infinity;
-            for(const n of options){ const score = distToHuman(n); if(score > bestScore){ best = [n]; bestScore = score; } else if(score === bestScore){ best.push(n); } }
-            chosen = best[randInt(best.length)];
+            const distField = computeHumanDistanceField();
+            const candidate = pickFarthestFleeCell(distField);
+            if(candidate){
+              const curValid = fleeTargetPoint
+                && grid[fleeTargetPoint.y][fleeTargetPoint.x] === EMPTY
+                && !humans.some(h => h.x===fleeTargetPoint.x && h.y===fleeTargetPoint.y);
+              if(!curValid){
+                fleeTargetPoint = candidate;
+                fleeTargetFarCount = 0;
+              } else {
+                const curScore = distField[fleeTargetPoint.y][fleeTargetPoint.x];
+                if(candidate.score > curScore + FLEE_TARGET_SWITCH_MARGIN){
+                  fleeTargetFarCount++;
+                  if(fleeTargetFarCount >= FLEE_TARGET_SWITCH_STREAK){
+                    fleeTargetPoint = candidate;
+                    fleeTargetFarCount = 0;
+                  }
+                } else {
+                  fleeTargetFarCount = 0;
+                }
+              }
+              const blocked = new Set(humans.map(h => h.x+','+h.y));
+              const path = bfsPathAvoiding(dog, fleeTargetPoint, blocked);
+              if(path && path.length){
+                const next = path[0];
+                chosen = options.find(o => o.x===next.x && o.y===next.y);
+              }
+            }
+            if(!chosen){
+              // No reachable flee point (fully boxed in) — fall back to greedy 1-step distancing.
+              let best = [], bestScore = -Infinity;
+              for(const n of options){ const score = distToHuman(n); if(score > bestScore){ best = [n]; bestScore = score; } else if(score === bestScore){ best.push(n); } }
+              chosen = best[randInt(best.length)];
+            }
           } else {
+            fleeTargetPoint = null;
+            fleeTargetFarCount = 0;
             chosen = options[randInt(options.length)];
           }
         }
@@ -265,19 +478,32 @@
       if(mode==='seekPets'){
         let gainedThisTick = 0;
         humans.forEach((h,idx)=>{
-          const adj = manhattan(h,dog) <= 1;
-          if(adj && !wasAdjacent[idx]){ // just became adjacent
-            petScore += 1;
-            gainedThisTick += 1;
-            wasAdjacent[idx] = true;
-            // Record pet event for heart rendering
-            petEvents.push({dog: {x: dog.x, y: dog.y}, human: {x: h.x, y: h.y}});
+          const adj = chebyshev(h,dog) <= 1; // includes diagonal neighbors
+          if(adj){
+            adjStreak[idx] += 1;
+            if(adjStreak[idx] >= PET_ADJ_STREAK_NEEDED && !wasAdjacent[idx]){ // held adjacency long enough
+              petScore += 1;
+              gainedThisTick += 1;
+              wasAdjacent[idx] = true;
+              petCooldown[idx] = PET_COOLDOWN_TICKS; // stay "recently pet" even after they step away
+              // Record pet event for heart rendering
+              petEvents.push({dog: {x: dog.x, y: dog.y}, human: {x: h.x, y: h.y}});
+            }
+          } else {
+            adjStreak[idx] = 0;
+            wasAdjacent[idx] = false; // reset so the same human can score again once truly re-approached
           }
-          if(!adj){
-            wasAdjacent[idx] = false; // reset to allow future pet from this human
-          }
+          if(petCooldown[idx] > 0) petCooldown[idx]--;
         });
         if(petScore >= petThreshold && mode==='seekPets'){
+          // Dog bolts immediately, but humans stay oblivious for a head start.
+          mode = 'fleeing';
+          fleeingTicks = 0;
+          updateHUD();
+        }
+      } else if(mode==='fleeing'){
+        fleeingTicks++;
+        if(fleeingTicks >= FLEE_HEAD_START_TICKS){
           startBlinkingThenSwitchMode();
         }
       }
@@ -287,7 +513,7 @@
 
     function startBlinkingThenSwitchMode(){
       // If already blinking or already switched, skip
-      if(mode!=='seekPets') return;
+      if(mode!=='fleeing') return;
       // Pause the game loop during blinking
       if(timer){clearInterval(timer); timer=null;}
       let blinks = 0;
@@ -340,12 +566,42 @@
     }
 
     function updateHUD(){
-      hud.textContent = `Mode: ${mode === 'seekPets' ? 'Seek Pets' : 'Run Away'} | Pet Score: ${petScore}/${petThreshold}`;
+      const modeLabel = mode === 'seekPets' ? 'Seek Pets' : mode === 'fleeing' ? 'Fleeing (head start)' : 'Run Away';
+      hud.textContent = `Mode: ${modeLabel} | Pet Score: ${petScore}/${petThreshold}`;
+      updateBlurb();
     }
 
-    document.getElementById('start').onclick=()=>{if(!timer&&!gameOver)timer=setInterval(step,400);};
+    function updateBlurb(){
+      if(!started){
+        blurbSeek.hidden = true;
+        blurbChase.hidden = true;
+        return;
+      }
+      blurbSeek.hidden = false;
+      if(mode === 'seekPets'){
+        blurbSeek.style.opacity = '1';
+        blurbChase.hidden = true;
+        blurbChase.textContent = '';
+      } else {
+        blurbSeek.style.opacity = '0.15';
+        blurbChase.hidden = false;
+        let text = "The agent learned that humans get tired of the dog seeking pets and leash it, so it started running away from humans now.";
+        if(mode === 'runAway'){
+          text += " Look, it's hard to catch it now.";
+        }
+        blurbChase.textContent = text;
+      }
+    }
+
+    document.getElementById('start').onclick=()=>{
+      if(!timer&&!gameOver){
+        started = true;
+        updateHUD();
+        timer=setInterval(step,400);
+      }
+    };
     document.getElementById('pause').onclick=()=>{if(timer){clearInterval(timer);timer=null;}};
-    document.getElementById('step').onclick=()=>{if(timer)clearInterval(timer);timer=null;step();};
+    document.getElementById('step').onclick=()=>{if(timer)clearInterval(timer);timer=null;started=true;step();};
     document.getElementById('reset').onclick=()=>{if(timer)clearInterval(timer);timer=null;reset();};
 
     reset();
