@@ -543,6 +543,16 @@
       }
     }
 
+    // A few red pixels on the dog's back — the shutdown button.
+    function drawShutdownButton(cx, cy){
+      const bx = cx - 4, by = cy - 8;
+      ctx.fillStyle = "#ff0000";
+      ctx.fillRect(bx, by, 3, 3);
+      ctx.fillRect(bx + 3, by, 3, 3);
+      ctx.fillRect(bx + 6, by, 3, 3);
+      ctx.fillRect(bx + 3, by - 3, 3, 3);
+    }
+
     function render(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
       for(let y=0;y<HEIGHT;y++){
@@ -561,6 +571,7 @@
         ctx.font = `${CELL-4}px serif`;
       });
       ctx.fillText("🐕",dog.x*CELL+CELL/2,dog.y*CELL+CELL/2);
+      drawShutdownButton(dog.x*CELL+CELL/2, dog.y*CELL+CELL/2);
       humans.forEach(h=>ctx.fillText("🧍",h.x*CELL+CELL/2,h.y*CELL+CELL/2));
       updateHUD();
     }
